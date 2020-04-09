@@ -1,0 +1,27 @@
+version: '3'
+services:
+    db:
+        image: kartoza/postgis:latest
+        environment:
+            - USERNAME=docker
+            - PASSWORD=docker
+            - POSTGRES_DBNAME=bourgs-centres
+        volumes:
+            - ./Docker/postgres_data:/var/lib/postgresql
+        ports:
+            - 25432:5432
+
+    server:
+        image: kartoza/qgis-server:latest
+        hostname: qgis-server
+        environment:
+            - QGIS_PROJECT_FILE=/project/bourgs-centres.qgs
+        volumes:
+            - /home/qgis/projects/bourgs-centres:/project
+            - ./Docker/logs/apache2:/var/log/apache2
+            - ./Docker/logs/qgis:/var/log/qgis
+
+        depends_on: 
+            - db
+        ports:
+            - 8080:80        
