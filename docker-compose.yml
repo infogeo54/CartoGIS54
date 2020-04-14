@@ -11,7 +11,6 @@ services:
 
     server:
         image: camptocamp/qgis-server:3.12
-        hostname: qgis-server
         volumes:
             - /home/qgis/projects/bourgs-centres:/etc/qgisserver
         environment:
@@ -29,5 +28,16 @@ services:
             - /tmp/.X11-unix:/tmp/.X11-unix
             - /home/qgis/projects/bourgs-centres:/project
         links:
-          - db:db
+            - db:db
         command: ["qgis", "/project/project.qgs"]
+
+    app:
+        image: node:13.11.0
+        volumes:
+            - .:/app
+        ports:
+            - 5000:8080
+        working_dir: /app
+        links:
+            - server:server
+        command: "npm run serve"
