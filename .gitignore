@@ -11,10 +11,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Docker log files
-Docker/logs/apache2/
-Docker/logs/qgis/
-
 # Editor directories and files
 .idea
 .vscode
