@@ -18,22 +18,21 @@
             })
         },
         methods: {
+            createMarker: function (coordinates) {
+                return L.marker(coordinates.reverse()) // WFS sends reversed coordinates
+            },
+            createPolygon: function (coordinates) {
+                let polygon = coordinates[0][0] // WFS sends an array of reversed coordinates
+                let points = []
+                for (let p of polygon) {
+                    p = p.reverse()
+                    points.push(p)
+                }
+                return L.polygon(points, {fillOpacity: 0.5})
+            },
             addToMap: function (feature) {
                 let coordinates = feature.geometry.coordinates
-                let representation
-                if (coordinates.length === 2 ) {
-                    coordinates = coordinates.reverse() // WFS sends reversed coordinates
-                    representation = L.marker(coordinates)
-                } else {
-                    let polygon = coordinates[0][0] // WFS sends an array of reversed coordinates
-                    let points = []
-                    for (let p of polygon) {
-                        p = p.reverse()
-                        points.push(p)
-                    }
-                    representation = L.polygon(points, {fillOpacity: 0.5})
-                    console.log(representation)
-                }
+                let representation = coordinates.length === 2 ? this.createMarker(coordinates) : this.createPolygon(coordinates)
                 representation.bindPopup(`${feature.id}`)
                 .addTo(this.map)
             },
