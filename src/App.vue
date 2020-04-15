@@ -1,11 +1,13 @@
 <template>
-  <div id="app">
+  <div v-if="!loading" id="app">
     <Menu></Menu>
     <Map></Map>
   </div>
+  <Loader v-else></Loader>
 </template>
 
 <script>
+  import Loader from './components/Loader'
   import Menu from './components/Menu'
   import Map from './components/Map'
   import {mapGetters, mapActions} from 'vuex'
@@ -19,7 +21,10 @@
       ...mapGetters({
         capabilities: 'capabilities',
         layers: 'layer/list'
-      })
+      }),
+      loading: function () {
+        return !this.layers.length
+      }
     },
     methods: {
       ...mapActions('layer', ['getLayers'])
@@ -28,6 +33,8 @@
       this.getLayers()
     },
     components: {
+      Loader,
+
       Menu,
       Map
     }
