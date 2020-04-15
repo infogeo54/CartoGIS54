@@ -4,12 +4,18 @@
 
 <script>
     import L from 'leaflet'
+    import {mapGetters} from 'vuex'
     export default {
         name: "Map",
         data() {
             return {
                 map: null
             }
+        },
+        computed: {
+            ...mapGetters({
+                layers: 'layer/list'
+            })
         },
         methods: {
             addMarker: function () {

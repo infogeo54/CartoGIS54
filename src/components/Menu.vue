@@ -17,7 +17,7 @@
         name: "Menu",
         computed: {
             ...mapGetters({
-                layers: 'layers'
+                layers: 'layer/list'
             })
         },
         methods: {

@@ -18,11 +18,11 @@
     computed: {
       ...mapGetters({
         capabilities: 'capabilities',
-        layers: 'layers'
+        layers: 'layer/list'
       })
     },
     methods: {
-      ...mapActions(['getLayers'])
+      ...mapActions('layer', ['getLayers'])
     },
     mounted() {
       this.getLayers()
