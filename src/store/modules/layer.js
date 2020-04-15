@@ -1,27 +1,23 @@
 import WFS from "../../API/WFS";
 
 export default {
+    namespaced: true,
     state : {
-        capabilities: null,
-        layers: []
+        list: []
     },
     getters : {
-        capabilities: state => { return state.capabilities },
-        layers: state => { return state.layers }
+        list: state => { return state.list }
     },
     mutations: {
-        setCapabilities: function (state, capabilities) {
-            state.capabilities = capabilities
-        },
-        setLayers: function (state, layers) {
-            state.layers = layers
+        setList: function (state, layers) {
+            state.list = layers
         },
         addLayer: function (state, layer) {
-            state.layers.push(layer)
+            state.list.push(layer)
         },
         removeLayer: function (state, layer) {
-            const index = state.layers.indexOf(layer)
-            state.layers.splice(index, 1)
+            const index = state.list.indexOf(layer)
+            state.list.splice(index, 1)
         }
     },
     actions: {
@@ -31,8 +27,8 @@ export default {
             for (const l of layers) {
                 l.entities = await WFS.getFeatures(l.Name._text)
             }
-            commit('setCapabilities', capabilities)
-            commit('setLayers', layers)
+            commit('setCapabilities', capabilities, {root: true})
+            commit('setList', layers)
         }
     },
 }
