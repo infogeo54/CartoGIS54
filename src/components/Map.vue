@@ -4,6 +4,7 @@
 
 <script>
     import L from 'leaflet'
+    import MapTools from '../tools/MapTools'
     import {mapGetters} from 'vuex'
     export default {
         name: "Map",
@@ -18,23 +19,11 @@
             })
         },
         methods: {
-            createMarker: function (coordinates) {
-                return L.marker(coordinates.reverse()) // WFS sends reversed coordinates
-            },
-            createPolygon: function (coordinates) {
-                let polygon = coordinates[0][0] // WFS sends an array of reversed coordinates
-                let points = []
-                for (let p of polygon) {
-                    p = p.reverse()
-                    points.push(p)
-                }
-                return L.polygon(points, {fillOpacity: 0.5})
-            },
             addToMap: function (feature) {
-                let coordinates = feature.geometry.coordinates
-                let representation = coordinates.length === 2 ? this.createMarker(coordinates) : this.createPolygon(coordinates)
-                representation.bindPopup(`${feature.id}`)
-                .addTo(this.map)
+                const coordinates = feature.geometry.coordinates
+                const representation = coordinates.length === 2 ? MapTools.createMarker(coordinates) : MapTools.createPolygon(coordinates)
+                const popup = MapTools.createPopUp(feature)
+                representation.bindPopup(popup).addTo(this.map)
             },
             init: function (center) {
                 this.map = L.map('map').setView(center, 15)
@@ -59,7 +48,7 @@
 </script>
 
 <style lang="sass" scoped>
-   #map
+    #map
         height: 100%
         width: 100%
 </style>
