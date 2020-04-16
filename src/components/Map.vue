@@ -21,7 +21,7 @@
         methods: {
             addToMap: function (feature) {
                 const coordinates = feature.geometry.coordinates
-                const representation = coordinates.length === 2 ? MapTools.createMarker(coordinates) : MapTools.createPolygon(coordinates)
+                const representation = coordinates.length === 2 ? MapTools.createMarker(feature) : MapTools.createPolygon(coordinates)
                 const popup = MapTools.createPopUp(feature)
                 representation.bindPopup(popup).addTo(this.map)
             },
