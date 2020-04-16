@@ -1,4 +1,5 @@
-import WFS from "../../API/WFS";
+import WFS from '../../API/WFS'
+import WMS from '../../API/WMS'
 
 export default {
     namespaced: true,
@@ -26,6 +27,7 @@ export default {
             const layers = WFS.extractLayers(capabilities)
             for (const l of layers) {
                 l.entities = await WFS.getFeatures(l.Name._text)
+                l.styles = await WMS.getStyles(l.Name._text)
             }
             commit('setCapabilities', capabilities, {root: true})
             commit('setList', layers)
