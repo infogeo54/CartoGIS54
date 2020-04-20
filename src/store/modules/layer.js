@@ -4,10 +4,12 @@ import WMS from '../../API/WMS'
 export default {
     namespaced: true,
     state : {
-        list: []
+        list: [],
+        selected: null
     },
     getters : {
-        list: state => { return state.list }
+        list: state => { return state.list },
+        selected: state => { return state.selected }
     },
     mutations: {
         setList: function (state, layers) {
@@ -19,6 +21,9 @@ export default {
         removeLayer: function (state, layer) {
             const index = state.list.indexOf(layer)
             state.list.splice(index, 1)
+        },
+        setSelected: function (state, layer) {
+            state.selected = layer !== state.selected ? layer : null
         }
     },
     actions: {
