@@ -41,9 +41,12 @@
   }
 </script>
 
-<style lang="sass" scoped>
-  #app
-    height: 100vh
-    display: flex
-    flex-direction: row
+<style lang="sass">
+    body
+        height: 100vh
+        margin: 0
+    #app
+        height: 100%
+        display: flex
+        flex-direction: row
 </style>
