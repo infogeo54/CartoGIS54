@@ -13,7 +13,6 @@ async function getCapabilities() {
 function extractStyles(stylesXML) {
     const stylesJS = convert.xml2js(stylesXML, {compact: true, spaces: 4})
     return stylesJS['StyledLayerDescriptor']['NamedLayer']['UserStyle']['se:FeatureTypeStyle']['se:Rule']
-
 }
 
 async function getStyles(layerName) {
