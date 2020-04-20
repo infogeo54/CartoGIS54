@@ -2,8 +2,9 @@
     Build a Transaction
  */
 
+import converter from 'xml-js'
 
-class Transaction{
+export default class Transaction {
 
     constructor() {
         this['_declaration'] = {
@@ -27,12 +28,72 @@ class Transaction{
         }
     }
 
+    /**
+     * Create a Point geomerty format
+     * @param geometry : Object - The feature's geometry
+     * @returns Object
+     */
+    static point (geometry) {
+        const coordinates = geometry.coordinates.split(',')
+        return {
+            'gml:Point': {
+                'gml:coordinates': {
+                    '_text': coordinates
+                }
+            }
+        }
+    }
+
+    /**
+     * Create a Polygon geomerty format
+     * @param geomerty : Object - The feature's geometry
+     * @returns Object
+     */
+    static polygon (geomerty) {
+        let coordinates = ''
+        const coordinatesList = geomerty.coordinates[0][0]
+        coordinatesList.forEach(c => {
+            coordinates += `${c.join(',')} `
+        })
+        return {
+            'gml:MultiPolygon': {
+               'polygonMember': {
+                   'Polygon': {
+                       'gml:outerBoundaryIs': {
+                           'gml:LinearRing': {
+                               'gml:coordinates': {
+                                   '_text': coordinates
+                               }
+                           }
+                       }
+                   }
+               }
+            }
+        }
+    }
+
+    /**
+     * Create an Insert Transaction
+     * @param layer : String - The associated layer name
+     * @param feature - The feature to insert
+     * @return String - A stringified XML Transaction
+     */
     static insert (layer, feature) {
+        let t = new Transaction()
+        const properties = feature.properties
+        if (feature.geometry.length === 2) {
+            properties['geometry'] = Transaction.point(feature.geometry)
+        } else {
+            properties['geometry'] = Transaction.polygon(feature.geometry)
+        }
+        t['wfs:Transaction']['wfs:Insert'][layer] = properties
+        return converter.js2xml(t, {compact: true, spaces: 4})
     }
 
     static update (layer, feature) {
     }
 
     static delete (feature) {
+
     }
 }
