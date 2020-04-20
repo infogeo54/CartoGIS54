@@ -20,15 +20,12 @@
         },
         methods: {
             addToMap: function (feature) {
-                const coordinates = feature.geometry.coordinates
-                const representation = coordinates.length === 2 ? MapTools.createMarker(feature) : MapTools.createPolygon(coordinates)
-                const popup = MapTools.createPopUp(feature)
-                representation.bindPopup(popup).addTo(this.map)
+                const representation = MapTools.representation(feature)
+                representation.addTo(this.map)
             },
             init: function (center) {
                 this.map = L.map('map').setView(center, 15)
                 L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
-                    // Il est toujours bien de laisser le lien vers la source des données
                     attribution: 'données © OpenStreetMap/ODbL - rendu OSM France',
                     minZoom: 1,
                     maxZoom: 20
