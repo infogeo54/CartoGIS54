@@ -1,26 +1,30 @@
 <template>
-    <div id="menu">
+    <div id="menu" :class="selectedLayer ? 'open' : ''">
         <div id="categories">
             <h3>Catégories</h3>
             <ul>
-                <li v-for="(layer, index) in layers" :key="index">{{ getTitle(layer) }}</li>
+                <li v-for="(layer, index) in layers" :key="index" @click="setSelected(layer)">
+                    {{ getTitle(layer) }}
+                </li>
             </ul>
         </div>
-        <Legend></Legend>
+        <Legend v-if="selectedLayer" :layer="selectedLayer"></Legend>
     </div>
 </template>
 
 <script>
     import Legend from './Legend'
-    import {mapGetters} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex'
     export default {
         name: "Menu",
         computed: {
             ...mapGetters({
-                layers: 'layer/list'
+                layers: 'layer/list',
+                selectedLayer: 'layer/selected'
             })
         },
         methods: {
+            ...mapMutations('layer', ['setSelected']),
             getTitle: function (layer) {
                 return layer.Title._text
             }
@@ -34,7 +38,8 @@
 <style lang="sass" scoped>
     #menu
         text-align: center
-        width: 18%
+        display: flex
+        flex-direction: row
         ul
             padding: 0
             li
