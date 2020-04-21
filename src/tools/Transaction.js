@@ -1,6 +1,13 @@
 /*
-    Build a Transaction
+    Build a WFS Transaction request body
+
+    The idea is to create a Transaction object from Insert, Update or Delete methods, passing
+    a layername and a feature, then converting the instance into a stringified XML document
+
+    The use of 'xml-js' obliges to respect a data format (compact format here)
  */
+
+//const converter = require ('xml-js')
 
 import converter from 'xml-js'
 
@@ -29,12 +36,20 @@ export default class Transaction {
     }
 
     /**
-     * Create a Point geomerty format
+     * Return an XML converted Transaction
+     * @returns String
+     */
+    toXML () {
+        return converter.js2xml(this, {compact: true, spaces: 4})
+    }
+
+    /**
+     * Create a formatted Point geomerty tag
      * @param geometry : Object - The feature's geometry
      * @returns Object
      */
     static point (geometry) {
-        const coordinates = geometry.coordinates.split(',')
+        const coordinates = geometry.coordinates.join(',')
         return {
             'gml:Point': {
                 'gml:coordinates': {
@@ -45,7 +60,41 @@ export default class Transaction {
     }
 
     /**
-     * Create a Polygon geomerty format
+     * Create a formatted Property tag
+     * @param key : String - The property name
+     * @param value : String,Number,Boolean,Object
+     * @returns Object
+     */
+    static property (key, value) {
+        return {
+            'wfs:Property': {
+                'wfs:ValueReference': {
+                    '_text': key
+                },
+                'wfs:Value': {
+                    '_text': value
+                }
+            }
+        }
+    }
+
+    /**
+     * Create a list of formatted Property tags
+     * @param props : Object - The feature's properties
+     * @returns Object
+     */
+    static properties (props) {
+        let properties  = []
+        for (const key in props) {
+            const value = props[key]
+            const property = Transaction.property(key, value)
+            properties.push(property)
+        }
+        return properties
+    }
+
+    /**
+     * Create a formatted MultiPolygon tag
      * @param geomerty : Object - The feature's geometry
      * @returns Object
      */
@@ -81,19 +130,60 @@ export default class Transaction {
     static insert (layer, feature) {
         let t = new Transaction()
         const properties = feature.properties
-        if (feature.geometry.length === 2) {
+        if (feature.geometry.coordinates.length === 2) {
             properties['geometry'] = Transaction.point(feature.geometry)
         } else {
             properties['geometry'] = Transaction.polygon(feature.geometry)
         }
         t['wfs:Transaction']['wfs:Insert'][layer] = properties
-        return converter.js2xml(t, {compact: true, spaces: 4})
+        return t
     }
 
+    /**
+     * Create an Update Transaction
+     * @param layer : String - The associated layer name
+     * @param feature - The feature to insert
+     * @return String - A stringified XML Transaction
+     */
     static update (layer, feature) {
+        let t = new Transaction()
+        const properties = Transaction.properties(feature.properties)
+        t['wfs:Transaction']['wfs:Update'] = {
+            '_attributes': {
+                'typeName': layer
+            },
+            'wfs:Property': properties,
+            'fes:Filter': {
+                'fes:ResourceId': {
+                    '_attributes': {
+                        'rid': feature.id
+                    }
+                }
+            }
+        }
+        return t
     }
 
-    static delete (feature) {
-
+    /**
+     * Create a Delete Transaction
+     * @param layer : String - The associated layer name
+     * @param feature - The feature to insert
+     * @return String - A stringified XML Transaction
+     */
+    static delete (layer, feature) {
+        let t = new Transaction()
+        t['wfs:Transaction']['wfs:Delete'] = {
+            '_attributes': {
+                'typeName': layer
+            },
+            'fes:Filter': {
+                'fes:ResourceId': {
+                    '_attributes': {
+                        rid: feature.id
+                    }
+                }
+            }
+        }
+        return t
     }
 }
