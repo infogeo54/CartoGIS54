@@ -1,8 +1,11 @@
 <template>
     <div id="legend">
-        <h3>{{ layerName }}</h3>
+        <h3>{{ layerTitle }}</h3>
         <ul>
-            <li v-for="(style, index) in layer.styles" :key="index">
+            <li v-for="(style, index) in layer.styles"
+                :key="index"
+                @click="onClick"
+            >
                 <img :src="getStyleIcon(style)" :alt="getStyleName(style)">
                 <h4>{{ getStyleName(style) }}</h4>
             </li>
@@ -11,15 +14,20 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     export default {
         name: "Legend",
         props: ['layer'],
         computed: {
-            layerName: function() {
+            layerTitle: function() {
                 return this.layer.Title._text
+            },
+            layerName: function () {
+                return this.layer.Name._text
             }
         },
         methods: {
+            ...mapActions('feature', ['getSchema']),
             /**
              * Get the name of a style
              */
@@ -38,6 +46,12 @@
                     icon = require('../assets/icons/poi.svg')
                 }
                 return icon
+            },
+            /**
+             * Call getSchema
+             */
+            onClick: function () {
+                this.getSchema(this.layerName)
             }
         }
     }
