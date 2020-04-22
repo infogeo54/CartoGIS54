@@ -1,6 +1,6 @@
 <template>
     <div id="form">
-        <FormGroup v-for="(value, property) in feature.properties"
+        <FormGroup v-for="(value, property) in properties"
                    :key="property"
                    :property="property"
                    :value="value"
@@ -17,7 +17,10 @@
         computed: {
             ...mapGetters({
                 feature: 'feature/selected'
-            })
+            }),
+            properties: function () {
+                return this.feature.properties
+            }
         },
         methods: {
             ...mapMutations('feature', ['setSelected']),
