@@ -5,6 +5,7 @@
                    :property="property"
                    :value="value"
                    @changed="onChange"></FormGroup>
+        <button @click="onClick">Enregistrer</button>
     </div>
 </template>
 
@@ -22,6 +23,9 @@
             ...mapMutations('feature', ['setSelected']),
             onChange: function () {
                 this.setSelected(this.feature)
+            },
+            onClick: function () {
+
             }
         },
         components: {
