@@ -9,7 +9,7 @@ export default {
     },
     getters : {
         list: state => { return state.list },
-        selected: state => { return state.selected }
+        selected: state => { return state.selected },
     },
     mutations: {
         setList: function (state, layers) {
