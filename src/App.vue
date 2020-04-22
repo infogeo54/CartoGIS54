@@ -2,6 +2,7 @@
   <div v-if="!loading" id="app">
     <Menu></Menu>
     <Map></Map>
+    <Form></Form>
   </div>
   <Loader v-else></Loader>
 </template>
@@ -10,6 +11,7 @@
   import Loader from './components/Loader'
   import Menu from './components/Menu'
   import Map from './components/Map'
+  import Form from './components/Form'
   import {mapGetters, mapActions} from 'vuex'
   export default {
     name: 'App',
@@ -34,9 +36,9 @@
     },
     components: {
       Loader,
-
       Menu,
-      Map
+      Map,
+      Form
     }
   }
 </script>
