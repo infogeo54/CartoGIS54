@@ -25,13 +25,13 @@ export default {
         }
     },
     actions: {
-        getSchema: async function ({commit}, layerName) {
-            const description = await WFS.getFeatureDescription(layerName)
+        getSchema: async function ({commit}, params) {
+            const description = await WFS.getFeatureDescription(params.layer)
             const properties = WFS.extractSchema(description)
-            let schema = { geometry: {}, properties: {}, id: null }
+            let schema = { geometry: {}, properties: {type: params.style}, id: null }
             properties.forEach(prop => {
                 const name = prop.name
-                if (name !== 'geometry') schema.properties[name] = null
+                if (name !== 'geometry' && name !== 'type') schema.properties[name] = null
             })
             commit('setSelected', schema)
         }
