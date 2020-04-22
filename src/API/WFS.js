@@ -10,7 +10,7 @@ const baseUrl = `http://${host}?SERVICE=WFS&VERSION=1.3.0&OUTPUTFORMAT=GEOJSON`
 /**
  * Make a GetCapabilities AJAX request and return a stringified XML document from the response
  * @param host - The request's target
- * @returns {Promise<AxiosResponse<any>>} - The response
+ * @returns String
  */
 async function getCapabilities() {
     const url = `${baseUrl}&REQUEST=GetCapabilities`
@@ -24,7 +24,7 @@ async function getCapabilities() {
  */
 function extractLayers(capabilitiesXML) {
     const capabilities = convert.xml2js(capabilitiesXML, {compact: true})
-    return capabilities.WFS_Capabilities.FeatureTypeList.FeatureType
+    return capabilities['WFS_Capabilities']['FeatureTypeList']['FeatureType']
 }
 
 /**
@@ -59,6 +59,7 @@ function extractSchema(descriptionXML) {
     const elements = description['schema']['complexType']['complexContent']['extension']['sequence']['element']
     return elements.map(e => { return e['_attributes']})
 }
+
 
 export default {
     getCapabilities,
