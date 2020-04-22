@@ -1,7 +1,11 @@
 <template>
-    <div class="form-group">
+    <div v-if="fillable" class="form-group">
         <label :for="id">{{ title }}</label>
-        <input :id="id" :type="type" v-model="value" @change="changed">
+        <input :id="id"
+               :type="type"
+               :disabled="disabled"
+               v-model="value"
+               @change="changed">
     </div>
 </template>
 
@@ -20,6 +24,13 @@
             },
             id: function () {
                 return `ipt-${this.property}`
+            },
+            disabled: function () {
+                return this.property === 'type'
+            },
+            // We don't want to create an ID input
+            fillable: function () {
+                return !this.property.match(/^.*id.*$/)
             }
         },
         methods: {
