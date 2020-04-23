@@ -10,7 +10,7 @@
 
 <script>
     import LegendItem from './LegendItem'
-    import {mapActions} from 'vuex'
+    import {mapMutations,mapActions} from 'vuex'
     export default {
         name: "Legend",
         props: ['layer'],
@@ -23,6 +23,7 @@
             }
         },
         methods: {
+            ...mapMutations('map', ['setEditing']),
             ...mapActions('feature', ['getSchema']),
             /**
              * Call getSchema
@@ -33,6 +34,7 @@
                     style: styleName
                 }
                 this.getSchema(params)
+                this.setEditing(true)
             }
         },
         components: {

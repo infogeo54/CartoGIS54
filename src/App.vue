@@ -2,7 +2,7 @@
   <div v-if="!loading" id="app">
     <Menu></Menu>
     <Map></Map>
-    <Form v-if="selectedFeature"></Form>
+    <Form v-if="coordinates"></Form>
   </div>
   <Loader v-else></Loader>
 </template>
@@ -23,7 +23,7 @@
       ...mapGetters({
         capabilities: 'capabilities',
         layers: 'layer/list',
-        selectedFeature: 'feature/selected'
+        coordinates: 'map/coordinates'
       }),
       loading: function () {
         return !this.layers.length
