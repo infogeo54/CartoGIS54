@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import layer from './modules/layer'
 import feature from './modules/feature'
+import map from './modules/map'
 
 Vue.use(Vuex)
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     },
     modules : {
         layer,
-        feature
+        feature,
+        map
     }
 })
