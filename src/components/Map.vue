@@ -1,11 +1,11 @@
 <template>
-    <div id="map"></div>
+    <div id="map" :style="{cursor: cursor}"></div>
 </template>
 
 <script>
     import L from 'leaflet'
     import MapTools from '../tools/MapTools'
-    import {mapGetters} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex'
     export default {
         name: "Map",
         data() {
@@ -15,10 +15,19 @@
         },
         computed: {
             ...mapGetters({
-                layers: 'layer/list'
-            })
+                layers: 'layer/list',
+                editing: 'map/editing',
+                coordinates: 'map/coordinates'
+            }),
+            cursor: function () {
+                return this.editing ? 'crosshair' : 'grab'
+            }
         },
         methods: {
+            ...mapMutations('map', ['setCoordinates']),
+            onClick: function (e) {
+                console.log(e)
+            },
             addToMap: function (feature) {
                 const representation = MapTools.representation(feature)
                 representation.addTo(this.map)
@@ -35,6 +44,9 @@
                     features.forEach(f => {
                         this.addToMap(f)
                     })
+                })
+                this.map.on('click', e => {
+                    if (this.editing) this.onClick(e)
                 })
             },
         },
