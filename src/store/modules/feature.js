@@ -1,17 +1,18 @@
+import Feature from '../../models/Feature'
 import WFS from '../../API/WFS'
 
 export default {
     namespaced: true,
     state: {
         layer: null,
-        selected: {}
+        selected: new Feature()
     },
     getters: {
         layerName: state => { return state.layer },
         selected: state => { return state.selected }
     },
     mutations: {
-        setType: function (state, layerName) {
+        setLayer: function (state, layerName) {
             state.layer = layerName
         },
         setSelected: function (state, feature) {
@@ -27,13 +28,13 @@ export default {
     actions: {
         getSchema: async function ({commit}, params) {
             const description = await WFS.getFeatureDescription(params.layer)
-            const properties = WFS.extractSchema(description)
-            let schema = { geometry: {}, properties: {type: params.style}, id: null }
-            properties.forEach(prop => {
-                const name = prop.name
-                if (name !== 'geometry' && name !== 'type') schema.properties[name] = null
-            })
-            commit('setSelected', schema)
+            let schema = WFS.extractSchema(description)
+            schema.type = params.type
+            commit('setSelected', new Feature(schema))
+        },
+        reset: function ({commit}) {
+            commit('setLayer', null)
+            commit('setSelected', new Feature())
         }
     }
 }
