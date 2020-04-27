@@ -4,7 +4,7 @@ import * as convert from 'xml-js'
 const host = 'localhost:8080'
 const baseUrl = `http://${host}?SERVICE=WMS&VERSION=1.3.0`
 
-async function getCapabilities() {
+async function fetchCapabilities() {
     const url = `${baseUrl}&REQUEST=GetCapabilities`
     const res = await axios.get(url)
     return res.data
@@ -15,10 +15,10 @@ function extractStyles(stylesXML) {
     return stylesJS['StyledLayerDescriptor']['NamedLayer']['UserStyle']['se:FeatureTypeStyle']['se:Rule']
 }
 
-async function getStyles(layerName) {
+async function fetchStyles(layerName) {
     const url = `${baseUrl}&REQUEST=GetStyles&LAYERS=${layerName}`
     const res = await axios.get(url)
     return extractStyles(res.data)
 }
 
-export default {getCapabilities, getStyles, extractStyles}
+export default {fetchCapabilities, fetchStyles}
