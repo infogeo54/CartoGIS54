@@ -16,6 +16,7 @@
         computed: {
             ...mapGetters({
                 layers: 'layer/list',
+                selectedLayer: 'layer/selected',
                 editing: 'map/editing',
                 coordinates: 'map/coordinates'
             }),
@@ -29,7 +30,7 @@
                         MapTools.representation(f).on('click', () => this.featureClicked(f))
                     )
                 })
-                return res.flat(Infinity)
+                return res.flat()
             }
         },
         methods: {

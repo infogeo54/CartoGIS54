@@ -15,8 +15,8 @@
     export default {
         name: "Form",
         computed: {
-            ...mapGetters({
-                feature: 'feature/selected'
+            ...mapGetters('feature', {
+                feature: 'selected'
             }),
             properties: function () {
                 return this.feature.properties
