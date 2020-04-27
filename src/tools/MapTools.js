@@ -11,8 +11,8 @@ export default {
         catch { icon = require('@/assets/icons/poi.svg') }
         return L.icon({
             iconUrl: icon,
-            iconSize: [48, 105],
-            iconAnchor: [30, 102],
+            iconSize: [50, 50],
+            iconAnchor: [28, 55],
             popupAnchor: [-3, -76],
         })
     },
