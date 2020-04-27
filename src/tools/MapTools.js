@@ -7,12 +7,8 @@ import L from 'leaflet'
 export default {
     createIcon: function (feature) {
         let icon
-        try {
-            icon = require(`../assets/icons/${feature.properties.type}.svg`)
-        } catch (e) {
-            console.log(e)
-            icon = require('../assets/icons/poi.svg')
-        }
+        try { icon = require(`@/assets/icons/${feature.properties.type}.svg`) }
+        catch (e) { icon = require('@/assets/icons/poi.svg') }
         return L.icon({
             iconUrl: icon,
             iconSize: [48, 105],
