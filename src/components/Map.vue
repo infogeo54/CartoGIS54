@@ -10,13 +10,15 @@
         name: "Map",
         data() {
             return {
-                map: null
+                map: null,
+                toInsert: null
             }
         },
         computed: {
             ...mapGetters({
                 layers: 'layer/list',
                 selectedLayer: 'layer/selected',
+                selectedFeature: 'feature/selected',
                 editing: 'map/editing',
                 coordinates: 'map/coordinates'
             }),
@@ -25,7 +27,7 @@
             },
             representations: function () {
                 const res = this.layers.map(l => {
-                    const features = l.entities.features
+                    const features = l.features
                     return features.map(f =>
                         MapTools.representation(f).on('click', () => this.featureClicked(f))
                     )
@@ -37,7 +39,10 @@
             ...mapMutations('map', ['setCoordinates']),
             ...mapMutations('feature', ['setSelected']),
             onClick: function (e) {
-                this.setCoordinates([e.latlng.lat, e.latlng.lng])
+                if (this.toInsert) { this.toInsert.remove() }
+                const coordinates = [e.latlng.lng, e.latlng.lat]
+                this.selectedFeature.setGeometryFromCoordinates(coordinates)
+                this.toInsert = MapTools.representation(this.selectedFeature).addTo(this.map)
             },
             addRepresentations: function () {
                 this.representations.forEach(r => r.addTo(this.map))
