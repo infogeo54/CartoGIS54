@@ -1,6 +1,6 @@
 <template>
     <div id="legend">
-        <h3>{{ title }}</h3>
+        <h3>{{ layer.title }}</h3>
         <LegendItem v-for="(style, index) in layer.styles"
                     :key="index"
                     :feature-style="style"
@@ -10,28 +10,26 @@
 
 <script>
     import LegendItem from './LegendItem'
-    import {mapGetters,mapMutations,mapActions} from 'vuex'
+    import {mapGetters,mapMutations} from 'vuex'
+    import Feature from '../models/Feature'
+
     export default {
         name: "Legend",
         computed: {
             ...mapGetters('layer', {
-                layer: 'selected',
-                name: 'selectedName',
-                title: 'selectedTitle'
+                layer: 'selected'
             })
         },
         methods: {
             ...mapMutations('map', ['setEditing']),
-            ...mapActions('feature', ['getSchema']),
+            ...mapMutations('feature', ['setSelected']),
             /**
-             * Call getSchema
+             * Creating new Feature & Entering Editing mode
              */
-            onClick: function (styleName) {
-                const params = {
-                    layer: this.name,
-                    style: styleName
-                }
-                this.getSchema(params)
+            onClick: async function (typeName) {
+                const f = new Feature()
+                await f.getDescription(this.layer.name, typeName)
+                this.setSelected(f)
                 this.setEditing(true)
             }
         },
