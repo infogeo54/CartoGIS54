@@ -1,5 +1,5 @@
 import WFS from '../../API/WFS'
-import WMS from '../../API/WMS'
+import Layer from '../../models/Layer'
 
 export default {
     namespaced: true,
@@ -30,13 +30,16 @@ export default {
     },
     actions: {
         getLayers: async function ({commit}) {
-            const capabilities = await WFS.getCapabilities()
-            const layers = WFS.extractLayers(capabilities)
-            for (const l of layers) {
-                const name = l['Name']['_text']
-                l.entities = await WFS.getFeatures(name)
-                l.styles = await WMS.getStyles(name)
-            }
+            const capabilities = await WFS.fetchCapabilities()
+            const layersData = WFS.extractLayers(capabilities)
+            const layers = await Promise.all(
+                layersData.map(async data => {
+                    const layer = new Layer(data)
+                    await layer.getFeatures()
+                    await layer.getStyles()
+                    return layer
+                })
+            )
             commit('setCapabilities', capabilities, {root: true})
             commit('setList', layers)
         },
