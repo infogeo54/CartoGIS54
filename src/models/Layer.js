@@ -18,7 +18,6 @@ export default class Layer {
     }
 
     async getStyles () {
-        const data = await WMS.fetchStyles(this.name)
-        this.styles = data
+        this.styles = await WMS.fetchStyles(this.name)
     }
 }
