@@ -27,6 +27,20 @@ function extractLayers(capabilitiesXML) {
 }
 
 /**
+ *
+ * @param coordinates : Array - Returns reversed coordinates
+ * @returns Array
+ */
+function reverseCoordinates (coordinates) {
+    if (coordinates.length === 2) {
+        return coordinates.reverse()
+    } else {
+        const polygon = coordinates[0][0]
+        return polygon.map(p => p.reverse())
+    }
+}
+
+/**
  * Make a GetFeature AJAX request and return the data from the response
  * @param layer : String - The name of the associated layer
  * @returns Object
@@ -34,7 +48,10 @@ function extractLayers(capabilitiesXML) {
 async function fetchFeatures(layer) {
     const url = `${baseUrl}&REQUEST=GetFeature&TYPENAME=${layer}`
     const res = await axios.get(url)
-    return res.data.features
+    return res.data.features.map(f => {
+        f.geometry.coordinates = reverseCoordinates(f.geometry.coordinates)
+        return f
+    })
 }
 
 /**

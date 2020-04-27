@@ -27,15 +27,13 @@ export default {
      * Create a Leaflet poylgon representation
      */
     createPolygon: function (coordinates) {
-        const polygon = coordinates[0][0] // WFS sends an array of reversed coordinates
-        const points = polygon.map(p => p.reverse())
-        return L.polygon(points, {fillOpacity: 0.5})
+        return L.polygon(coordinates, {fillOpacity: 0.5})
     },
     /**
      * Build a feature's representation (marker or polygon)
      */
     representation: function (feature) {
-        const coordinates = feature.geometry.coordinates.reverse() // WFS sends reversed coordinates
+        const coordinates = feature.geometry.coordinates // WFS sends reversed coordinates
         if (coordinates.length === 2) {
             return this.createMarker(feature, coordinates)
         }
