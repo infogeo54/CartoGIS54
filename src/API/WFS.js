@@ -57,7 +57,12 @@ async function getFeatureDescription(layer) {
 function extractSchema(descriptionXML) {
     const description = convert.xml2js(descriptionXML, {compact: true})
     const elements = description['schema']['complexType']['complexContent']['extension']['sequence']['element']
-    return elements.map(e => { return e['_attributes']})
+    let entries = []
+    elements.forEach(e => {
+        const attr = e['_attributes']
+        if (attr.name !== 'geometry') entries.push([attr.name, null])
+    })
+    return Object.fromEntries(entries)
 }
 
 
