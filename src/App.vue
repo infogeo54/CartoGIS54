@@ -2,7 +2,7 @@
   <div v-if="!loading" id="app">
     <Menu></Menu>
     <Map></Map>
-    <Form v-if="coordinates || selectedFeature.id"></Form>
+    <Form v-if="formVisible"></Form>
   </div>
   <Loader v-else></Loader>
 </template>
@@ -28,6 +28,14 @@
       }),
       loading: function () {
         return !this.layers.length
+      },
+      formVisible: function () {
+        const geometry = this.selectedFeature.geometry
+        console.log(geometry)
+        if (geometry) {
+          return !!Object.keys(geometry).length
+        }
+        return false
       }
     },
     methods: {
