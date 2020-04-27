@@ -26,7 +26,7 @@
         methods: {
             ...mapMutations('map', ['setCoordinates']),
             onClick: function (e) {
-                console.log(e)
+                this.setCoordinates([e.latlng.lat, e.latlng.lng])
             },
             addToMap: function (feature) {
                 const representation = MapTools.representation(feature)

@@ -31,12 +31,8 @@ export default {
      * Create a Leaflet poylgon representation
      */
     createPolygon: function (coordinates) {
-        let polygon = coordinates[0][0] // WFS sends an array of reversed coordinates
-        let points = []
-        for (let p of polygon) {
-            p = p.reverse()
-            points.push(p)
-        }
+        const polygon = coordinates[0][0] // WFS sends an array of reversed coordinates
+        const points = polygon.map(p => p.reverse())
         return L.polygon(points, {fillOpacity: 0.5})
     },
     /**

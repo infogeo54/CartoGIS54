@@ -84,13 +84,7 @@ export default class Transaction {
      * @returns Object
      */
     static properties (props) {
-        let properties  = []
-        for (const key in props) {
-            const value = props[key]
-            const property = Transaction.property(key, value)
-            properties.push(property)
-        }
-        return properties
+        return props.map(key => Transaction.property(key, props[key]))
     }
 
     /**

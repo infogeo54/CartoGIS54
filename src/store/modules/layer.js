@@ -31,8 +31,9 @@ export default {
             const capabilities = await WFS.getCapabilities()
             const layers = WFS.extractLayers(capabilities)
             for (const l of layers) {
-                l.entities = await WFS.getFeatures(l.Name._text)
-                l.styles = await WMS.getStyles(l.Name._text)
+                const name = l['Name']['_text']
+                l.entities = await WFS.getFeatures(name)
+                l.styles = await WMS.getStyles(name)
             }
             commit('setCapabilities', capabilities, {root: true})
             commit('setList', layers)
