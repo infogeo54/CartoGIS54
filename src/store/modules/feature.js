@@ -4,7 +4,7 @@ export default {
     namespaced: true,
     state: {
         layer: null,
-        selected: null
+        selected: {}
     },
     getters: {
         layerName: state => { return state.layer },

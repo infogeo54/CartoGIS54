@@ -2,7 +2,7 @@
   <div v-if="!loading" id="app">
     <Menu></Menu>
     <Map></Map>
-    <Form v-if="coordinates || selectedFeature"></Form>
+    <Form v-if="coordinates || selectedFeature.id"></Form>
   </div>
   <Loader v-else></Loader>
 </template>
