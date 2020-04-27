@@ -26,12 +26,6 @@ export default {
         }
     },
     actions: {
-        getSchema: async function ({commit}, params) {
-            const description = await WFS.getFeatureDescription(params.layer)
-            let schema = WFS.extractSchema(description)
-            schema.type = params.type
-            commit('setSelected', new Feature(schema))
-        },
         reset: function ({commit}) {
             commit('setLayer', null)
             commit('setSelected', new Feature())
