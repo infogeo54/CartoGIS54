@@ -39,6 +39,10 @@ export default {
             }
             commit('setCapabilities', capabilities, {root: true})
             commit('setList', layers)
+        },
+        reset: function ({commit}) {
+            commit('setList', [])
+            commit('setSelected', null)
         }
     },
 }

@@ -17,6 +17,9 @@ export default {
         }
     },
     actions: {
-
+        reset: function ({commit}) {
+            commit('setEditing', false)
+            commit('setCoordinates', null)
+        }
     }
 }
