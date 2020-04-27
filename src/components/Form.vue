@@ -5,13 +5,14 @@
                    :property="property"
                    :value="value"
                    @changed="onChange"></FormGroup>
-        <button @click="onClick">Enregistrer</button>
+        <button @click="onSaveClick">Enregistrer</button>
+        <button  @click="onCancelClick">Annuler</button>
     </div>
 </template>
 
 <script>
     import FormGroup from './FormGroup'
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapGetters, mapMutations, mapActions} from 'vuex'
     export default {
         name: "Form",
         computed: {
@@ -24,6 +25,10 @@
         },
         methods: {
             ...mapMutations('feature', ['setSelected']),
+            ...mapActions([
+                'feature/reset',
+                'map/reset'
+            ]),
             /**
              * Saving changes in the Store
              * @param attribute
@@ -32,8 +37,12 @@
                 this.feature.properties[attribute.name] = attribute.value
                 this.setSelected(this.feature)
             },
-            onClick: function () {
+            onSaveClick: function () {
 
+            },
+            onCancelClick: function () {
+                this['feature/reset']()
+                this['map/reset']()
             }
         },
         components: {
