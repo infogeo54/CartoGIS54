@@ -1,6 +1,6 @@
 <template>
     <div id="legend">
-        <h3>{{ title }}</h3>
+        <h3>{{ layerTitle }}</h3>
         <LegendItem v-for="(style, index) in layer.styles"
                     :key="index"
                     :feature-style="style"
@@ -15,11 +15,11 @@
         name: "Legend",
         props: ['layer'],
         computed: {
-            title: function() {
-                return this.layer.Title._text
+            layerTitle: function() {
+                return this.layer['Title']['_text']
             },
-            name: function () {
-                return this.layer.Name._text
+            layerName: function () {
+                return this.layer['Name']['_text']
             }
         },
         methods: {
@@ -30,7 +30,7 @@
              */
             onClick: function (styleName) {
                 const params = {
-                    layer: this.name,
+                    layer: this.layerName,
                     style: styleName
                 }
                 this.getSchema(params)
