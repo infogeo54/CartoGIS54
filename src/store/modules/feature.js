@@ -15,6 +15,9 @@ export default {
         setSelectedGeometry: function (state, geometry) {
             state.selected.geometry = geometry
         },
+        setSelectedCoordinates: function (state, coordinates) {
+          state.selected.setGeometryFromCoordinates(coordinates)
+        },
         setSelectedId: function (state, id) {
             state.selected.id = id
         }

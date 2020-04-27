@@ -36,12 +36,11 @@
             }
         },
         methods: {
-            ...mapMutations('map', ['setCoordinates']),
-            ...mapMutations('feature', ['setSelected']),
+            ...mapMutations('feature', ['setSelected', "setSelectedCoordinates"]),
             onClick: function (e) {
                 if (this.toInsert) { this.toInsert.remove() }
                 const coordinates = [e.latlng.lng, e.latlng.lat]
-                this.selectedFeature.setGeometryFromCoordinates(coordinates)
+                this.setSelectedCoordinates(coordinates)
                 this.toInsert = MapTools.representation(this.selectedFeature).addTo(this.map)
             },
             addRepresentations: function () {
