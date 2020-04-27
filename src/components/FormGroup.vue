@@ -35,7 +35,7 @@
         },
         methods: {
             changed:function () {
-                this.$emit('changed')
+                this.$emit('changed', {name: this.property, value: this.value})
             }
         }
     }

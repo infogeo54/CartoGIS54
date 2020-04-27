@@ -24,7 +24,12 @@
         },
         methods: {
             ...mapMutations('feature', ['setSelected']),
-            onChange: function () {
+            /**
+             * Saving changes in the Store
+             * @param attribute
+             */
+            onChange: function (attribute) {
+                this.feature.properties[attribute.name] = attribute.value
                 this.setSelected(this.feature)
             },
             onClick: function () {
