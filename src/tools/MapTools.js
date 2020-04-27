@@ -8,7 +8,7 @@ export default {
     createIcon: function (feature) {
         let icon
         try { icon = require(`@/assets/icons/${feature.properties.type}.svg`) }
-        catch (e) { icon = require('@/assets/icons/poi.svg') }
+        catch { icon = require('@/assets/icons/poi.svg') }
         return L.icon({
             iconUrl: icon,
             iconSize: [48, 105],
