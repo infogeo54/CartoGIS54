@@ -8,8 +8,10 @@ export default {
         selected: null
     },
     getters : {
-        list: state => { return state.list },
-        selected: state => { return state.selected },
+        list: state => state.list,
+        selected: state => state.selected ,
+        selectedName: state => state.selected['Name']['_text'],
+        selectedTitle: state => state.selected['Title']['_text']
     },
     mutations: {
         setList: function (state, layers) {
