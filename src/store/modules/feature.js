@@ -1,14 +1,12 @@
-import Feature from '../../models/Feature'
-import WFS from '../../API/WFS'
+//import Feature from '../../models/Feature'
 
 export default {
     namespaced: true,
     state: {
         layer: null,
-        selected: new Feature()
+        selected: {}
     },
     getters: {
-        layerName: state => { return state.layer },
         selected: state => { return state.selected }
     },
     mutations: {
@@ -28,7 +26,7 @@ export default {
     actions: {
         reset: function ({commit}) {
             commit('setLayer', null)
-            commit('setSelected', new Feature())
+            commit('setSelected', {})
         }
     }
 }

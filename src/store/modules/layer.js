@@ -5,7 +5,7 @@ export default {
     namespaced: true,
     state : {
         list: [],
-        selected: null
+        selected: {}
     },
     getters : {
         list: state => state.list,
@@ -45,7 +45,7 @@ export default {
         },
         reset: function ({commit}) {
             commit('setList', [])
-            commit('setSelected', null)
+            commit('setSelected', {})
         }
     },
 }
