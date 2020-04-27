@@ -36,30 +36,13 @@ export default {
         return L.polygon(points, {fillOpacity: 0.5})
     },
     /**
-     * Create a representation's popup
-     */
-    createPopUp: function (feature) {
-        const props = feature.properties
-        return `<h3>${props.nom}</h3>
-                <table>
-                    <tr>
-                        <th>Type</th>
-                        <td>${props.type}</td>
-                    </tr>
-                </table>`
-    },
-    /**
      * Build a feature's representation (marker or polygon)
      */
     representation: function (feature) {
-        let rep
         const coordinates = feature.geometry.coordinates.reverse() // WFS sends reversed coordinates
         if (coordinates.length === 2) {
-            rep = this.createMarker(feature, coordinates)
-        } else {
-            rep = this.createPolygon(coordinates)
+            return this.createMarker(feature, coordinates)
         }
-        const popup = this.createPopUp(feature)
-        return rep.bindPopup(popup)
+        return this.createPolygon(coordinates)
     }
 }

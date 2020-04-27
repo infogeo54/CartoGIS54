@@ -21,30 +21,43 @@
             }),
             cursor: function () {
                 return this.editing ? 'crosshair' : 'grab'
+            },
+            representations: function () {
+                const res = this.layers.map(l => {
+                    const features = l.entities.features
+                    return features.map(f =>
+                        MapTools.representation(f).on('click', () => this.featureClicked(f))
+                    )
+                })
+                return res.flat(Infinity)
             }
         },
         methods: {
             ...mapMutations('map', ['setCoordinates']),
+            ...mapMutations('feature', ['setSelected']),
             onClick: function (e) {
                 this.setCoordinates([e.latlng.lat, e.latlng.lng])
             },
-            addToMap: function (feature) {
-                const representation = MapTools.representation(feature)
-                representation.addTo(this.map)
+            addRepresentations: function () {
+                this.representations.forEach(r => r.addTo(this.map))
+            },
+            removeRepresentations: function () {
+                this.representations.forEach(r => r.remove())
+            },
+            featureClicked: function (f) {
+                this.setSelected(f)
             },
             init: function (center) {
                 this.map = L.map('map').setView(center, 15)
+
                 L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
                     attribution: 'données © OpenStreetMap/ODbL - rendu OSM France',
                     minZoom: 1,
                     maxZoom: 20
                 }).addTo(this.map)
-                this.layers.forEach(l => {
-                    const features = l.entities.features
-                    features.forEach(f => {
-                        this.addToMap(f)
-                    })
-                })
+
+                this.addRepresentations()
+
                 this.map.on('click', e => {
                     if (this.editing) this.onClick(e)
                 })
