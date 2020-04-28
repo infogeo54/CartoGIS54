@@ -19,7 +19,6 @@ export default class Layer {
             id: f.id,
             geometry: f.geometry
         }))
-        console.log(this.features)
     }
 
     async getStyles () {

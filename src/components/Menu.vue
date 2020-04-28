@@ -26,7 +26,7 @@
         methods: {
             ...mapMutations('layer', ['setSelected']),
             getTitle: function (layer) {
-                return layer.Title._text
+                return layer.title
             }
         },
         components: {

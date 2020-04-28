@@ -86,8 +86,7 @@ export default {
     fetchCapabilities,
     extractLayers,
     fetchFeatures,
-    fetchFeatureDescription,
-    extractSchema
+    fetchFeatureDescription
 }
 
 //module.exports = {getFeatureDescription, extractAttributes}

@@ -5,7 +5,6 @@ export default class Feature {
         this.props = options.properties
         this.identifier = options.id
         this.geom = options.geometry
-        console.log(this)
     }
 
     set props (properties) {
@@ -20,9 +19,7 @@ export default class Feature {
         this.geometry = geometry ? geometry : {}
     }
 
-    async getDescription (layerName, typeName) {
-        let properties = await WFS.fetchFeatureDescription(layerName)
-        properties.type = typeName
-        this.properties = properties
+    static async getDescription (layerName) {
+        return WFS.fetchFeatureDescription(layerName)
     }
 }

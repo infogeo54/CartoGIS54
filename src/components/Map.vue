@@ -5,13 +5,13 @@
 <script>
     import L from 'leaflet'
     import MapTools from '../tools/MapTools'
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapGetters, mapMutations, mapActions} from 'vuex'
+    import Feature from "../models/Feature";
     export default {
         name: "Map",
         data() {
             return {
                 map: null,
-                toInsert: null
             }
         },
         computed: {
@@ -19,8 +19,9 @@
                 layers: 'layer/list',
                 selectedLayer: 'layer/selected',
                 selectedFeature: 'feature/selected',
+                selectedType: 'feature/type',
                 editing: 'map/editing',
-                coordinates: 'map/coordinates'
+                representation: 'map/representation'
             }),
             cursor: function () {
                 return this.editing ? 'crosshair' : 'grab'
@@ -36,13 +37,9 @@
             }
         },
         methods: {
-            ...mapMutations('feature', ['setSelected', "setSelectedCoordinates"]),
-            onClick: function (e) {
-                if (this.toInsert) { this.toInsert.remove() }
-                const coordinates = [e.latlng.lng, e.latlng.lat]
-                this.setSelectedCoordinates(coordinates)
-                this.toInsert = MapTools.representation(this.selectedFeature).addTo(this.map)
-            },
+            ...mapMutations('feature', ['setSelected']),
+            ...mapMutations('map', ['setRepresentation']),
+            ...mapActions('feature', ['createFeature']),
             addRepresentations: function () {
                 this.representations.forEach(r => r.addTo(this.map))
             },
@@ -51,6 +48,16 @@
             },
             featureClicked: function (f) {
                 this.setSelected(f)
+            },
+            mapClicked: async function (e) {
+                const geom = {coordinates: [e.latlng.lat, e.latlng.lng]}
+                const props = {
+                    ... await Feature.getDescription(this.selectedLayer.name),
+                    type: this.selectedType
+                }
+                this.createFeature({ geometry: geom, properties: props })
+                this.setRepresentation(MapTools.representation(this.selectedFeature))
+                this.representation.addTo(this.map)
             },
             init: function (center) {
                 this.map = L.map('map').setView(center, 15)
@@ -64,7 +71,10 @@
                 this.addRepresentations()
 
                 this.map.on('click', e => {
-                    if (this.editing) this.onClick(e)
+                    if (this.editing) {
+                        if (this.representation) this.representation.remove()
+                        this.mapClicked(e)
+                    }
                 })
             },
         },

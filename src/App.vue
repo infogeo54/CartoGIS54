@@ -23,23 +23,17 @@
       ...mapGetters({
         capabilities: 'capabilities',
         layers: 'layer/list',
-        coordinates: 'map/coordinates',
-        selectedFeature: 'feature/selected'
+        feature: 'feature/selected'
       }),
       loading: function () {
         return !this.layers.length
       },
       formVisible: function () {
-        const geometry = this.selectedFeature.geometry
-        console.log(geometry)
-        if (geometry) {
-          return !!Object.keys(geometry).length
-        }
-        return false
+        return !!this.feature.geometry.coordinates
       }
     },
     methods: {
-      ...mapActions('layer', ['getLayers'])
+      ...mapActions('layer', ['getLayers']),
     },
     mounted() {
       this.getLayers()

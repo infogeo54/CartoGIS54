@@ -11,7 +11,6 @@
 <script>
     import LegendItem from './LegendItem'
     import {mapGetters,mapMutations} from 'vuex'
-    import Feature from '../models/Feature'
 
     export default {
         name: "Legend",
@@ -22,15 +21,13 @@
         },
         methods: {
             ...mapMutations('map', ['setEditing']),
-            ...mapMutations('feature', ['setSelected']),
+            ...mapMutations('feature', ['setType']),
             /**
              * Creating new Feature & Entering Editing mode
              */
-            onClick: async function (typeName) {
-                const f = new Feature()
-                await f.getDescription(this.layer.name, typeName)
-                this.setSelected(f)
+            onClick: async function (type) {
                 this.setEditing(true)
+                this.setType(type)
             }
         },
         components: {

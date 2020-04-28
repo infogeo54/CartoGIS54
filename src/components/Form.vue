@@ -17,7 +17,7 @@
         name: "Form",
         computed: {
             ...mapGetters('feature', {
-                feature: 'selected'
+                feature: 'selected',
             }),
             properties: function () {
                 return this.feature.properties

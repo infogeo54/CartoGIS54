@@ -1,30 +1,30 @@
-//import Feature from '../../models/Feature'
+import Feature from '../../models/Feature'
 
 export default {
     namespaced: true,
     state: {
-        selected: {}
+        selected: new Feature(),
+        type: null
     },
     getters: {
-        selected: state => { return state.selected }
+        selected: state => state.selected,
+        type: state => state.type
     },
     mutations: {
         setSelected: function (state, feature) {
             state.selected = feature
         },
-        setSelectedGeometry: function (state, geometry) {
-            state.selected.geometry = geometry
-        },
-        setSelectedCoordinates: function (state, coordinates) {
-          state.selected.setGeometryFromCoordinates(coordinates)
-        },
-        setSelectedId: function (state, id) {
-            state.selected.id = id
+        setType: function (state, type) {
+            state.type = type
         }
     },
     actions: {
+        createFeature: async function ({commit}, params) {
+            const f = new Feature(params)
+            commit('setSelected', f)
+        },
         reset: function ({commit}) {
-            commit('setSelected', {})
+            commit('setSelected', new Feature())
         }
     }
 }
