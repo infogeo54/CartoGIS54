@@ -18,6 +18,7 @@
         computed: {
             ...mapGetters('feature', {
                 feature: 'selected',
+                representation: 'representation'
             }),
             properties: function () {
                 return this.feature.properties
@@ -25,24 +26,24 @@
         },
         methods: {
             ...mapMutations('feature', ['setSelected']),
-            ...mapActions([
-                'feature/reset',
-                'map/reset'
-            ]),
+            ...mapActions('feature', ['reset']),
             /**
-             * Saving changes in the Store
+             * Saves changes in the Store
              * @param attribute
              */
             onChange: function (attribute) {
                 this.feature.properties[attribute.name] = attribute.value
                 this.setSelected(this.feature)
             },
+            /**
+             * Sends a Transaction request
+             */
             onSaveClick: function () {
 
             },
             onCancelClick: function () {
-                this['feature/reset']()
-                this['map/reset']()
+                this.representation.remove()
+                this.reset()
             }
         },
         components: {

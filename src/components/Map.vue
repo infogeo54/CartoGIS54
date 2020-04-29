@@ -20,9 +20,9 @@
                 features: 'layer/features',
                 selectedLayer: 'layer/selected',
                 selectedFeature: 'feature/selected',
+                toInsert: 'feature/representation',
                 selectedType: 'feature/type',
                 editing: 'map/editing',
-                representation: 'map/representation'
             }),
             cursor: function () {
                 return this.editing ? 'crosshair' : 'grab'
@@ -31,12 +31,6 @@
                 return this.features.map(f =>
                     MapTools.representation(f, this.setSelected)
                 )
-            },
-            toInsert: function () {
-                if (this.selectedFeature) {
-                    return this.selectedFeature.representation(this.setSelected)
-                }
-                return null
             }
         },
         methods: {

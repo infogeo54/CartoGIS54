@@ -6,7 +6,11 @@ export default {
     },
     getters: {
         selected: state => state.selected,
-        type: state => state.type
+        type: state => state.type,
+        representation: state => {
+            if (state.selected) return state.selected.representation()
+            return null
+        }
     },
     mutations: {
         setSelected: function (state, feature) {
