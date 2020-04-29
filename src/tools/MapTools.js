@@ -32,11 +32,9 @@ export default {
     /**
      * Build a feature's representation (marker or polygon)
      */
-    representation: function (feature) {
-        const coordinates = feature.geometry.coordinates // WFS sends reversed coordinates
-        if (coordinates.length === 2) {
-            return this.createMarker(feature, coordinates)
-        }
-        return this.createPolygon(coordinates)
+    representation: function (f, cb) {
+        const coord = f.geometry.coordinates
+        const rep = coord.length === 2 ? this.createMarker(f, coord) :  this.createPolygon(coord)
+        return rep.on('click', () => cb(f))
     }
 }

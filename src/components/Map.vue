@@ -5,7 +5,7 @@
 <script>
     import L from 'leaflet'
     import MapTools from '../tools/MapTools'
-    import {mapGetters, mapMutations, mapActions} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex'
     import Feature from "../models/Feature";
     export default {
         name: "Map",
@@ -27,27 +27,22 @@
                 return this.editing ? 'crosshair' : 'grab'
             },
             representations: function () {
-                const res = this.layers.map(l => {
-                    const features = l.features
-                    return features.map(f =>
-                        MapTools.representation(f).on('click', () => this.featureClicked(f))
+                const res = this.layers.map(l =>
+                    l.features.map(f =>
+                        MapTools.representation(f, this.setSelected)
                     )
-                })
+                )
                 return res.flat()
             }
         },
         methods: {
             ...mapMutations('feature', ['setSelected']),
             ...mapMutations('map', ['setRepresentation']),
-            ...mapActions('feature', ['createFeature']),
             addRepresentations: function () {
                 this.representations.forEach(r => r.addTo(this.map))
             },
             removeRepresentations: function () {
                 this.representations.forEach(r => r.remove())
-            },
-            featureClicked: function (f) {
-                this.setSelected(f)
             },
             mapClicked: async function (e) {
                 const geom = {coordinates: [e.latlng.lat, e.latlng.lng]}
@@ -55,7 +50,7 @@
                     ... await Feature.getDescription(this.selectedLayer.name),
                     type: this.selectedType
                 }
-                this.createFeature({ geometry: geom, properties: props })
+                this.setSelected(new Feature({ geometry: geom, properties: props }))
                 this.setRepresentation(MapTools.representation(this.selectedFeature))
                 this.representation.addTo(this.map)
             },
