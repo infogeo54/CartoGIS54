@@ -35,6 +35,7 @@ export default {
     representation: function (f, cb) {
         const coord = f.geometry.coordinates
         const rep = coord.length === 2 ? this.createMarker(f, coord) :  this.createPolygon(coord)
-        return rep.on('click', () => cb(f))
+        if (cb) rep.on('click', () => cb(f))
+        return rep
     }
 }
