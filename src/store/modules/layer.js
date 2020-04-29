@@ -9,9 +9,8 @@ export default {
     },
     getters : {
         list: state => state.list,
-        selected: state => state.selected ,
-        selectedName: state => state.selected['Name']['_text'],
-        selectedTitle: state => state.selected['Title']['_text']
+        selected: state => state.selected,
+        features: state => state.list.map(l => l.features).flat()
     },
     mutations: {
         setList: function (state, layers) {
