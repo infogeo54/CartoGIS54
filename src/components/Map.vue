@@ -17,6 +17,7 @@
         computed: {
             ...mapGetters({
                 layers: 'layer/list',
+                features: 'layer/features',
                 selectedLayer: 'layer/selected',
                 selectedFeature: 'feature/selected',
                 selectedType: 'feature/type',
@@ -27,12 +28,15 @@
                 return this.editing ? 'crosshair' : 'grab'
             },
             representations: function () {
-                const res = this.layers.map(l =>
-                    l.features.map(f =>
-                        MapTools.representation(f, this.setSelected)
-                    )
+                return this.features.map(f =>
+                    MapTools.representation(f, this.setSelected)
                 )
-                return res.flat()
+            },
+            toInsert: function () {
+                if (this.selectedFeature) {
+                    return this.selectedFeature.representation(this.setSelected)
+                }
+                return null
             }
         },
         methods: {
@@ -45,14 +49,16 @@
                 this.representations.forEach(r => r.remove())
             },
             mapClicked: async function (e) {
-                const geom = {coordinates: [e.latlng.lat, e.latlng.lng]}
-                const props = {
-                    ... await Feature.getDescription(this.selectedLayer.name),
-                    type: this.selectedType
+                if (this.toInsert) this.toInsert.remove()
+                const options = {
+                    geometry: { coordinates: [e.latlng.lat, e.latlng.lng] },
+                    properties: {
+                        ... await Feature.getDescription(this.selectedLayer.name),
+                        type: this.selectedType
+                    }
                 }
-                this.setSelected(new Feature({ geometry: geom, properties: props }))
-                this.setRepresentation(MapTools.representation(this.selectedFeature))
-                this.representation.addTo(this.map)
+                this.setSelected(new Feature(options))
+                this.toInsert.addTo(this.map)
             },
             init: function (center) {
                 this.map = L.map('map').setView(center, 15)
@@ -66,10 +72,7 @@
                 this.addRepresentations()
 
                 this.map.on('click', e => {
-                    if (this.editing) {
-                        if (this.representation) this.representation.remove()
-                        this.mapClicked(e)
-                    }
+                    if (this.editing) this.mapClicked(e)
                 })
             },
         },
