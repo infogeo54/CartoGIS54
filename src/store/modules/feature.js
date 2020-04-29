@@ -19,10 +19,6 @@ export default {
         }
     },
     actions: {
-        createFeature: async function ({commit}, params) {
-            const f = new Feature(params)
-            commit('setSelected', f)
-        },
         reset: function ({commit}) {
             commit('setSelected', new Feature())
         }
