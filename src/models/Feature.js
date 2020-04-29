@@ -1,3 +1,4 @@
+import MapTools from '../tools/MapTools'
 import WFS from '../API/WFS'
 
 export default class Feature {
@@ -17,6 +18,10 @@ export default class Feature {
 
     set geom (geometry) {
         this.geometry = geometry ? geometry : {}
+    }
+
+    representation (cb) {
+        return MapTools.representation(this, cb)
     }
 
     static async getDescription (layerName) {
