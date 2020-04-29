@@ -50,14 +50,10 @@
             },
             mapClicked: async function (e) {
                 if (this.toInsert) this.toInsert.remove()
-                const options = {
-                    geometry: { coordinates: [e.latlng.lat, e.latlng.lng] },
-                    properties: {
-                        ... await Feature.getDescription(this.selectedLayer.name),
-                        type: this.selectedType
-                    }
-                }
-                this.setSelected(new Feature(options))
+                const options = { geometry: { coordinates: [e.latlng.lat, e.latlng.lng] } }
+                const f = new Feature(options)
+                await f.getDescription(this.selectedLayer.name, this.selectedType)
+                this.setSelected(f)
                 this.toInsert.addTo(this.map)
             },
             init: function (center) {
