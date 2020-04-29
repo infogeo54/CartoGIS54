@@ -1,9 +1,7 @@
-import Feature from '../../models/Feature'
-
 export default {
     namespaced: true,
     state: {
-        selected: new Feature(),
+        selected: null,
         type: null
     },
     getters: {
@@ -20,7 +18,7 @@ export default {
     },
     actions: {
         reset: function ({commit}) {
-            commit('setSelected', new Feature())
+            commit('setSelected', null)
         }
     }
 }
