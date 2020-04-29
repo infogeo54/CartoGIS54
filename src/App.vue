@@ -29,7 +29,10 @@
         return !this.layers.length
       },
       formVisible: function () {
-        return !!this.feature.geometry.coordinates
+        if (this.feature) {
+          return !!this.feature.geometry.coordinates
+        }
+        return false
       }
     },
     methods: {
