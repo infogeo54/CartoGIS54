@@ -24,7 +24,10 @@ export default class Feature {
         return MapTools.representation(this, cb)
     }
 
-    static async getDescription (layerName) {
-        return WFS.fetchFeatureDescription(layerName)
+    async getDescription (layerName, typeName) {
+        this.props = {
+            ...await WFS.fetchFeatureDescription(layerName),
+            type: typeName
+        }
     }
 }
