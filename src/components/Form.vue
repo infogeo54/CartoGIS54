@@ -26,7 +26,10 @@
         },
         methods: {
             ...mapMutations('feature', ['updateAttribute']),
-            ...mapActions('feature', ['reset', 'save']),
+            ...mapActions([
+                'reset',
+                'feature/save'
+            ]),
             /**
              * Saves changes in the Store
              * @param attribute
@@ -38,7 +41,7 @@
              * Sends a Transaction request
              */
             onSaveClick: function () {
-                this.save(this.layer.name)
+                this['feature/save'](this.layer.name)
             },
             onCancelClick: function () {
                 if (!this.feature.id) this.feature.representation.remove()

@@ -20,6 +20,10 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        reset: function ({dispatch}) {
+            dispatch('map/reset')
+            dispatch('feature/reset')
+        }
     },
     modules : {
         layer,
