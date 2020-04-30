@@ -1,7 +1,7 @@
 <template>
     <div id="form">
-        <FormGroup v-for="(value, property) in properties"
-                   :key="property"
+        <FormGroup v-for="(value, property, index) in properties"
+                   :key="index"
                    :property="property"
                    :value="value"
                    @changed="onChange"></FormGroup>
@@ -16,33 +16,32 @@
     export default {
         name: "Form",
         computed: {
-            ...mapGetters('feature', {
-                feature: 'selected',
-                representation: 'representation'
+            ...mapGetters({
+                layer: 'layer/selected',
+                feature: 'feature/selected',
             }),
             properties: function () {
                 return this.feature.properties
             }
         },
         methods: {
-            ...mapMutations('feature', ['setSelected']),
-            ...mapActions('feature', ['reset']),
+            ...mapMutations('feature', ['updateAttribute']),
+            ...mapActions('feature', ['reset', 'save']),
             /**
              * Saves changes in the Store
              * @param attribute
              */
             onChange: function (attribute) {
-                this.feature.properties[attribute.name] = attribute.value
-                this.setSelected(this.feature)
+                this.updateAttribute(attribute)
             },
             /**
              * Sends a Transaction request
              */
             onSaveClick: function () {
-
+                this.save(this.layer.name)
             },
             onCancelClick: function () {
-                this.representation.remove()
+                if (!this.feature.id) this.feature.representation.remove()
                 this.reset()
             }
         },

@@ -4,7 +4,6 @@
 
 <script>
     import L from 'leaflet'
-    import MapTools from '../tools/MapTools'
     import {mapGetters, mapMutations} from 'vuex'
     import Feature from "../models/Feature";
     export default {
@@ -20,7 +19,7 @@
                 features: 'layer/features',
                 selectedLayer: 'layer/selected',
                 selectedFeature: 'feature/selected',
-                toInsert: 'feature/representation',
+                representation: 'feature/representation',
                 selectedType: 'feature/type',
                 editing: 'map/editing',
             }),
@@ -28,9 +27,10 @@
                 return this.editing ? 'crosshair' : 'grab'
             },
             representations: function () {
-                return this.features.map(f =>
-                    MapTools.representation(f, this.setSelected)
-                )
+                return this.features.map(f => {
+                    f.createRepresentation(this.setSelected)
+                    return f.representation
+                })
             }
         },
         methods: {
@@ -43,12 +43,13 @@
                 this.representations.forEach(r => r.remove())
             },
             mapClicked: async function (e) {
-                if (this.toInsert) this.toInsert.remove()
+                if (this.representation) this.representation.remove()
                 const options = { geometry: { coordinates: [e.latlng.lat, e.latlng.lng] } }
                 const f = new Feature(options)
                 await f.getDescription(this.selectedLayer.name, this.selectedType)
+                f.createRepresentation(this.setSelected)
                 this.setSelected(f)
-                this.toInsert.addTo(this.map)
+                f.representation.addTo(this.map)
             },
             init: function (center) {
                 this.map = L.map('map').setView(center, 15)

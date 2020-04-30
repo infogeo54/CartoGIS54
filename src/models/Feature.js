@@ -20,8 +20,8 @@ export default class Feature {
         this.geometry = geometry ? geometry : {}
     }
 
-    representation (cb) {
-        return MapTools.representation(this, cb)
+    createRepresentation (cb) {
+        this.representation =  MapTools.representation(this, cb)
     }
 
     async getDescription (layerName, typeName) {
