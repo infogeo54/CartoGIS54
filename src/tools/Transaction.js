@@ -94,7 +94,7 @@ export default class Transaction {
      */
     static polygon (geomerty) {
         let coordinates = ''
-        const coordinatesList = geomerty.coordinates[0][0]
+        const coordinatesList = geomerty.coordinates
         coordinatesList.forEach(c => {
             coordinates += `${c.join(',')} `
         })
