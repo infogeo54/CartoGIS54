@@ -1,11 +1,8 @@
 import axios from 'axios'
 import * as convert from 'xml-js'
 
-//const axios = require('axios')
-//const convert = require('xml-js')
-
-const host = 'localhost:8080'
-const baseUrl = `http://${host}?SERVICE=WFS&VERSION=1.3.0&OUTPUTFORMAT=GEOJSON`
+const host = 'qgisserver/cgi-bin/qgis_mapserv.fcgi'
+const baseUrl = `http://${host}?SERVICE=WFS&VERSION=1.1.0`
 
 /**
  * Make a GetCapabilities AJAX request and return a stringified XML document from the response
@@ -22,6 +19,7 @@ async function fetchCapabilities() {
  * @param capabilitiesXML : String - Capabilities stringified XML document
  */
 function extractLayers(capabilitiesXML) {
+    console.log(capabilities)
     const capabilities = convert.xml2js(capabilitiesXML, {compact: true})
     return capabilities['WFS_Capabilities']['FeatureTypeList']['FeatureType']
 }
@@ -46,7 +44,7 @@ function reverseCoordinates (coordinates) {
  * @returns Object
  */
 async function fetchFeatures(layer) {
-    const url = `${baseUrl}&REQUEST=GetFeature&TYPENAME=${layer}`
+    const url = `${baseUrl}&REQUEST=GetFeature&TYPENAME=${layer}&OUTPUTFORMAT=GEOJSON`
     const res = await axios.get(url)
     return res.data.features.map(f => {
         f.geometry.coordinates = reverseCoordinates(f.geometry.coordinates)
@@ -81,12 +79,22 @@ function extractSchema(descriptionXML) {
     return Object.fromEntries(entries)
 }
 
+async function sendTransaction(transaction, layer) {
+    console.log(transaction)
+    const url = `${baseUrl}&REQUEST=Transaction&TYPENAME=${layer}`
+    const res = await axios.post(url, transaction, {
+        headers: {
+            'Content-type': 'application/gml+xml'
+        }
+    })
+    console.log(res.data)
+}
+
 
 export default {
     fetchCapabilities,
     extractLayers,
     fetchFeatures,
-    fetchFeatureDescription
+    fetchFeatureDescription,
+    sendTransaction
 }
-
-//module.exports = {getFeatureDescription, extractAttributes}

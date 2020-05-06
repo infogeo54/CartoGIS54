@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as convert from 'xml-js'
 
-const host = 'localhost:8080'
+const host = 'qgisserver/cgi-bin/qgis_mapserv.fcgi'
 const baseUrl = `http://${host}?SERVICE=WMS&VERSION=1.3.0`
 
 async function fetchCapabilities() {

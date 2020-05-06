@@ -8,10 +8,11 @@ services:
             - POSTGRES_DBNAME=bourgs-centres
         volumes:
             - ./Docker/postgres_data:/var/lib/postgresql
+        ports:
+            - 5432:5432
 
     pgadmin:
         image: dpage/pgadmin4:4.20
-        restart: always
         environment:
             - PGADMIN_DEFAULT_EMAIL=hugo.jahnke@gmail.com
             - PGADMIN_DEFAULT_PASSWORD=password
@@ -19,36 +20,3 @@ services:
             - 8888:80
         links:
             - db:db
-
-    server:
-        image: camptocamp/qgis-server:3.12
-        volumes:
-            - /home/qgis/projects/bourgs-centres:/etc/qgisserver
-        environment:
-            - QGIS_SERVER_LOG_LEVEL=0
-        links:
-          - db:db
-        ports:
-            - 8080:80
-
-    qgis:
-        image: qgis/qgis:release-3_12
-        environment:
-            - DISPLAY=unix$DISPLAY
-        volumes:
-            - /tmp/.X11-unix:/tmp/.X11-unix
-            - /home/qgis/projects/bourgs-centres:/project
-        links:
-            - db:db
-        command: ["qgis", "/project/project.qgs"]
-
-    app:
-        image: node:13.11.0
-        volumes:
-            - .:/app
-        ports:
-            - 5000:8080
-        working_dir: /app
-        links:
-            - server:server
-        command: "npm run serve"
