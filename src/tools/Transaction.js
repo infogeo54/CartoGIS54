@@ -22,16 +22,13 @@ export default class Transaction {
         }
         this['wfs:Transaction'] = {
             '_attributes':  {
-                'version': '1.3.0',
+                'version': '1.1.0',
                 'xmlns:topp': 'http://www.openplans.org/topp',
-                'xmlns:fes': 'http://www.opengis.net/fes/2.0',
-                'xmlns:gml': 'http://www.opengis.net/gml/3.2',
-                'xmlns:wfs': 'http://www.opengis.net/wfs/2.0',
+                'xmlns:fes': 'http://www.opengis.net/fes',
+                'xmlns:gml': 'http://www.opengis.net/gml',
+                'xmlns:wfs': 'http://www.opengis.net/wfs',
                 'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance'
-            },
-            'wfs:Insert': {},
-            'wfs:Update': {},
-            'wfs:Delete': {},
+            }
         }
     }
 
@@ -49,14 +46,28 @@ export default class Transaction {
      * @returns Object
      */
     static point (geometry) {
-        const coordinates = geometry.coordinates.join(',')
+        const coordinates = geometry.coordinates.join(' ')
         return {
             'gml:Point': {
-                'gml:coordinates': {
+                '_attributes': {
+                    'srsName': "EPSG:2154"
+                },
+                'gml:pos': {
+                    '_attributes': {
+                        'srsDimension': 2
+                    },
                     '_text': coordinates
                 }
             }
         }
+    }
+
+    static toInsertProperties (props) {
+        let res = {}
+        for (let key in props) {
+            if (props[key]) res[key] = props[key]
+        }
+        return res
     }
 
     /**
@@ -123,11 +134,12 @@ export default class Transaction {
      */
     static insert (layer, feature) {
         let t = new Transaction()
-        const properties = feature.properties
+        t['wfs:Transaction']['wfs:Insert'] = {}
+        const properties = Transaction.toInsertProperties(feature.properties)
         if (feature.geometry.coordinates.length === 2) {
-            properties['geometry'] = Transaction.point(feature.geometry)
+            properties.geometry = Transaction.point(feature.geometry)
         } else {
-            properties['geometry'] = Transaction.polygon(feature.geometry)
+            properties.geometry = Transaction.polygon(feature.geometry)
         }
         t['wfs:Transaction']['wfs:Insert'][layer] = properties
         return t
@@ -141,6 +153,7 @@ export default class Transaction {
      */
     static update (layer, feature) {
         let t = new Transaction()
+        t['wfs:Transaction']['wfs:Update'] = {}
         const properties = Transaction.properties(feature.properties)
         t['wfs:Transaction']['wfs:Update'] = {
             '_attributes': {
@@ -173,7 +186,7 @@ export default class Transaction {
             'fes:Filter': {
                 'fes:ResourceId': {
                     '_attributes': {
-                        rid: feature.id
+                        'rid': feature.id
                     }
                 }
             }
