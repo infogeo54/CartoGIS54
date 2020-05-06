@@ -38,7 +38,9 @@ export default {
             const t = Transaction.insert(state.selected).toXML()
             await WFS.sendTransaction(t, state.selected.parent)
         },
-        update: function () {
+        update: async function ({state}) {
+            const t = Transaction.update(state.selected).toXML()
+            await WFS.sendTransaction(t, state.selected.parent)
         },
         save: function ({state, dispatch}, layer) {
             if (state.selected.id) dispatch('update', layer)

@@ -78,13 +78,11 @@ export default class Transaction {
      */
     static property (key, value) {
         return {
-            'wfs:Property': {
-                'wfs:ValueReference': {
-                    '_text': key
-                },
-                'wfs:Value': {
-                    '_text': value
-                }
+            'wfs:Name': {
+                '_text': key
+            },
+            'wfs:Value': {
+                '_text': value
             }
         }
     }
@@ -94,8 +92,14 @@ export default class Transaction {
      * @param props : Object - The feature's properties
      * @returns Object
      */
-    static properties (props) {
-        return props.map(key => Transaction.property(key, props[key]))
+    static properties (properties) {
+        let props = []
+        for (let key in properties) {
+           if (properties[key]) {
+               props.push(Transaction.property(key, properties[key]))
+           }
+        }
+        return props
     }
 
     /**
