@@ -1,5 +1,5 @@
 <template>
-    <div v-if="fillable" class="form-group">
+    <div class="form-group">
         <label :for="id">{{ title }}</label>
         <input :id="id"
                :type="type"

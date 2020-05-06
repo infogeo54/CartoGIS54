@@ -1,5 +1,5 @@
 import Transaction from '../../tools/Transaction'
-//import axios from 'axios'
+import WFS from '../../API/WFS'
 
 export default {
     namespaced: true,
@@ -30,10 +30,9 @@ export default {
         reset: function ({commit}) {
             commit('setSelected', null)
         },
-        insert: function ({state}, layer) {
-            const t = Transaction.insert(layer, state.selected)
-            console.log(t)
-            console.log(t.toXML())
+        insert: async function ({state}, layer) {
+            const t = Transaction.insert(layer, state.selected).toXML()
+            await WFS.sendTransaction(t, layer)
         },
         update: function () {
         },
