@@ -7,6 +7,7 @@
                    @changed="onChange"></FormGroup>
         <button @click="onSaveClick">Enregistrer</button>
         <button  @click="onCancelClick">Annuler</button>
+        <button @click="onDeleteClick">Supprimer</button>
     </div>
 </template>
 
@@ -28,7 +29,8 @@
             ...mapMutations('feature', ['updateAttribute']),
             ...mapActions([
                 'reset',
-                'feature/save'
+                'feature/save',
+                'feature/delete'
             ]),
             /**
              * Saves changes in the Store
@@ -46,6 +48,9 @@
             onCancelClick: function () {
                 if (!this.feature.id) this.feature.representation.remove()
                 this.reset()
+            },
+            onDeleteClick: function () {
+                this['feature/delete']()
             }
         },
         components: {

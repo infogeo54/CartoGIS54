@@ -177,16 +177,16 @@ export default class Transaction {
      * @param feature - The feature to insert
      * @return String - A stringified XML Transaction
      */
-    static delete (layer, feature) {
+    static delete (feature) {
         let t = new Transaction()
         t['wfs:Transaction']['wfs:Delete'] = {
             '_attributes': {
-                'typeName': layer
+                'typeName': feature.parent
             },
-            'fes:Filter': {
-                'fes:ResourceId': {
+            'ogc:Filter': {
+                'ocg:GmlObjectId': {
                     '_attributes': {
-                        'rid': feature.id
+                        'gml:id': feature.id
                     }
                 }
             }

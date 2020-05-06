@@ -30,6 +30,10 @@ export default {
         reset: function ({commit}) {
             commit('setSelected', null)
         },
+        delete: async function ({state}){
+            const t = Transaction.delete(state.selected).toXML()
+            await WFS.sendTransaction(t, state.selected.parent)
+        },
         insert: async function ({state}, layer) {
             const t = Transaction.insert(layer, state.selected).toXML()
             await WFS.sendTransaction(t, layer)
