@@ -34,9 +34,9 @@ export default {
             const t = Transaction.delete(state.selected).toXML()
             await WFS.sendTransaction(t, state.selected.parent)
         },
-        insert: async function ({state}, layer) {
-            const t = Transaction.insert(layer, state.selected).toXML()
-            await WFS.sendTransaction(t, layer)
+        insert: async function ({state}) {
+            const t = Transaction.insert(state.selected).toXML()
+            await WFS.sendTransaction(t, state.selected.parent)
         },
         update: function () {
         },

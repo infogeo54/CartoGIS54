@@ -132,7 +132,7 @@ export default class Transaction {
      * @param feature - The feature to insert
      * @return String - A stringified XML Transaction
      */
-    static insert (layer, feature) {
+    static insert (feature) {
         let t = new Transaction()
         t['wfs:Transaction']['wfs:Insert'] = {}
         const properties = Transaction.toInsertProperties(feature.properties)
@@ -141,7 +141,7 @@ export default class Transaction {
         } else {
             properties.geometry = Transaction.polygon(feature.geometry)
         }
-        t['wfs:Transaction']['wfs:Insert'][layer] = properties
+        t['wfs:Transaction']['wfs:Insert'][feature.parent] = properties
         return t
     }
 
@@ -151,19 +151,19 @@ export default class Transaction {
      * @param feature - The feature to insert
      * @return String - A stringified XML Transaction
      */
-    static update (layer, feature) {
+    static update (feature) {
         let t = new Transaction()
         t['wfs:Transaction']['wfs:Update'] = {}
         const properties = Transaction.properties(feature.properties)
         t['wfs:Transaction']['wfs:Update'] = {
             '_attributes': {
-                'typeName': layer
+                'typeName': feature.parent
             },
             'wfs:Property': properties,
-            'fes:Filter': {
-                'fes:ResourceId': {
+            'ogc:Filter': {
+                'ocg:GmlObjectId': {
                     '_attributes': {
-                        'rid': feature.id
+                        'gml:id': feature.id
                     }
                 }
             }
