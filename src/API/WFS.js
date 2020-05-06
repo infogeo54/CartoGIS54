@@ -82,11 +82,7 @@ function extractSchema(descriptionXML) {
 async function sendTransaction(transaction, layer) {
     console.log(transaction)
     const url = `${baseUrl}&REQUEST=Transaction&TYPENAME=${layer}`
-    const res = await axios.post(url, transaction, {
-        headers: {
-            'Content-type': 'application/gml+xml'
-        }
-    })
+    const res = await axios.post(url, transaction)
     console.log(res.data)
 }
 
