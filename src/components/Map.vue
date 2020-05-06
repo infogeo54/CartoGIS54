@@ -44,7 +44,10 @@
             },
             mapClicked: async function (e) {
                 if (this.representation) this.representation.remove()
-                const options = { geometry: { coordinates: [e.latlng.lat, e.latlng.lng] } }
+                const options = {
+                    geometry: { coordinates: [e.latlng.lat, e.latlng.lng] },
+                    parent: this.selectedLayer.name
+                }
                 const f = new Feature(options)
                 await f.getDescription(this.selectedLayer.name, this.selectedType)
                 f.createRepresentation(this.setSelected)

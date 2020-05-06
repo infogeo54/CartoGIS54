@@ -6,6 +6,7 @@ export default class Feature {
         this.props = options.properties
         this.identifier = options.id
         this.geom = options.geometry
+        this.parent = options.parent
     }
 
     set props (properties) {
