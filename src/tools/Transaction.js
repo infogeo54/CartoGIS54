@@ -46,7 +46,9 @@ export default class Transaction {
      * @returns Object
      */
     static point (geometry) {
-        const coordinates = geometry.coordinates.join(' ')
+        const x = geometry.coordinates.x
+        const y = geometry.coordinates.y
+        const pos = `${x} ${y}`
         return {
             'gml:Point': {
                 '_attributes': {
@@ -56,7 +58,7 @@ export default class Transaction {
                     '_attributes': {
                         'srsDimension': 2
                     },
-                    '_text': coordinates
+                    '_text': pos
                 }
             }
         }
@@ -89,7 +91,7 @@ export default class Transaction {
 
     /**
      * Create a list of formatted Property tags
-     * @param props : Object - The feature's properties
+     * @param properties : Object - The feature's properties
      * @returns Object
      */
     static properties (properties) {
@@ -132,7 +134,6 @@ export default class Transaction {
 
     /**
      * Create an Insert Transaction
-     * @param layer : String - The associated layer name
      * @param feature - The feature to insert
      * @return String - A stringified XML Transaction
      */
@@ -141,9 +142,9 @@ export default class Transaction {
         t['wfs:Transaction']['wfs:Insert'] = {}
         const properties = Transaction.toInsertProperties(feature.properties)
         if (feature.geometry.coordinates.length === 2) {
-            properties.geometry = Transaction.point(feature.geometry)
+            properties.geometry = Transaction.point(feature.getConvertedGeometry())
         } else {
-            properties.geometry = Transaction.polygon(feature.geometry)
+            properties.geometry = Transaction.polygon(feature.getConvertedGeometry())
         }
         t['wfs:Transaction']['wfs:Insert'][feature.parent] = properties
         return t
@@ -151,7 +152,6 @@ export default class Transaction {
 
     /**
      * Create an Update Transaction
-     * @param layer : String - The associated layer name
      * @param feature - The feature to insert
      * @return String - A stringified XML Transaction
      */
@@ -177,7 +177,6 @@ export default class Transaction {
 
     /**
      * Create a Delete Transaction
-     * @param layer : String - The associated layer name
      * @param feature - The feature to insert
      * @return String - A stringified XML Transaction
      */
