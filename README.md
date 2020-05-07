@@ -27,9 +27,9 @@ Then, follow these steps to configure the containers and the app :
 
 NOTE : If you already have an existing and configured environment and a WMS/WFS server you can skip to the **App setup** section.
 
-#### PostGIS
-
 ### Containers setup
+
+#### PostGIS
 
 PostGIS is a PostgreSQL database able to manipulate spatial and geographical objects.
 
