@@ -31,4 +31,12 @@ export default class Feature {
             type: typeName
         }
     }
+
+    /**
+     * Returns the EPSG:900913 to EPSG:2154 geometry conversion
+     * @returns Object
+     */
+    getConvertedGeometry () {
+        return { coordinates: MapTools.project(this.geometry.coordinates) }
+    }
 }
