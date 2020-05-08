@@ -1,6 +1,6 @@
 # Bourgs-Centres
 
-Bourgs-Centres is a GIS web app developed for some municipalities inside of the [Conseil Départemental de Meurthe-et-Moselle](https://meurthe-et-moselle.fr) in order to help them localizing and providing data about projects they did or they want to undertake.
+Bourgs-Centres is a GIS web app developed for some municipalities inside of the [Conseil Départemental de Meurthe-et-Moselle](http://meurthe-et-moselle.fr) in order to help them localizing and providing data about projects they did or they want to undertake.
 
 ## Front stack
 
