@@ -19,7 +19,6 @@ async function fetchCapabilities() {
  * @param capabilitiesXML : String - Capabilities stringified XML document
  */
 function extractLayers(capabilitiesXML) {
-    console.log(capabilities)
     const capabilities = convert.xml2js(capabilitiesXML, {compact: true})
     return capabilities['WFS_Capabilities']['FeatureTypeList']['FeatureType']
 }
@@ -53,30 +52,27 @@ async function fetchFeatures(layer) {
 }
 
 /**
- * Make a DescribeFeature AJAX request and return a stringified XML document from the response
- * @param layer : String - The name of the associated layer
- * @returns String
- */
-async function fetchFeatureDescription(layer) {
-    const url = `${baseUrl}&REQUEST=DescribeFeatureType&TYPENAME=${layer}`
-    const res = await axios.get(url)
-    return extractSchema(res.data)
-}
-
-/**
- * Extract a list of property objects from a Feature Description XML document
- * @param descriptionXML : String - Feature Description stringified XML document
+ * Make a DescribeFeature AJAX request and return a list of descriptions
  * @returns Array
  */
-function extractSchema(descriptionXML) {
-    const description = convert.xml2js(descriptionXML, {compact: true})
-    const elements = description['schema']['complexType']['complexContent']['extension']['sequence']['element']
-    let entries = []
-    elements.forEach(e => {
-        const attr = e['_attributes']
-        if (attr.name !== 'geometry') entries.push([attr.name, null])
+async function fetchAllFeatureDescriptions() {
+    const url = `${baseUrl}&REQUEST=DescribeFeatureType&TYPENAME=education`
+    const res = await axios.get(url)
+    return extractAllDescriptions(res.data)
+}
+
+function extractAllDescriptions(XMLDescriptions) {
+    const descriptions = convert.xml2js(XMLDescriptions, {compact: true})
+    return descriptions['schema']['complexType'].map(t => {
+        const layer = t['_attributes']['name'].replace('Type', '')
+        const attributes = extractAttributes(t['complexContent']['extension']['sequence'])
+        return {layer: layer, attributes: attributes}
     })
-    return Object.fromEntries(entries)
+}
+
+function extractAttributes(sequence) {
+    const attributes = sequence.element.map(e => [e['_attributes']['name']], null)
+    return Object.fromEntries(attributes)
 }
 
 async function sendTransaction(transaction, layer) {
@@ -86,11 +82,10 @@ async function sendTransaction(transaction, layer) {
     console.log(res.data)
 }
 
-
 export default {
     fetchCapabilities,
     extractLayers,
     fetchFeatures,
-    fetchFeatureDescription,
+    fetchAllFeatureDescriptions,
     sendTransaction
 }
