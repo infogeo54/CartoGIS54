@@ -5,12 +5,17 @@ export default {
     namespaced: true,
     state : {
         list: [],
-        selected: {}
+        selected: {},
+        descriptions: []
     },
     getters : {
         list: state => state.list,
         selected: state => state.selected,
-        features: state => state.list.map(l => l.features).flat()
+        features: state => state.list.map(l => l.features).flat(),
+        descriptions: state => state.descriptions,
+        getDescription: (state) => (layer) => {
+            return state.descriptions.find(d => d.layer === layer)
+        }
     },
     mutations: {
         setList: function (state, layers) {
@@ -25,6 +30,9 @@ export default {
         },
         setSelected: function (state, layer) {
             state.selected = layer !== state.selected ? layer : null
+        },
+        setDescriptions: function (state, descriptions) {
+            state.descriptions = descriptions
         }
     },
     actions: {
@@ -41,6 +49,10 @@ export default {
             )
             commit('setCapabilities', capabilities, {root: true})
             commit('setList', layers)
+        },
+        getDescriptions: async function ({commit}) {
+            const descriptions = await WFS.fetchAllFeatureDescriptions()
+            commit('setDescriptions', descriptions)
         },
         reset: function ({commit}) {
             commit('setList', [])
