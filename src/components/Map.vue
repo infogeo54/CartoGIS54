@@ -17,6 +17,7 @@
             ...mapGetters({
                 layers: 'layer/list',
                 features: 'layer/features',
+                description: 'layer/getDescription',
                 selectedLayer: 'layer/selected',
                 selectedFeature: 'feature/selected',
                 representation: 'feature/representation',
@@ -45,11 +46,13 @@
             mapClicked: async function (e) {
                 if (this.representation) this.representation.remove()
                 const options = {
-                    geometry: { coordinates: [e.latlng.lat, e.latlng.lng] },
-                    parent: this.selectedLayer.name
+                    properties: {
+                        ...this.description(this.selectedLayer.name).attributes,
+                        geometry: { coordinates: [e.latlng.lat, e.latlng.lng] }
+                    },
+                    parent: this.selectedLayer
                 }
                 const f = new Feature(options)
-                await f.getDescription(this.selectedLayer.name, this.selectedType)
                 f.createRepresentation(this.setSelected)
                 this.setSelected(f)
                 f.representation.addTo(this.map)

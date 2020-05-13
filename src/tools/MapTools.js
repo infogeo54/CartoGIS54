@@ -37,7 +37,7 @@ export default {
      * Build a feature's representation (marker or polygon)
      */
     representation: function (f, cb) {
-        const coord = f.geometry.coordinates
+        const coord = f.properties.geometry.coordinates
         const rep = coord.length === 2 ? this.createMarker(f, coord) :  this.createPolygon(coord)
         if (cb) rep.on('click', () => cb(f))
         return rep

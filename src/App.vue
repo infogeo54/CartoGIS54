@@ -30,16 +30,17 @@
       },
       formVisible: function () {
         if (this.feature) {
-          return !!this.feature.geometry.coordinates
+          return !!this.feature.properties.geometry.coordinates
         }
         return false
       }
     },
     methods: {
-      ...mapActions('layer', ['getLayers']),
+      ...mapActions('layer', ['getLayers', 'getDescriptions']),
     },
     mounted() {
       this.getLayers()
+      this.getDescriptions()
     },
     components: {
       Loader,
