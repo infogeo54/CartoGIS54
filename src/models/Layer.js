@@ -15,9 +15,8 @@ export default class Layer {
     async getFeatures () {
         const data = await WFS.fetchFeatures(this.name)
         this.features = data.map(f => new Feature({
-            properties: f.properties,
+            properties: {...f.properties, geometry: f.geometry},
             id: f.id,
-            geometry: f.geometry,
             parent: this.name
         }))
     }

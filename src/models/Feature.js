@@ -1,35 +1,20 @@
 import MapTools from '../tools/MapTools'
-import WFS from '../API/WFS'
+//import WFS from '../API/WFS'
 
 export default class Feature {
-    constructor (options = {}) {
-        this.props = options.properties
-        this.identifier = options.id
-        this.geom = options.geometry
+    constructor (options = {
+        id: null,
+        properties: null,
+        parent: null
+    }) {
+        this.properties = options.properties
+        this.id = options.id
         this.parent = options.parent
-    }
-
-    set props (properties) {
-        this.properties = properties ? properties : {}
-    }
-
-    set identifier (id) {
-        this.id = id ? id : null
-    }
-
-    set geom (geometry) {
-        this.geometry = geometry ? geometry : {}
+        this.representation = null
     }
 
     createRepresentation (cb) {
         this.representation =  MapTools.representation(this, cb)
-    }
-
-    async getDescription (layerName, typeName) {
-        this.props = {
-            ...await WFS.fetchFeatureDescription(layerName),
-            type: typeName
-        }
     }
 
     /**
@@ -37,6 +22,6 @@ export default class Feature {
      * @returns Object
      */
     getConvertedGeometry () {
-        return { coordinates: MapTools.project(this.geometry.coordinates) }
+        return { coordinates: MapTools.project(this.properties.geometry.coordinates) }
     }
 }
