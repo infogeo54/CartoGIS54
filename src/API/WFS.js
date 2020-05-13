@@ -1,8 +1,8 @@
 import axios from 'axios'
 import * as convert from 'xml-js'
+import config from '../config'
 
-const host = 'localhost:8080'
-const baseUrl = `http://${host}?SERVICE=WFS&VERSION=1.1.0`
+const baseUrl = `http://${config.host}?SERVICE=WFS&VERSION=1.1.0`
 
 /**
  * Make a GetCapabilities AJAX request and return a stringified XML document from the response

@@ -1,8 +1,8 @@
 import axios from 'axios'
 import * as convert from 'xml-js'
+import config from '../config'
 
-const host = 'localhost:8080'
-const baseUrl = `http://${host}?SERVICE=WMS&VERSION=1.3.0`
+const baseUrl = `http://${config.host}?SERVICE=WMS&VERSION=1.3.0`
 
 async function fetchCapabilities() {
     const url = `${baseUrl}&REQUEST=GetCapabilities`
