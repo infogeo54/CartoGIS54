@@ -1,4 +1,5 @@
 export default {
-    host: "172.16.16.47",
-    script: "cgi-bin/qgis_mapserve.fcgi"
+    qgisserver: {
+        host: "172.16.16.47/cgi-bin/qgis_mapserv.fcgi"
+    }
 }
