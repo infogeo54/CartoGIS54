@@ -75,9 +75,9 @@ function extractAttributes(sequence) {
     return Object.fromEntries(attributes)
 }
 
-async function sendTransaction(transaction, layer) {
+async function sendTransaction(transaction) {
     console.log(transaction)
-    const url = `${baseUrl}&REQUEST=Transaction&TYPENAME=${layer}`
+    const url = `${baseUrl}&REQUEST=Transaction`
     const res = await axios.post(url, transaction)
     console.log(res.data)
 }

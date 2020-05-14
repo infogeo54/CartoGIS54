@@ -32,19 +32,19 @@ export default {
         },
         delete: async function ({state}){
             const t = Transaction.delete(state.selected).toXML()
-            await WFS.sendTransaction(t, state.selected.parent)
+            await WFS.sendTransaction(t)
         },
         insert: async function ({state}) {
             const t = Transaction.insert(state.selected).toXML()
-            await WFS.sendTransaction(t, state.selected.parent)
+            await WFS.sendTransaction(t)
         },
         update: async function ({state}) {
             const t = Transaction.update(state.selected).toXML()
-            await WFS.sendTransaction(t, state.selected.parent)
+            await WFS.sendTransaction(t)
         },
-        save: async function ({state, dispatch}, layer) {
-            if (state.selected.id) await dispatch('update', layer)
-            else await dispatch('insert', layer)
+        save: async function ({state, dispatch}) {
+            if (state.selected.id) await dispatch('update')
+            else await dispatch('insert')
         }
     }
 }
