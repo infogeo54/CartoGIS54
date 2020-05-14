@@ -17,7 +17,7 @@ export default class Layer {
         this.features = data.map(f => new Feature({
             properties: {...f.properties, geometry: f.geometry},
             id: f.id,
-            parent: this.name
+            parent: this
         }))
     }
 

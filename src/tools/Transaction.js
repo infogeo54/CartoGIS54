@@ -205,7 +205,7 @@ export default class Transaction {
         let t = new Transaction()
         t['wfs:Transaction']['wfs:Delete'] = {
             '_attributes': {
-                'typeName': feature.parent
+                'typeName': feature.parent.name
             },
             'ogc:Filter': {
                 'ocg:GmlObjectId': {
