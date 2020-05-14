@@ -44,17 +44,19 @@
              */
             onSaveClick: async function () {
                 await this['feature/save'](this.layer.name)
-                this.reset()
-
+                this.$destroy()
             },
             onCancelClick: function () {
                 if (!this.feature.id) this.feature.representation.remove()
-                this.reset()
+                this.$destroy()
             },
             onDeleteClick: async function () {
                 await this['feature/delete']()
-                this.reset()
+                this.$destroy()
             }
+        },
+        async beforeDestroy() {
+            this.reset()
         },
         components: {
             FormGroup
