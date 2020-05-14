@@ -56,7 +56,7 @@ async function fetchFeatures(layer) {
  * @returns Array
  */
 async function fetchAllFeatureDescriptions() {
-    const url = `${baseUrl}&REQUEST=DescribeFeatureType&TYPENAME=education`
+    const url = `${baseUrl}&REQUEST=DescribeFeatureType`
     const res = await axios.get(url)
     return extractAllDescriptions(res.data)
 }
