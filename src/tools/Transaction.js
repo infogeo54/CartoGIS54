@@ -10,6 +10,7 @@
 //const converter = require ('xml-js')
 
 import converter from 'xml-js'
+import MapTools from './MapTools'
 
 export default class Transaction {
 
@@ -28,7 +29,7 @@ export default class Transaction {
                 'xmlns:gml': 'http://www.opengis.net/gml',
                 'xmlns:wfs': 'http://www.opengis.net/wfs',
                 'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance'
-            }
+            },
         }
     }
 
@@ -42,12 +43,12 @@ export default class Transaction {
 
     /**
      * Create a formatted Point geomerty tag
-     * @param geometry : Object - The feature's geometry
+     * @param coordinates : Object - The point's coordinates
      * @returns Object
      */
-    static point (geometry) {
-        const x = geometry.coordinates.x
-        const y = geometry.coordinates.y
+    static point (coordinates) {
+        const x = coordinates.x
+        const y = coordinates.y
         const pos = `${x} ${y}`
         return {
             'gml:Point': {
@@ -64,21 +65,68 @@ export default class Transaction {
         }
     }
 
+    /**
+     * Create a formatted MultiPolygon tag
+     * @param coordinates : Object - The polygon's coordinates
+     * @returns Object
+     */
+    static polygon (coordinates) {
+        const coordinatesList = coordinates.map(c => c.join(','))
+        return {
+            'gml:MultiPolygon': {
+                'polygonMember': {
+                    'Polygon': {
+                        'gml:outerBoundaryIs': {
+                            'gml:LinearRing': {
+                                'gml:coordinates': {
+                                    '_text': coordinatesList.join(' ')
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Create a formatted geometry tag for Insert and Update Transactions
+     * @param geometry
+     * @returns {{"gml:MultiPolygon": {polygonMember: {Polygon: {"gml:outerBoundaryIs": {"gml:LinearRing": {"gml:coordinates": {_text: string}}}}}}}|{"gml:Point": {"gml:pos": {_text: string, _attributes: {srsDimension: number}}, _attributes: {srsName: string}}}}
+     */
+    static formattedGeometry (geometry) {
+        const coordinates = geometry.coordinates
+        if (Array.isArray(coordinates))return Transaction.polygon(coordinates)
+        return Transaction.point(coordinates)
+    }
+
+    /**
+     * Create formatted Properties tags for an Insert Transaction
+     * @param props : Object - The properties of the Feature to insert
+     * @returns Object
+     */
     static toInsertProperties (props) {
         let res = {}
         for (let key in props) {
-            if (props[key]) res[key] = props[key]
+            if (props[key]) {
+                if (key === 'geometry') {
+                    const geometry = {coordinates: MapTools.project(props.geometry.coordinates)}
+                    res.geometry = Transaction.formattedGeometry(geometry)
+                } else {
+                    res[key] = props[key]
+                }
+            }
         }
         return res
     }
 
     /**
-     * Create a formatted Property tag
+     * Create a formatted Property tag for an Update Transaction
      * @param key : String - The property name
      * @param value : String,Number,Boolean,Object
      * @returns Object
      */
-    static property (key, value) {
+    static toUpdateProperty (key, value) {
         return {
             'wfs:Name': {
                 '_text': key
@@ -90,46 +138,23 @@ export default class Transaction {
     }
 
     /**
-     * Create a list of formatted Property tags
+     * Create a list of formatted Property tags for an Update Transaction
      * @param properties : Object - The feature's properties
      * @returns Object
      */
-    static properties (properties) {
+    static toUpdateProperties (properties) {
         let props = []
         for (let key in properties) {
            if (properties[key]) {
-               props.push(Transaction.property(key, properties[key]))
+               props.push(Transaction.toUpdateProperty(key, properties[key]))
            }
         }
         return props
     }
 
-    /**
-     * Create a formatted MultiPolygon tag
-     * @param geomerty : Object - The feature's geometry
-     * @returns Object
-     */
-    static polygon (geomerty) {
-        let coordinates = ''
-        const coordinatesList = geomerty.coordinates
-        coordinatesList.forEach(c => {
-            coordinates += `${c.join(',')} `
-        })
-        return {
-            'gml:MultiPolygon': {
-               'polygonMember': {
-                   'Polygon': {
-                       'gml:outerBoundaryIs': {
-                           'gml:LinearRing': {
-                               'gml:coordinates': {
-                                   '_text': coordinates
-                               }
-                           }
-                       }
-                   }
-               }
-            }
-        }
+    static properties (feature) {
+        if (feature.id) return Transaction.toUpdateProperties(feature.properties)
+        return Transaction.toInsertProperties(feature.properties)
     }
 
     /**
@@ -141,12 +166,8 @@ export default class Transaction {
         let t = new Transaction()
         t['wfs:Transaction']['wfs:Insert'] = {}
         const properties = Transaction.toInsertProperties(feature.properties)
-        if (feature.geometry.coordinates.length === 2) {
-            properties.geometry = Transaction.point(feature.getConvertedGeometry())
-        } else {
-            properties.geometry = Transaction.polygon(feature.getConvertedGeometry())
-        }
-        t['wfs:Transaction']['wfs:Insert'][feature.parent] = properties
+        console.log(properties)
+        t['wfs:Transaction']['wfs:Insert'][feature.parent.name] = properties
         return t
     }
 
@@ -161,7 +182,7 @@ export default class Transaction {
         const properties = Transaction.properties(feature.properties)
         t['wfs:Transaction']['wfs:Update'] = {
             '_attributes': {
-                'typeName': feature.parent
+                'typeName': feature.parent.name
             },
             'wfs:Property': properties,
             'ogc:Filter': {

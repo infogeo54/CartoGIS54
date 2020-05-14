@@ -16,12 +16,4 @@ export default class Feature {
     createRepresentation (cb) {
         this.representation =  MapTools.representation(this, cb)
     }
-
-    /**
-     * Returns the EPSG:900913 to EPSG:2154 geometry conversion
-     * @returns Object
-     */
-    getConvertedGeometry () {
-        return { coordinates: MapTools.project(this.properties.geometry.coordinates) }
-    }
 }
