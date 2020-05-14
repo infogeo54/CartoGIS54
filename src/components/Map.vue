@@ -36,7 +36,6 @@
         },
         methods: {
             ...mapMutations('feature', ['setSelected']),
-            ...mapMutations('map', ['setRepresentation']),
             addRepresentations: function () {
                 this.representations.forEach(r => r.addTo(this.map))
             },
@@ -54,8 +53,8 @@
                 }
                 const f = new Feature(options)
                 f.createRepresentation(this.setSelected)
-                this.setSelected(f)
                 f.representation.addTo(this.map)
+                this.setSelected(f)
             },
             init: function (center) {
                 this.map = L.map('map').setView(center, 15)
