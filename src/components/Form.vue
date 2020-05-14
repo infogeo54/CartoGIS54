@@ -42,15 +42,18 @@
             /**
              * Sends a Transaction request
              */
-            onSaveClick: function () {
-                this['feature/save'](this.layer.name)
+            onSaveClick: async function () {
+                await this['feature/save'](this.layer.name)
+                this.reset()
+
             },
             onCancelClick: function () {
                 if (!this.feature.id) this.feature.representation.remove()
                 this.reset()
             },
-            onDeleteClick: function () {
-                this['feature/delete']()
+            onDeleteClick: async function () {
+                await this['feature/delete']()
+                this.reset()
             }
         },
         components: {
