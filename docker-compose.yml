@@ -7,7 +7,7 @@ services:
             - PASSWORD=docker
             - POSTGRES_DBNAME=bourgs-centres
         volumes:
-            - ./Docker/postgres_data:/var/lib/postgres
+            - ./Docker/postgres_data:/var/lib/postgresql
 
     pgadmin:
         image: dpage/pgadmin4:4.20
