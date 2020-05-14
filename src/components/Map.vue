@@ -28,19 +28,15 @@
                 return this.editing ? 'crosshair' : 'grab'
             },
             representations: function () {
-                return this.features.map(f => {
-                    f.createRepresentation(this.setSelected)
-                    return f.representation
-                })
+                return this.features.map(f => f.representation)
             }
         },
         methods: {
             ...mapMutations('feature', ['setSelected']),
             addRepresentations: function () {
-                this.representations.forEach(r => r.addTo(this.map))
-            },
-            removeRepresentations: function () {
-                this.representations.forEach(r => r.remove())
+                this.representations.forEach(r => {
+                    r.addTo(this.map)
+                })
             },
             mapClicked: async function (e) {
                 if (this.representation) this.representation.remove()
@@ -53,7 +49,6 @@
                     parent: this.selectedLayer
                 }
                 const f = new Feature(options)
-                f.createRepresentation(this.setSelected)
                 f.representation.addTo(this.map)
                 this.setSelected(f)
             },
