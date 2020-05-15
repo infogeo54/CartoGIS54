@@ -1,9 +1,9 @@
 <template>
     <div id="form">
-        <FormGroup v-for="(value, property, index) in properties"
+        <FormGroup v-for="(property, index) in properties"
                    :key="index"
                    :property="property"
-                   :value="value"
+                   :value="feature.properties[property]"
                    @changed="onChange"></FormGroup>
         <button @click="onSaveClick">Enregistrer</button>
         <button  @click="onCancelClick">Annuler</button>
@@ -22,7 +22,9 @@
                 feature: 'feature/selected',
             }),
             properties: function () {
-                return this.feature.properties
+                return Object.keys(this.feature.properties).sort((a, b) =>
+                    a < b ? -1 : a > b ? 1 : 0
+                )
             }
         },
         methods: {
@@ -55,7 +57,7 @@
                 this.$destroy()
             }
         },
-        async beforeDestroy() {
+        beforeDestroy() {
             this.reset()
         },
         components: {
