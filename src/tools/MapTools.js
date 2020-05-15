@@ -10,6 +10,11 @@ import feature from '../store/modules/feature'
 proj4.defs("EPSG:2154", "+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
 
 export default {
+    /**
+     * Create a Leaflet marker custom icon
+     * @param feature : Feature - The feature to represent
+     * @returns Leaflet Icon
+     */
     createIcon: function (feature) {
         let icon
         try { icon = require(`@/assets/icons/${feature.properties.type}.svg`) }
@@ -23,6 +28,9 @@ export default {
     },
     /**
      * Create a Leaflet marker representation
+     * @param feature : Feature - The feature to represent
+     * @param coordinates : Array
+     * @returns Leaflet Layer
      */
     createMarker: function (feature, coordinates) {
         const icon = this.createIcon(feature)
@@ -30,12 +38,16 @@ export default {
     },
     /**
      * Create a Leaflet poylgon representation
+     * @param coordinates : Array
+     * @returns Leaflet Layer
      */
     createPolygon: function (coordinates) {
         return L.polygon(coordinates, {fillOpacity: 0.5})
     },
     /**
      * Build a feature's representation (marker or polygon)
+     * @param f : Feature - The feature to represent
+     * @returns Leaflet Layer
      */
     representation: function (f) {
         const coord = f.properties.geometry.coordinates
@@ -75,6 +87,4 @@ export default {
         }
         return this.projectPoint(coordinates)
     }
-
-
 }
