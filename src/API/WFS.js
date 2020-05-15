@@ -72,7 +72,11 @@ function extractAllDescriptions(XMLDescriptions) {
 }
 
 function extractAttributes(sequence) {
-    const attributes = sequence.element.map(e => [e['_attributes']['name']], null)
+    const attributes = sequence.element.map(e => {
+        const name = e['_attributes']['name']
+        const type = e['_attributes']['type']
+        return [name, {type: type, value: null}]
+    })
     return Object.fromEntries(attributes)
 }
 
