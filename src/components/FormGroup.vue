@@ -1,11 +1,13 @@
 <template>
     <div class="form-group">
-        <label :for="id">{{ title }}</label>
-        <input :id="id"
-               :type="type"
-               :disabled="disabled"
-               :value="value"
-               @change="changed">
+        <label>
+            {{ title }}
+            <input :id="id"
+                   :type="type"
+                   :disabled="disabled"
+                   :value="value"
+                   @change="changed">
+        </label>
     </div>
 </template>
 
