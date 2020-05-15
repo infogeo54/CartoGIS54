@@ -4,7 +4,7 @@
         <input :id="id"
                :type="type"
                :disabled="disabled"
-               v-model="value"
+               :value="value"
                @change="changed">
     </div>
 </template>
@@ -26,7 +26,13 @@
                 return `ipt-${this.property}`
             },
             disabled: function () {
-                return this.property === 'type'
+                switch (this.property) {
+                    case 'type':
+                    case 'geometry':
+                        return true
+                    default:
+                        return false
+                }
             },
             // We don't want to create an ID input
             fillable: function () {
@@ -34,8 +40,9 @@
             }
         },
         methods: {
-            changed:function () {
-                this.$emit('changed', {name: this.property, value: this.value})
+            changed:function (e) {
+                const value = e.target.value
+                this.$emit('changed', {name: this.property, value: value})
             }
         }
     }
