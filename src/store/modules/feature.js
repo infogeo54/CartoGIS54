@@ -24,27 +24,37 @@ export default {
         },
         updateAttribute: function (state, attribute) {
             state.selected.properties[attribute.name] = attribute.value
+        },
+        setId: function (state, id) {
+            state.selected.id = id
         }
     },
     actions: {
         reset: function ({commit}) {
             commit('setSelected', null)
         },
-        delete: async function ({state}){
+        delete: async function ({state, getters, commit}){
             const t = Transaction.delete(state.selected).toXML()
             await WFS.sendTransaction(t)
+            commit('layer/removeFeature', getters.selected, {root: true})
+
         },
-        insert: async function ({state}) {
+        insert: async function ({state, commit}) {
             const t = Transaction.insert(state.selected).toXML()
-            await WFS.sendTransaction(t)
+            const res = await WFS.sendTransaction(t)
+            const id = res['TransactionResponse']['InsertResults']['Feature']['ogc:FeatureId']['_attributes']['fid']
+            if (id) {
+                commit('setId', id)
+                commit('layer/addFeature', state.selected, {root: true})
+            }
         },
         update: async function ({state}) {
             const t = Transaction.update(state.selected).toXML()
-            await WFS.sendTransaction(t)
+            return await WFS.sendTransaction(t)
         },
         save: async function ({state, dispatch}) {
-            if (state.selected.id) await dispatch('update')
-            else await dispatch('insert')
+            if (state.selected.id) return await dispatch('update')
+            return await dispatch('insert')
         }
     }
 }

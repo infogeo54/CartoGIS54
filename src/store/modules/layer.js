@@ -33,6 +33,26 @@ export default {
         },
         setDescriptions: function (state, descriptions) {
             state.descriptions = descriptions
+        },
+        /**
+         * After an Insert Transacation, add a feature to it's parent layer
+         * @param state
+         * @param feature : Feature
+         */
+        addFeature: function (state, feature) {
+            const layer = state.list.find(l => l.name === feature.parent.name)
+            layer.features.push(feature)
+        },
+        /**
+         * After a Delete Transaction, remove a feature and it's representation from it's parent layer
+         * @param state
+         * @param feature : Feature
+         */
+        removeFeature: function (state, feature) {
+            const layer = state.list.find(l => l.name === feature.parent.name)
+            const index = layer.features.indexOf(feature)
+            feature.representation.remove()
+            layer.features.splice(index, 1)
         }
     },
     actions: {
