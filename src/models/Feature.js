@@ -17,7 +17,10 @@ export default class Feature {
         const description = {...layer.getters.getDescription(layer.state)(parent)}.attributes
         let properties = {}
         for (let prop in description) {
-            properties[prop] = {type: description[prop].type, value: props[prop]}
+            const type = description[prop].type
+            let value = props[prop]
+            if (type === 'boolean' && !value) value = 'FALSE' // New Feature's booleans are init at FALSE
+            properties[prop] = {type: type, value: value}
         }
         this.properties = properties
     }
