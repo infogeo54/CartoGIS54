@@ -30,7 +30,7 @@
       },
       formVisible: function () {
         if (this.feature) {
-          return !!this.feature.properties.geometry.coordinates
+          return !!this.feature.properties.geometry.value.coordinates
         }
         return false
       }

@@ -14,21 +14,24 @@
 <script>
     export default {
         name: "FormGroup",
-        props: ['property', 'value'],
+        props: ['property'],
         computed: {
-            type: function () {
-                const regex = new RegExp(/^.*date.*$/)
-                return this.property.match(regex) ? 'date' : 'text'
-            },
             title: function () {
-                const words = this.property.split('_').join(' ')
+                const words = this.property.name.split('_').join(' ')
                 return words[0].toUpperCase() + words.slice(1)
             },
             id: function () {
-                return `ipt-${this.property}`
+                return `ipt-${this.property.name}`
+            },
+            type: function () {
+                switch (this.property.type) {
+                    case 'date':
+                        return 'date'
+                }
+                return 'text'
             },
             disabled: function () {
-                switch (this.property) {
+                switch (this.property.name) {
                     case 'type':
                     case 'geometry':
                         return true
@@ -36,15 +39,14 @@
                         return false
                 }
             },
-            // We don't want to create an ID input
-            fillable: function () {
-                return !this.property.match(/^.*id.*$/)
+            value: function () {
+                return this.property.value
             }
         },
         methods: {
             changed:function (e) {
                 const value = e.target.value
-                this.$emit('changed', {name: this.property, value: value})
+                this.$emit('changed', {name: this.property.name, value: value})
             }
         }
     }

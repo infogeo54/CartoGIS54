@@ -2,8 +2,7 @@
     <div id="form">
         <FormGroup v-for="(property, index) in properties"
                    :key="index"
-                   :property="property"
-                   :value="feature.properties[property]"
+                   :property="{name: property, ...feature.properties[property]}"
                    @changed="onChange"></FormGroup>
         <button @click="onSaveClick">Enregistrer</button>
         <button  @click="onCancelClick">Annuler</button>

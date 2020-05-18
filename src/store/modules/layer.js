@@ -14,7 +14,7 @@ export default {
         features: state => state.list.map(l => l.features).flat(),
         descriptions: state => state.descriptions,
         getDescription: (state) => (layer) => {
-            return state.descriptions.find(d => d.layer === layer)
+            return state.descriptions.find(d => d.layer === layer.name)
         }
     },
     mutations: {

@@ -95,6 +95,7 @@ export default class Transaction {
      * @returns {{"gml:MultiPolygon": {polygonMember: {Polygon: {"gml:outerBoundaryIs": {"gml:LinearRing": {"gml:coordinates": {_text: string}}}}}}}|{"gml:Point": {"gml:pos": {_text: string, _attributes: {srsDimension: number}}, _attributes: {srsName: string}}}}
      */
     static formattedGeometry (geometry) {
+        console.log(geometry)
         const coordinates = geometry.coordinates
         if (Array.isArray(coordinates))return Transaction.polygon(coordinates)
         return Transaction.point(coordinates)
@@ -108,12 +109,12 @@ export default class Transaction {
     static toInsertProperties (props) {
         let res = {}
         for (let key in props) {
-            if (props[key]) {
+            if (props[key].value) {
                 if (key === 'geometry') {
-                    const geometry = {coordinates: MapTools.project(props.geometry.coordinates)}
+                    const geometry = {coordinates: MapTools.project(props.geometry.value.coordinates)}
                     res.geometry = Transaction.formattedGeometry(geometry)
                 } else {
-                    res[key] = props[key]
+                    res[key] = props[key].value
                 }
             }
         }
@@ -146,7 +147,7 @@ export default class Transaction {
         let props = []
         for (let key in properties) {
            if (properties[key]) {
-               props.push(Transaction.toUpdateProperty(key, properties[key]))
+               props.push(Transaction.toUpdateProperty(key, properties[key].value))
            }
         }
         return props
@@ -163,6 +164,7 @@ export default class Transaction {
      * @return String - A stringified XML Transaction
      */
     static insert (feature) {
+        console.log(feature)
         let t = new Transaction()
         t['wfs:Transaction']['wfs:Insert'] = {}
         const properties = Transaction.toInsertProperties(feature.properties)

@@ -42,7 +42,6 @@
                 if (this.representation) this.representation.remove()
                 const options = {
                     properties: {
-                        ...this.description(this.selectedLayer.name).attributes,
                         geometry: { coordinates: [e.latlng.lat, e.latlng.lng] },
                         type: this.selectedType
                     },

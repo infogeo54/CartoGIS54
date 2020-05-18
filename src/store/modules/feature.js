@@ -23,7 +23,7 @@ export default {
             state.type = type
         },
         updateAttribute: function (state, attribute) {
-            state.selected.properties[attribute.name] = attribute.value
+            state.selected.properties[attribute.name].value = attribute.value
         },
         setId: function (state, id) {
             state.selected.id = id

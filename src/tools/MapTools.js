@@ -17,7 +17,7 @@ export default {
      */
     createIcon: function (feature) {
         let icon
-        try { icon = require(`@/assets/icons/${feature.properties.type}.svg`) }
+        try { icon = require(`@/assets/icons/${feature.properties.type.value}.svg`) }
         catch { icon = require('@/assets/icons/poi.svg') }
         return L.icon({
             iconUrl: icon,
@@ -50,7 +50,7 @@ export default {
      * @returns Leaflet Layer
      */
     representation: function (f) {
-        const coord = f.properties.geometry.coordinates
+        const coord = f.properties.geometry.value.coordinates
         const rep = coord.length === 2 ? this.createMarker(f, coord) :  this.createPolygon(coord)
         rep.on('click', () => feature.mutations.setSelected(feature.state, f))
         return rep
