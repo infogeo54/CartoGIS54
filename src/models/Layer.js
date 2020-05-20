@@ -4,16 +4,16 @@ import Feature from './Feature'
 
 
 export default class Layer {
-    constructor (data) {
-        this.srs = data['DefaultSRS']
-        this.name = data['Name']['_text']
-        this.title = data['Title']['_text']
-        this.operations = data['Operations']['Operation']
-        this.boundingBox = data['ows:WGS84BoundingBox']
+    constructor (options = {properties: null, description: null}) {
+        this.properties = {
+            name: options.properties['Name']['_text'],
+            title: options.properties['Title']['_text']
+        }
+        this.description = options.description
     }
 
     async getFeatures () {
-        const data = await WFS.fetchFeatures(this.name)
+        const data = await WFS.fetchFeatures(this.properties.name)
         this.features = data.map(f => new Feature({
             properties: {...f.properties, geometry: f.geometry},
             id: f.id,
@@ -22,6 +22,6 @@ export default class Layer {
     }
 
     async getStyles () {
-        this.styles = await WMS.fetchStyles(this.name)
+        this.styles = await WMS.fetchStyles(this.properties.name)
     }
 }
