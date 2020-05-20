@@ -10,6 +10,7 @@
 
 <script>
     import LegendItem from './LegendItem'
+    //import Feature from '../models/Feature'
     import {mapGetters,mapMutations} from 'vuex'
 
     export default {
@@ -21,14 +22,13 @@
         },
         methods: {
             ...mapMutations('map', ['setEditing']),
-            ...mapMutations('feature', ['setType']),
+            ...mapMutations('feature', ['setSelected']),
             /**
              * Creating new Feature & Entering Editing mode
+             * Récupérer la description
+             * Créer une nouvelle feature
+             * La stocker dans le store
              */
-            onClick: async function (type) {
-                this.setEditing(true)
-                this.setType(type)
-            }
         },
         components: {
             LegendItem

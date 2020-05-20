@@ -1,20 +1,15 @@
 <template>
     <div id="menu" :class="selectedLayer ? 'open' : ''">
-        <div id="categories">
-            <h3>Catégories</h3>
-            <ul>
-                <li v-for="(layer, index) in layers" :key="index" @click="setSelected(layer)">
-                    {{ getTitle(layer) }}
-                </li>
-            </ul>
-        </div>
+        <Layers :layers="layers" @layerItemClicked="layerItemClicked"></Layers>
         <Legend v-if="selectedLayer" :layer="selectedLayer"></Legend>
     </div>
 </template>
 
 <script>
-    import Legend from './Legend'
+    import Layers from './MenuComponents/Layers'
+    import Legend from './MenuComponents/Legend'
     import {mapGetters, mapMutations} from 'vuex'
+
     export default {
         name: "Menu",
         computed: {
@@ -25,11 +20,13 @@
         },
         methods: {
             ...mapMutations('layer', ['setSelected']),
-            getTitle: function (layer) {
-                return layer.title
+            layerItemClicked: function (name) {
+                const selectedLayer = this.layers.find(l => l.properties.name === name)
+                this.setSelected(selectedLayer)
             }
         },
         components: {
+            Layers,
             Legend
         },
     }
