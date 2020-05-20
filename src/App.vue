@@ -11,7 +11,7 @@
   import Loader from './components/Loader'
   import Menu from './components/Menu'
   import Map from './components/Map'
-  import Form from './components/Form/Form'
+  import Form from './components/Form'
   import {mapGetters, mapActions} from 'vuex'
   export default {
     name: 'App',

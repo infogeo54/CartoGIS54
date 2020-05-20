@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import FormGroup from './FormGroup'
+    import FormGroup from './FormComponents/FormGroup'
     import {mapGetters, mapMutations, mapActions} from 'vuex'
     export default {
         name: "Form",
