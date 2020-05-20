@@ -55,7 +55,14 @@ export default {
         rep.on('click', () => feature.mutations.setSelected(feature.state, f))
         return rep
     },
-
+    /**
+     * Add representations to a mp
+     * @param map : L.map - A Leaflet map instance
+     * @param representations : Array<Feature>
+     */
+    addRepresentations: function (map, representations) {
+        representations.forEach(r => r.addTo(map))
+    },
     /**
      * Project a Point's coordinates from EPSG:900913 to EPSG:2154
      * @param coordinates : Array - Point's coordinates

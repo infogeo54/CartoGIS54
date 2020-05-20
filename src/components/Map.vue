@@ -5,6 +5,7 @@
 <script>
     import L from 'leaflet'
     import {mapGetters, mapMutations} from 'vuex'
+    import MapTools from "../tools/MapTools";
     export default {
         name: "Map",
         data() {
@@ -34,11 +35,6 @@
         },
         methods: {
             ...mapMutations('feature', ['setSelected']),
-            addRepresentations: function () {
-                this.representations.forEach(r => {
-                    r.addTo(this.map)
-                })
-            },
             mapClicked: async function (e) {
                 if (this.editing) {
                     if (this.feature.representation) this.feature.representation.remove()
@@ -56,7 +52,7 @@
                     maxZoom: 20
                 }).addTo(this.map)
 
-                this.addRepresentations()
+                MapTools.addRepresentations(this.map, this.representations)
 
                 this.map.on('click', e => this.mapClicked(e))
             },
