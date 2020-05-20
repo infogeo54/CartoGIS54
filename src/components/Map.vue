@@ -5,7 +5,6 @@
 <script>
     import L from 'leaflet'
     import {mapGetters, mapMutations} from 'vuex'
-    import Feature from "../models/Feature";
     export default {
         name: "Map",
         data() {
@@ -19,14 +18,18 @@
                 features: 'layer/features',
                 selectedLayer: 'layer/selected',
                 selectedFeature: 'feature/selected',
-                representation: 'feature/representation',
-                editing: 'map/editing',
             }),
+            editing: function () {
+                return this.selectedFeature
+            },
             cursor: function () {
                 return this.editing ? 'crosshair' : 'grab'
             },
             representations: function () {
-                return this.features.map(f => f.representation)
+                return this.features.map(f => {
+                    f.createRepresentation()
+                    return f.representation
+                })
             }
         },
         methods: {
@@ -37,17 +40,10 @@
                 })
             },
             mapClicked: async function (e) {
-                if (this.representation) this.representation.remove()
-                const options = {
-                    properties: {
-                        geometry: { coordinates: [e.latlng.lat, e.latlng.lng] },
-                        type: this.selectedType
-                    },
-                    parent: this.selectedLayer
-                }
-                const f = new Feature(options)
-                f.representation.addTo(this.map)
-                this.setSelected(f)
+                if (this.selectedFeature.representation) this.selectedFeature.representation.remove()
+                this.selectedFeature.coordinates = [e.latlng.lat, e.latlng.lng]
+                this.selectedFeature.createRepresentation()
+                this.selectedFeature.representation.addTo(this.map)
             },
             init: function (center) {
                 this.map = L.map('map').setView(center, 15)
