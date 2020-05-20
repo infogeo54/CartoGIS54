@@ -2,13 +2,19 @@
     <div class="form-group">
         <label>{{ title }}</label>
         <select v-if="type === 'select'"
+                :required="required"
                 @change="changed">
             <option value="FALSE">Non</option>
             <option value="TRUE">Oui</option>
         </select>
+        <textarea v-else-if="type === 'textarea'"
+                  :value="value"
+                  @change="changed">
+        </textarea>
         <input v-else
                :type="type"
                :disabled="disabled"
+               :required="required"
                :value="value"
                @change="changed">
     </div>
@@ -26,6 +32,7 @@
                     case 'boolean':
                         return 'select'
                     default:
+                        if (this.property.name === 'observations') return 'textarea'
                         return 'text'
                 }
             },
@@ -33,6 +40,18 @@
                 switch (this.property.name) {
                     case 'type':
                     case 'geometry':
+                        return true
+                    default:
+                        return false
+                }
+            },
+            required: function () {
+                switch (this.property.name) {
+                    case 'nom':
+                    case 'projet':
+                    case 'geometry':
+                    case 'disponible':
+                    case 'vacances':
                         return true
                     default:
                         return false

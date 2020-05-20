@@ -1,13 +1,13 @@
 <template>
-    <div id="form">
+    <form id="form" @submit.prevent="submitForm">
         <FormGroup v-for="(property, index) in properties"
                    :key="index"
                    :property="{name: property, ...feature.properties[property]}"
                    @changed="onChange"></FormGroup>
-        <button @click="onSaveClick">Enregistrer</button>
-        <button  @click="onCancelClick">Annuler</button>
-        <button @click="onDeleteClick">Supprimer</button>
-    </div>
+        <button name="save">Enregistrer</button>
+        <button name="cancel">Annuler</button>
+        <button name="delete">Supprimer</button>
+    </form>
 </template>
 
 <script>
@@ -15,6 +15,11 @@
     import {mapGetters, mapMutations, mapActions} from 'vuex'
     export default {
         name: "Form",
+        data(){
+            return {
+                element: null
+            }
+        },
         computed: {
             ...mapGetters({
                 layer: 'layer/selected',
@@ -24,7 +29,7 @@
                 return Object.keys(this.feature.properties).sort((a, b) =>
                     a < b ? -1 : a > b ? 1 : 0
                 )
-            }
+            },
         },
         methods: {
             ...mapMutations('feature', ['updateAttribute']),
@@ -54,7 +59,20 @@
             onDeleteClick: async function () {
                 await this['feature/delete']()
                 this.$destroy()
+            },
+            submitForm: function (e) {
+                const action = e.submitter.name
+                switch (action) {
+                    case 'save':
+                    case 'update':
+                        return this.onSaveClick()
+                    case 'delete':
+                        return this.onDeleteClick()
+                }
             }
+        },
+        mounted() {
+            this.element = this.$el
         },
         beforeDestroy() {
             this.reset()
