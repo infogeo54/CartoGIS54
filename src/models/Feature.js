@@ -1,5 +1,4 @@
 import MapTools from '../tools/MapTools'
-import layer from '../store/modules/layer'
 
 export default class Feature {
     constructor (options = {
@@ -14,13 +13,13 @@ export default class Feature {
     }
 
     setProperties (parent, props) {
-        const description = {...layer.getters.getDescription(layer.state)(parent)}.attributes
+        const attributes = parent.description.attributes
         let properties = {}
-        for (let prop in description) {
-            const type = description[prop].type
-            let value = props[prop]
+        for (let attr in attributes) {
+            const type = attributes[attr].type
+            let value = props[attr]
             if (type === 'boolean' && !value) value = 'FALSE' // New Feature's booleans are init at FALSE
-            properties[prop] = {type: type, value: value}
+            properties[attr] = {type: type, value: value}
         }
         this.properties = properties
     }
