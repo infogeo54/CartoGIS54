@@ -17,11 +17,9 @@
             ...mapGetters({
                 layers: 'layer/list',
                 features: 'layer/features',
-                description: 'layer/getDescription',
                 selectedLayer: 'layer/selected',
                 selectedFeature: 'feature/selected',
                 representation: 'feature/representation',
-                selectedType: 'feature/type',
                 editing: 'map/editing',
             }),
             cursor: function () {
