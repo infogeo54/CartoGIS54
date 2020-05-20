@@ -169,7 +169,7 @@ export default class Transaction {
         t['wfs:Transaction']['wfs:Insert'] = {}
         const properties = Transaction.toInsertProperties(feature.properties)
         console.log(properties)
-        t['wfs:Transaction']['wfs:Insert'][feature.parent.name] = properties
+        t['wfs:Transaction']['wfs:Insert'][feature.parent.properties.name] = properties
         return t
     }
 
@@ -184,7 +184,7 @@ export default class Transaction {
         const properties = Transaction.properties(feature.properties)
         t['wfs:Transaction']['wfs:Update'] = {
             '_attributes': {
-                'typeName': feature.parent.name
+                'typeName': feature.parent.properties.name
             },
             'wfs:Property': properties,
             'ogc:Filter': {
@@ -207,7 +207,7 @@ export default class Transaction {
         let t = new Transaction()
         t['wfs:Transaction']['wfs:Delete'] = {
             '_attributes': {
-                'typeName': feature.parent.name
+                'typeName': feature.parent.properties.name
             },
             'ogc:Filter': {
                 'ocg:GmlObjectId': {
