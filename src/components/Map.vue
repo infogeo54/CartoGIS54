@@ -14,19 +14,19 @@
         },
         computed: {
             ...mapGetters({
-                layers: 'layer/list',
-                features: 'layer/features',
-                selectedLayer: 'layer/selected',
-                selectedFeature: 'feature/selected',
+                layerList: 'layer/list',
+                featureList: 'layer/features',
+                layer: 'layer/selected',
+                feature: 'feature/selected',
             }),
             editing: function () {
-                return this.selectedFeature
+                return this.feature
             },
             cursor: function () {
                 return this.editing ? 'crosshair' : 'grab'
             },
             representations: function () {
-                return this.features.map(f => {
+                return this.featureList.map(f => {
                     f.createRepresentation()
                     return f.representation
                 })
@@ -40,10 +40,12 @@
                 })
             },
             mapClicked: async function (e) {
-                if (this.selectedFeature.representation) this.selectedFeature.representation.remove()
-                this.selectedFeature.coordinates = [e.latlng.lat, e.latlng.lng]
-                this.selectedFeature.createRepresentation()
-                this.selectedFeature.representation.addTo(this.map)
+                if (this.editing) {
+                    if (this.feature.representation) this.feature.representation.remove()
+                    this.feature.coordinates = [e.latlng.lat, e.latlng.lng]
+                    this.feature.createRepresentation()
+                    this.feature.representation.addTo(this.map)
+                }
             },
             init: function (center) {
                 this.map = L.map('map').setView(center, 15)
@@ -56,9 +58,7 @@
 
                 this.addRepresentations()
 
-                this.map.on('click', e => {
-                    if (this.editing) this.mapClicked(e)
-                })
+                this.map.on('click', e => this.mapClicked(e))
             },
         },
         mounted() {
