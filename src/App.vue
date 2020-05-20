@@ -29,18 +29,15 @@
         return !this.layers.length
       },
       formVisible: function () {
-        if (this.feature) {
-          return !!this.feature.properties.geometry.value.coordinates
-        }
+        if (this.feature) return this.feature.coordinates
         return false
       }
     },
     methods: {
-      ...mapActions('layer', ['getLayers', 'getDescriptions']),
+      ...mapActions('layer', ['getLayers']),
     },
     mounted() {
       this.getLayers()
-      this.getDescriptions()
     },
     components: {
       Loader,
