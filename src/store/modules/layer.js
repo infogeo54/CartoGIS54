@@ -5,7 +5,7 @@ export default {
     namespaced: true,
     state : {
         list: [],
-        selected: {},
+        selected: null,
     },
     getters : {
         list: state => state.list,
