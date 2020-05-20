@@ -9,10 +9,10 @@ const baseUrl = `http://${config.qgisserver.host}?SERVICE=WFS&VERSION=1.1.0`
  * Make a GetCapabilities AJAX request and return a stringified XML document from the response
  * @returns String
  */
-async function fetchCapabilities() {
+async function fetchLayers() {
     const url = `${baseUrl}&REQUEST=GetCapabilities`
     const res = await axios.get(url)
-    return res.data
+    return extractLayers(res.data)
 }
 
 /**
@@ -67,7 +67,8 @@ function extractAllDescriptions(XMLDescriptions) {
     return descriptions['schema']['complexType'].map(t => {
         const layer = t['_attributes']['name'].replace('Type', '')
         const attributes = extractAttributes(t['complexContent']['extension']['sequence'])
-        return {layer: layer, attributes: attributes}
+        const shape = extractShape(t['complexContent']['extension']['sequence'])
+        return {layer: layer, attributes: attributes, shape: shape}
     })
 }
 
@@ -80,6 +81,13 @@ function extractAttributes(sequence) {
     return Object.fromEntries(attributes)
 }
 
+function extractShape(sequence) {
+    const geometryElement = sequence.element.find(e => e['_attributes']['name'] === 'geometry')
+    const geometryType = geometryElement['_attributes']['type']
+    if (geometryType === 'gml:PointPropertyType') return 'Point'
+    else return 'Polygon'
+}
+
 async function sendTransaction(transaction) {
     console.log(transaction)
     const url = `${baseUrl}&REQUEST=Transaction`
@@ -88,7 +96,7 @@ async function sendTransaction(transaction) {
 }
 
 export default {
-    fetchCapabilities,
+    fetchLayers,
     extractLayers,
     fetchFeatures,
     fetchAllFeatureDescriptions,
