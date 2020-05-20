@@ -1,7 +1,12 @@
 <template>
     <div id="menu" :class="selectedLayer ? 'open' : ''">
-        <Layers :layers="layers" @layerItemClicked="layerItemClicked"></Layers>
-        <Legend v-if="selectedLayer" :layer="selectedLayer"></Legend>
+        <Layers :layers="layers"
+                @layerItemClicked="layerItemClicked">
+        </Layers>
+        <Legend v-if="selectedLayer"
+                :layer="selectedLayer"
+                @legendItemClicked="legendItemClicked">
+        </Legend>
     </div>
 </template>
 
@@ -9,6 +14,7 @@
     import Layers from './MenuComponents/Layers'
     import Legend from './MenuComponents/Legend'
     import {mapGetters, mapMutations} from 'vuex'
+    import Feature from '../models/Feature'
 
     export default {
         name: "Menu",
@@ -19,10 +25,20 @@
             })
         },
         methods: {
-            ...mapMutations('layer', ['setSelected']),
+            ...mapMutations([
+                'layer/setSelected',
+                'feature/setSelected'
+            ]),
             layerItemClicked: function (name) {
-                const selectedLayer = this.layers.find(l => l.properties.name === name)
-                this.setSelected(selectedLayer)
+                const layer = this.layers.find(l => l.properties.name === name)
+                this['layer/setSelected'](layer)
+            },
+            legendItemClicked: function (featureType) {
+                const options = {
+                    properties: { type: featureType },
+                    parent: this.selectedLayer
+                }
+                this['feature/setSelected'](new Feature(options))
             }
         },
         components: {

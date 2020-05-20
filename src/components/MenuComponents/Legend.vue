@@ -1,34 +1,33 @@
 <template>
     <div id="legend">
-        <h3>{{ layer.title }}</h3>
-        <LegendItem v-for="(style, index) in layer.styles"
+        <h3>{{ title }}</h3>
+        <LegendItem v-for="(style, index) in styles"
                     :key="index"
                     :feature-style="style"
-                    @clicked="onClick"></LegendItem>
+                    @itemClicked="itemClicked"></LegendItem>
     </div>
 </template>
 
 <script>
     import LegendItem from './LegendItem'
-    //import Feature from '../models/Feature'
-    import {mapGetters,mapMutations} from 'vuex'
 
     export default {
         name: "Legend",
+        props: ['layer'],
         computed: {
-            ...mapGetters('layer', {
-                layer: 'selected'
-            })
+            title: function () {
+                return this.layer.properties.title
+            },
+            styles: function () {
+                return this.layer.styles
+            }
         },
         methods: {
-            ...mapMutations('map', ['setEditing']),
-            ...mapMutations('feature', ['setSelected']),
-            /**
-             * Creating new Feature & Entering Editing mode
-             * Récupérer la description
-             * Créer une nouvelle feature
-             * La stocker dans le store
-             */
+            itemClicked: function (featureType) {
+                this.$emit('legendItemClicked', featureType)
+            }
+
+
         },
         components: {
             LegendItem

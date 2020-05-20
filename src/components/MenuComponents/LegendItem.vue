@@ -1,7 +1,7 @@
 <template>
-    <div class="legend-item" @click="onClick">
+    <div class="legend-item" @click="clicked">
         <img :src="icon" :alt="name">
-        <h4>{{ name }}</h4>
+        <h4>{{ title }}</h4>
     </div>
 </template>
 
@@ -10,8 +10,11 @@
         name: "LegendItem",
         props: ['featureStyle'],
         computed: {
-            name: function () {
+            title: function() {
                 return this.featureStyle['se:Name']['_text']
+            },
+            name: function () {
+                return this.title.toLowerCase()
             },
             icon: function () {
                 const name = this.name.toLowerCase()
@@ -25,8 +28,8 @@
             }
         },
         methods: {
-            onClick: function () {
-                this.$emit('clicked', this.name.toLowerCase())
+            clicked: function () {
+                this.$emit('itemClicked', this.name)
             }
         }
     }
