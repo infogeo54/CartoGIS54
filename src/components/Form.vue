@@ -5,8 +5,8 @@
                    :property="{name: property, ...feature.properties[property]}"
                    @changed="onChange"></FormGroup>
         <button name="save">Enregistrer</button>
-        <button name="cancel">Annuler</button>
         <button name="delete">Supprimer</button>
+        <button type="button" name="cancel" @click="onCancelClick">Annuler</button>
     </form>
 </template>
 
@@ -61,14 +61,7 @@
                 this.$destroy()
             },
             submitForm: function (e) {
-                const action = e.submitter.name
-                switch (action) {
-                    case 'save':
-                    case 'update':
-                        return this.onSaveClick()
-                    case 'delete':
-                        return this.onDeleteClick()
-                }
+                return e.submitter.name === 'save' ? this.onSaveClick() : this.onDeleteClick()
             }
         },
         mounted() {
