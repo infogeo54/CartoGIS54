@@ -16,8 +16,18 @@ export default class Feature {
         let properties = {}
         for (let attr in attributes) {
             const type = attributes[attr].type
-            let value = params.props[attr]
-            if (type === 'boolean' && !value) value = 'FALSE' // New Feature's booleans are init at FALSE
+            let value = params.props ? params.props[attr] : null
+            if (!value) {
+                switch (type) {
+                    case 'boolean':
+                        value = 'FALSE' // New Feature's booleans are init at FALSE
+                        break
+                    case 'gml:PointPropertyType':
+                    case 'gml:MultiPolygonPropertyType':
+                        value = {coordinates: []} // New Feature's geometry is init at empty coordinates
+                        break
+                }
+            }
             properties[attr] = {type: type, value: value}
         }
         this.properties = properties
