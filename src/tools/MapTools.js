@@ -36,9 +36,16 @@ export default {
         const icon = this.createIcon(feature)
         return L.marker(coordinates, {icon: icon})
     },
+    createPoint: function(coordinates) {
+        const icon = L.icon({
+            iconUrl: require('@/assets/icons/dot.svg'),
+            iconSize: [10, 10]
+        })
+        return L.marker(coordinates, {icon: icon})
+    },
     /**
      * Create a Leaflet poylgon representation
-     * @param coordinates : Array
+     * @param coordinates : Array<Array>
      * @returns Leaflet Layer
      */
     createPolygon: function (coordinates) {
