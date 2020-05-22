@@ -3,7 +3,7 @@
         <Layers :layers="layers"
                 @layerItemClicked="layerItemClicked">
         </Layers>
-        <Legend v-if="selectedLayer"
+        <Legend v-if="selectedLayer && selectedLayer.description.shape === 'Point'"
                 :layer="selectedLayer"
                 @legendItemClicked="legendItemClicked">
         </Legend>
@@ -32,6 +32,10 @@
             layerItemClicked: function (name) {
                 const layer = this.layers.find(l => l.properties.name === name)
                 this['layer/setSelected'](layer)
+                if (layer.description.shape === 'Polygon') {
+                    const options = { parent: layer }
+                    this['feature/setSelected'](new Feature(options))
+                }
             },
             legendItemClicked: function (featureType) {
                 const options = {
