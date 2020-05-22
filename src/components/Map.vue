@@ -21,7 +21,7 @@
                 feature: 'feature/selected',
             }),
             editing: function () {
-                return this.feature
+                return !!this.feature
             },
             cursor: function () {
                 return this.editing ? 'crosshair' : 'grab'
@@ -35,12 +35,26 @@
         },
         methods: {
             ...mapMutations('feature', ['setSelected']),
+            handlePoint: function (coordinates) {
+                this.feature.coordinates = coordinates
+                this.feature.createRepresentation()
+                this.feature.representation.addTo(this.map)
+            },
+            handlePolygon: function (coordinates) {
+                if (!this.feature.coordinates.includes(coordinates)) {
+                    this.feature.coordinates.push(coordinates)
+                    const point = MapTools.createPoint(coordinates)
+                    point.addTo(this.map)
+                } else if (this.polygonPoints[0] === coordinates) {
+                    console.log(this.polygonPoints)
+                }
+            },
             mapClicked: async function (e) {
                 if (this.editing) {
+                    const coordinates = [e.latlng.lat, e.latlng.lng]
                     if (this.feature.representation) this.feature.representation.remove()
-                    this.feature.coordinates = [e.latlng.lat, e.latlng.lng]
-                    this.feature.createRepresentation()
-                    this.feature.representation.addTo(this.map)
+                    if (this.feature.parent.description.shape === 'Point') this.handlePoint(coordinates)
+                    else this.handlePolygon(coordinates)
                 }
             },
             init: function (center) {
