@@ -44,6 +44,12 @@
                 if (!this.feature.coordinates.includes(coordinates)) {
                     this.feature.coordinates.push(coordinates)
                     const point = MapTools.createPoint(coordinates)
+                    if (this.feature.coordinates.length === 1) { // Adding click listener on first point
+                        point.on('click', () => {
+                            this.feature.createRepresentation()
+                            this.feature.representation.addTo(this.map)
+                        })
+                    }
                     point.addTo(this.map)
                 }
             },
