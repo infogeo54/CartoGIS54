@@ -9,6 +9,7 @@ export default class Feature {
         this.id = options.id
         this.parent = options.parent
         this._properties = {parent: options.parent, props: options.properties}
+        this.representation = null
     }
 
     set _properties (params) {
@@ -43,8 +44,6 @@ export default class Feature {
     }
 
     createRepresentation () {
-        if (this.coordinates) {
-            this.representation = MapTools.representation(this)
-        }
+        if (this.coordinates) this.representation = MapTools.representation(this)
     }
 }
