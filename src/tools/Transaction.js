@@ -71,15 +71,27 @@ export default class Transaction {
      * @returns Object
      */
     static polygon (coordinates) {
-        const coordinatesList = coordinates.map(c => c.join(','))
+        const coordinatesList = coordinates.map(c => [c.x, c.y])
         return {
             'gml:MultiPolygon': {
-                'polygonMember': {
-                    'Polygon': {
-                        'gml:outerBoundaryIs': {
+                '_attributes': {
+                    'srsName': "EPSG:2154"
+                },
+                'gml:polygonMember': {
+                    'gml:Polygon': {
+                        '_attributes': {
+                            'srsName': "EPSG:2154"
+                        },
+                        'gml:exterior': {
                             'gml:LinearRing': {
-                                'gml:coordinates': {
-                                    '_text': coordinatesList.join(' ')
+                                '_attributes': {
+                                    'srsName': "EPSG:2154"
+                                },
+                                'gml:posList': {
+                                    '_attributes': {
+                                        'srsDimension': 2
+                                    },
+                                    '_text': coordinatesList.flat().join(' ')
                                 }
                             }
                         }
@@ -92,12 +104,12 @@ export default class Transaction {
     /**
      * Create a formatted geometry tag for Insert and Update Transactions
      * @param geometry
-     * @returns {{"gml:MultiPolygon": {polygonMember: {Polygon: {"gml:outerBoundaryIs": {"gml:LinearRing": {"gml:coordinates": {_text: string}}}}}}}|{"gml:Point": {"gml:pos": {_text: string, _attributes: {srsDimension: number}}, _attributes: {srsName: string}}}}
+     * @returns Object
      */
     static formattedGeometry (geometry) {
         console.log(geometry)
         const coordinates = geometry.coordinates
-        if (Array.isArray(coordinates))return Transaction.polygon(coordinates)
+        if (Array.isArray(coordinates)) return Transaction.polygon(coordinates)
         return Transaction.point(coordinates)
     }
 

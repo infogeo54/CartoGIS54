@@ -92,6 +92,7 @@ async function sendTransaction(transaction) {
     console.log(transaction)
     const url = `${baseUrl}&REQUEST=Transaction`
     const res = await axios.post(url, transaction)
+    console.log(res.data)
     return xml2js(res.data, {compact: true})
 }
 
