@@ -8,10 +8,6 @@ export default {
     },
     getters: {
         selected: state => state.selected,
-        representation: state => {
-            if (state.selected) return state.selected.representation
-            return null
-        }
     },
     mutations: {
         setSelected: function (state, feature) {
