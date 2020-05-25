@@ -45,8 +45,6 @@
                     this.feature.coordinates.push(coordinates)
                     const point = MapTools.createPoint(coordinates)
                     point.addTo(this.map)
-                } else if (this.polygonPoints[0] === coordinates) {
-                    console.log(this.polygonPoints)
                 }
             },
             mapClicked: async function (e) {
