@@ -37,8 +37,7 @@
             ...mapMutations('feature', ['setSelected']),
             handlePoint: function (coordinates) {
                 this.feature.coordinates = coordinates
-                this.feature.createRepresentation()
-                this.feature.representation.addTo(this.map)
+                this.feature.createRepresentation().addTo(this.map)
             },
             handlePolygon: function (coordinates) {
                 if (!this.feature.coordinates.includes(coordinates)) {
@@ -47,8 +46,7 @@
                     if (this.feature.coordinates.length === 1) { // Adding click listener on first point
                         point.on('click', () => {
                             this.feature.coordinates.push([point._latlng.lat, point._latlng.lng]) // Closing polygon
-                            this.feature.createRepresentation()
-                            this.feature.representation.addTo(this.map)
+                            this.feature.createRepresentation().addTo(this.map)
                         })
                     }
                     point.addTo(this.map)
