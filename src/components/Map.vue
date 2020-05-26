@@ -20,11 +20,8 @@
                 layer: 'layer/selected',
                 feature: 'feature/selected',
             }),
-            editing: function () {
-                return !!this.feature
-            },
             cursor: function () {
-                return this.editing ? 'crosshair' : 'grab'
+                return this.feature ? 'crosshair' : 'grab'
             },
             representations: function () {
                 return this.featureList.map(f => {
@@ -53,7 +50,7 @@
                 }
             },
             mapClicked: async function (e) {
-                if (this.editing) {
+                if (this.feature) {
                     const coordinates = [e.latlng.lat, e.latlng.lng]
                     if (this.feature.representation) this.feature.representation.remove()
                     if (this.feature.parent.description.shape === 'Point') this.handlePoint(coordinates)
