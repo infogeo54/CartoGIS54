@@ -59,8 +59,23 @@ export default {
     representation: function (f) {
         const coord = f.properties.geometry.value.coordinates
         const rep = coord.length === 2 ? this.createMarker(f, coord) :  this.createPolygon(coord)
-        rep.on('click', () => feature.mutations.setSelected(feature.state, f))
+        rep.on('click', (e) => {
+            L.DomEvent.stopPropagation(e) // Avoid map clicked event when a feature is clicked
+            feature.mutations.setSelected(feature.state, f)
+        })
         return rep
+    },
+    handlePoint: function (feature, point) {
+        feature.coordinates = point
+        return feature.createRepresentation()
+    },
+    handlePolygon: function (feature, point) {
+        console.log(point)
+    },
+    manageFeature: function (feature, point) {
+        if (feature.representation) feature.representation.remove() // Removing existing representation
+        if (feature.parent.shape === 'Point') return this.handlePoint(feature, point)
+        else return this.handlePolygon(feature, point)
     },
     /**
      * Add representations to a mp

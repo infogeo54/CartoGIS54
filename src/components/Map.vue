@@ -5,12 +5,13 @@
 <script>
     import L from 'leaflet'
     import {mapGetters, mapMutations} from 'vuex'
-    import MapTools from "../tools/MapTools";
+    import MapTools from '@/tools/MapTools'
+    import Feature from '@/models/Feature'
     export default {
         name: "Map",
         data() {
             return {
-                map: null,
+                map: null
             }
         },
         computed: {
@@ -28,33 +29,18 @@
                     f.createRepresentation()
                     return f.representation
                 })
+            },
+            tempFeature: function () {
+                return new Feature({...this.feature})
             }
         },
         methods: {
             ...mapMutations('feature', ['setSelected']),
-            handlePoint: function (coordinates) {
-                this.feature.coordinates = coordinates
-                this.feature.createRepresentation().addTo(this.map)
-            },
-            handlePolygon: function (coordinates) {
-                if (!this.feature.coordinates.includes(coordinates)) {
-                    this.feature.coordinates.push(coordinates)
-                    const point = MapTools.createPoint(coordinates)
-                    if (this.feature.coordinates.length === 1) { // Adding click listener on first point
-                        point.on('click', () => {
-                            this.feature.coordinates.push([point._latlng.lat, point._latlng.lng]) // Closing polygon
-                            this.feature.createRepresentation().addTo(this.map)
-                        })
-                    }
-                    point.addTo(this.map)
-                }
-            },
             mapClicked: async function (e) {
-                if (this.feature) {
-                    const coordinates = [e.latlng.lat, e.latlng.lng]
+                if (this.tempFeature) {
                     if (this.feature.representation) this.feature.representation.remove()
-                    if (this.feature.parent.description.shape === 'Point') this.handlePoint(coordinates)
-                    else this.handlePolygon(coordinates)
+                    const point = [e.latlng.lat, e.latlng.lng]
+                    MapTools.manageFeature(this.tempFeature, point).addTo(this.map)
                 }
             },
             init: function (center) {
@@ -69,7 +55,7 @@
                 MapTools.addRepresentations(this.map, this.representations)
 
                 this.map.on('click', e => this.mapClicked(e))
-            },
+            }
         },
         mounted() {
             this.init([49.305, 5.78])

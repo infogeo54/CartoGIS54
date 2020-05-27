@@ -12,6 +12,10 @@ export default class Layer {
         this.description = options.description
     }
 
+    get shape () {
+        return this.description.shape
+    }
+
     async getFeatures () {
         const data = await WFS.fetchFeatures(this.properties.name)
         this.features = data.map(f => new Feature({
