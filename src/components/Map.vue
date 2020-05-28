@@ -8,13 +8,9 @@ import MapTools from '@/tools/MapTools'
 
 export default {
     name: "Map",
-    data() {
-        return {
-            map: null
-        }
-    },
     computed: {
         ...mapGetters({
+            map: 'map',
             layerList: 'layer/list',
             featureList: 'layer/features',
             layer: 'layer/selected',
@@ -31,7 +27,7 @@ export default {
         }
     },
     methods: {
-        ...mapMutations('feature', ['setSelected']),
+        ...mapMutations(['setMap']),
         mapClicked: async function (e) {
             if (this.feature) {
                 if (this.feature.representation) this.feature.representation.remove()
@@ -41,7 +37,8 @@ export default {
         }
     },
     mounted() {
-        this.map = MapTools.createMap([49.305, 5.78]).on('click', e => this.mapClicked(e))
+        const map = MapTools.createMap([49.305, 5.78]).on('click', e => this.mapClicked(e))
+        this.setMap(map)
         MapTools.addRepresentations(this.map, this.representations)
     }
 }

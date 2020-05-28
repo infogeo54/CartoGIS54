@@ -8,10 +8,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        map: null,
     },
     getters: {
+        map: state => state.map,
     },
     mutations: {
+        setMap: function (state, map) {
+            state.map = map
+        }
     },
     actions: {
         reset: function ({dispatch}) {
