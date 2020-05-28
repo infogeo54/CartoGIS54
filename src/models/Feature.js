@@ -44,7 +44,7 @@ export default class Feature {
     }
 
     createRepresentation () {
-        if (this.coordinates) return this.representation = MapTools.representation(this)
+        if (this.coordinates) return this.representation = MapTools.createRepresentation(this)
         throw 'Feature\'s coordinates are undefined'
     }
 }
