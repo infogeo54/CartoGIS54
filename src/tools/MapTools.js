@@ -11,6 +11,20 @@ proj4.defs("EPSG:2154", "+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0
 
 export default {
     /**
+     * Create a Leaflet map instance
+     * @param center : Array<number> - The point where the map will be centered
+     * @returns Object
+     */
+    createMap: function (center) {
+        const map = L.map('map').setView(center, 15)
+        L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+            attribution: 'données © OpenStreetMap/ODbL - rendu OSM France',
+            minZoom: 1,
+            maxZoom: 20
+        }).addTo(map)
+        return map
+    },
+    /**
      * Create a Leaflet marker custom icon
      * @param feature : Feature - The feature to represent
      * @returns Leaflet Icon
@@ -56,7 +70,7 @@ export default {
      * @param f : Feature - The feature to represent
      * @returns Leaflet Layer
      */
-    representation: function (f) {
+    createRepresentation: function (f) {
         const coord = f.properties.geometry.value.coordinates
         const rep = coord.length === 2 ? this.createMarker(f, coord) :  this.createPolygon(coord)
         rep.on('click', (e) => {
@@ -64,6 +78,14 @@ export default {
             feature.mutations.setSelected(feature.state, f)
         })
         return rep
+    },
+    /**
+     * Add representations to a map
+     * @param map : L.map - A Leaflet map instance
+     * @param representations : Array<Object>
+     */
+    addRepresentations: function (map, representations) {
+        representations.forEach(r => r.addTo(map))
     },
     handlePoint: function (feature, point) {
         feature.coordinates = point
@@ -76,14 +98,6 @@ export default {
         if (feature.representation) feature.representation.remove() // Removing existing representation
         if (feature.parent.shape === 'Point') return this.handlePoint(feature, point)
         else return this.handlePolygon(feature, point)
-    },
-    /**
-     * Add representations to a mp
-     * @param map : L.map - A Leaflet map instance
-     * @param representations : Array<Feature>
-     */
-    addRepresentations: function (map, representations) {
-        representations.forEach(r => r.addTo(map))
     },
     /**
      * Project a Point's coordinates from EPSG:900913 to EPSG:2154
