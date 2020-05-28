@@ -1,5 +1,5 @@
-import Transaction from '../../tools/Transaction'
-import WFS from '../../API/WFS'
+import Transaction from '@/tools/Transaction'
+import WFS from '@/API/WFS'
 
 export default {
     namespaced: true,
