@@ -4,7 +4,7 @@
 
 import L from 'leaflet'
 import proj4 from 'proj4'
-import feature from '../store/modules/feature'
+import feature from '@/store/modules/feature'
 
 // Adding EPSG:2154 to proj4 projections
 proj4.defs("EPSG:2154", "+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
@@ -27,7 +27,7 @@ export default {
     /**
      * Create a Leaflet marker custom icon
      * @param feature : Feature - The feature to represent
-     * @returns Leaflet Icon
+     * @returns layers: 'layer/list',
      */
     createIcon: function (feature) {
         let icon
@@ -75,7 +75,8 @@ export default {
         const rep = coord.length === 2 ? this.createMarker(f, coord) :  this.createPolygon(coord)
         rep.on('click', (e) => {
             L.DomEvent.stopPropagation(e) // Avoid map clicked event when a feature is clicked
-            feature.mutations.setSelected(feature.state, f)
+            feature.mutations.setSelected(feature.state, f.copy())
+            feature.mutations.setOg(feature.state, f)
         })
         return rep
     },

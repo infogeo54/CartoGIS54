@@ -5,13 +5,18 @@ export default {
     namespaced: true,
     state: {
         selected: null,
+        og: null
     },
     getters: {
         selected: state => state.selected,
+        og: state => state.copy
     },
     mutations: {
         setSelected: function (state, feature) {
             state.selected = feature
+        },
+        setOg: function (state, og) {
+            state.og = og
         },
         updateAttribute: function (state, attribute) {
             state.selected.properties[attribute.name].value = attribute.value
@@ -21,7 +26,8 @@ export default {
         }
     },
     actions: {
-        reset: function ({commit}) {
+        reset: function ({commit, getters, rootState}) {
+            if (getters.selected.id) getters.selected.representation.addTo(rootState.map)
             commit('setSelected', null)
         },
         delete: async function ({state, getters, commit}){

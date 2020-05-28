@@ -1,4 +1,5 @@
 import MapTools from '../tools/MapTools'
+import _ from 'lodash'
 
 export default class Feature {
     constructor (options = {
@@ -46,5 +47,11 @@ export default class Feature {
     createRepresentation () {
         if (this.coordinates) return this.representation = MapTools.createRepresentation(this)
         throw 'Feature\'s coordinates are undefined'
+    }
+
+    copy () {
+        const f = new Feature({id: this.id, parent: this.parent})
+        f.properties = _.cloneDeep(this.properties)
+        return f
     }
 }

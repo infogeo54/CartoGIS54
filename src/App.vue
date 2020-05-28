@@ -18,8 +18,9 @@ export default {
   name: 'App',
   computed: {
     ...mapGetters({
-      layers: 'layer/list',
-      feature: 'feature/selected',
+        layers: 'layer/list',
+        feature: 'feature/selected',
+        copy: 'feature/copy',
     }),
     loading: function () {
       return !this.layers.length
