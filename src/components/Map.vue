@@ -5,7 +5,6 @@
 <script>
 import {mapGetters, mapMutations} from 'vuex'
 import MapTools from '@/tools/MapTools'
-import Feature from '@/models/Feature'
 
 export default {
     name: "Map",
@@ -29,18 +28,15 @@ export default {
                 f.createRepresentation()
                 return f.representation
             })
-        },
-        tempFeature: function () {
-            return new Feature({...this.feature})
         }
     },
     methods: {
         ...mapMutations('feature', ['setSelected']),
         mapClicked: async function (e) {
-            if (this.tempFeature) {
+            if (this.feature) {
                 if (this.feature.representation) this.feature.representation.remove()
                 const point = [e.latlng.lat, e.latlng.lng]
-                MapTools.manageFeature(this.tempFeature, point).addTo(this.map)
+                MapTools.manageFeature(this.feature, point).addTo(this.map)
             }
         }
     },
