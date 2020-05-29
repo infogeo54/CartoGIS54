@@ -1,19 +1,19 @@
 <template>
     <div id="menu">
         <Layers :layers="layers"
-                @layerItemClicked="layerItemClicked">
-        </Layers>
+                @layerItemClicked="layerItemClicked"
+        />
         <Legend v-if="legendVisibility"
                 :layer="layer"
-                @legendItemClicked="legendItemClicked">
-        </Legend>
+                @legendItemClicked="legendItemClicked"
+        />
     </div>
 </template>
 
 <script>
-import Layers from './Menu/Layers'
-import Legend from './Menu/Legend/index'
-import Feature from '../models/Feature'
+import Layers from './Layers'
+import Legend from './Legend'
+import Feature from '@/models/Feature'
 import {mapGetters, mapMutations} from 'vuex'
 
 export default {
