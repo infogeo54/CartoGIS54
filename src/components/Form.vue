@@ -7,7 +7,7 @@
         />
         <button name="save">Enregistrer</button>
         <button name="delete">Supprimer</button>
-        <button name="cancel">Annuler</button>
+        <button name="cancel" type="button" @click="onCancelClick">Annuler</button>
     </form>
 </template>
 
@@ -65,6 +65,7 @@ export default {
                 this.feature.properties = this.ogProperties
                 this.feature.createRepresentation().addTo(this.map)
             }
+            this.$destroy()
         },
         /**
          * Call the appropriated action then destroy the component
@@ -77,9 +78,6 @@ export default {
                     break
                 case 'delete':
                     await this.onDeleteClick()
-                    break
-                default:
-                    await this.onCancelClick()
                     break
             }
             this.$destroy()
