@@ -67,10 +67,11 @@ export default class Transaction {
 
     /**
      * Create a formatted MultiPolygon tag
-     * @param coordinates : Object - The polygon's coordinates
+     * @param coordinates : Array<Array> - The polygon's coordinates
      * @returns Object
      */
     static polygon (coordinates) {
+        coordinates = coordinates.concat(coordinates[0]) // Closing polygon
         const coordinatesList = coordinates.map(c => [c.x, c.y])
         return {
             'gml:MultiPolygon': {
@@ -107,7 +108,6 @@ export default class Transaction {
      * @returns Object
      */
     static formattedGeometry (geometry) {
-        console.log(geometry)
         const coordinates = geometry.coordinates
         if (Array.isArray(coordinates)) return Transaction.polygon(coordinates)
         return Transaction.point(coordinates)
@@ -176,11 +176,9 @@ export default class Transaction {
      * @return String - A stringified XML Transaction
      */
     static insert (feature) {
-        console.log(feature)
         let t = new Transaction()
         t['wfs:Transaction']['wfs:Insert'] = {}
         const properties = Transaction.toInsertProperties(feature.properties)
-        console.log(properties)
         t['wfs:Transaction']['wfs:Insert'][feature.parent.properties.name] = properties
         return t
     }
