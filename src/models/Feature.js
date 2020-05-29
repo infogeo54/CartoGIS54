@@ -46,12 +46,27 @@ export default class Feature {
 
     createRepresentation () {
         if (this.coordinates) return this.representation = MapTools.createRepresentation(this)
-        throw 'Feature\'s coordinates are undefined'
+        throw 'Feature has no coordinates'
     }
 
-    copy () {
-        const f = new Feature({id: this.id, parent: this.parent})
-        f.properties = _.cloneDeep(this.properties)
-        return f
+    /**
+     * Remove and reset Feature's representation
+     */
+    deleteRepresentation () {
+        if (this.representation) {
+            this.representation.remove()
+            this.representation = null
+        } else {
+            throw 'Feature has no representation'
+        }
+    }
+
+    /**
+     * Return a deep copy (not referenced) of the Feature's properties
+     * @returns Object
+     */
+    copyProperties () {
+        if (this.properties) return _.cloneDeep(this.properties)
+        throw  'Feature has no properties'
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <form id="form" @submit.prevent="submitForm">
+    <form id="form" @submit.prevent="action">
         <FormGroup v-for="property in properties"
                    :key="property"
                    :property="{name: property, ...feature.properties[property]}"
@@ -7,7 +7,7 @@
         />
         <button name="save">Enregistrer</button>
         <button name="delete">Supprimer</button>
-        <button type="button" name="cancel" @click="onCancelClick">Annuler</button>
+        <button name="cancel">Annuler</button>
     </form>
 </template>
 
@@ -18,15 +18,12 @@ import {mapGetters, mapMutations, mapActions} from 'vuex'
 export default {
     name: "Form",
     components: { FormGroup },
-    data () {
-        return {
-            element: null
-        }
-    },
     computed: {
         ...mapGetters({
+            map: 'map',
             layer: 'layer/selected',
-            feature: 'feature/selected'
+            feature: 'feature/selected',
+            ogProperties: 'feature/ogProperties'
         }),
         properties: function () {
             return Object.keys(this.feature.properties).sort((a, b) => a < b ? -1 : a > b ? 1 : 0)
@@ -47,27 +44,50 @@ export default {
             this.updateAttribute(attribute)
         },
         /**
-         * Sends a Transaction request
+         * Call store's save action
          */
         onSaveClick: async function () {
             await this['feature/save'](this.layer.name)
-            this.$destroy()
         },
-        onCancelClick: function () {
-            this.feature.representation.remove()
-            this.$destroy()
-        },
+        /**
+         * Call store's delete action
+         */
         onDeleteClick: async function () {
             await this['feature/delete']()
-            this.$destroy()
         },
-        submitForm: function (e) {
-            return e.submitter.name === 'save' ? this.onSaveClick() : this.onDeleteClick()
+        /**
+         * Cancel the current editing
+         * Reset an existing Feature to it's original state
+         */
+        onCancelClick: function () {
+            this.feature.deleteRepresentation()
+            if (this.ogProperties) {
+                this.feature.properties = this.ogProperties
+                this.feature.createRepresentation().addTo(this.map)
+            }
+        },
+        /**
+         * Call the appropriated action then destroy the component
+         * @param e : Event - An event created by clicking on a form's button
+         */
+        action: async function (e) {
+            switch (e.submitter.name) {
+                case 'save':
+                    await this.onSaveClick()
+                    break
+                case 'delete':
+                    await this.onDeleteClick()
+                    break
+                default:
+                    await this.onCancelClick()
+                    break
+            }
+            this.$destroy()
         }
     },
-    mounted() {
-        this.element = this.$el
-    },
+    /**
+     * Call store's reset action before destroying the component
+     */
     beforeDestroy() {
         this.reset()
     }

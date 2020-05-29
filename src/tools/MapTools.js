@@ -75,8 +75,8 @@ export default {
         const rep = coord.length === 2 ? this.createMarker(f, coord) :  this.createPolygon(coord)
         rep.on('click', (e) => {
             L.DomEvent.stopPropagation(e) // Avoid map clicked event when a feature is clicked
-            feature.mutations.setSelected(feature.state, f.copy())
-            feature.mutations.setOg(feature.state, f)
+            feature.mutations.setOgProperties(feature.state, f.copyProperties()) // Copying original properties
+            feature.mutations.setSelected(feature.state, f)
         })
         return rep
     },
