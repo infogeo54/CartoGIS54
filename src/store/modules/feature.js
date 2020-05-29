@@ -23,13 +23,13 @@ export default {
         },
         setId: function (state, id) {
             state.selected.id = id
-        }
+        },
+        reset: function (state) {
+            state.selected = null
+            state.ogProperties = null
+        },
     },
     actions: {
-        reset: function ({commit}) {
-            commit('setSelected', null)
-            commit('setOgProperties', null)
-        },
         delete: async function ({state, getters, commit}){
             const t = Transaction.delete(state.selected).toXML()
             await WFS.sendTransaction(t)

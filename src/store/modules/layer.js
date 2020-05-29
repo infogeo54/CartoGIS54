@@ -65,7 +65,7 @@ export default {
         },
         reset: function ({commit}) {
             commit('setList', [])
-            commit('setSelected', {})
+            commit('setSelected', null)
         }
     },
 }

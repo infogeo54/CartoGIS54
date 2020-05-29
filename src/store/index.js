@@ -19,8 +19,9 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        reset: function ({dispatch}) {
-            dispatch('feature/reset')
+        reset: function ({commit}) {
+            commit('feature/reset')
+            commit('layer/setSelected', null)
         }
     },
     modules : {
