@@ -39,9 +39,9 @@ export default {
         }
     },
     mounted() {
-        const map = MapTools.createMap([49.305, 5.78]).on('click', e => this.mapClicked(e))
+        const map = MapTools.map.create([49.305, 5.78]).on('click', e => this.mapClicked(e))
         this.setMap(map)
-        MapTools.addRepresentations(this.map, this.representations)
+        MapTools.map.representations(this.map, this.representations)
     }
 }
 </script>

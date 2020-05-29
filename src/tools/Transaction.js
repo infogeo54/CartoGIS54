@@ -123,7 +123,7 @@ export default class Transaction {
         for (let key in props) {
             if (props[key].value) {
                 if (key === 'geometry') {
-                    const geometry = {coordinates: MapTools.project(props.geometry.value.coordinates)}
+                    const geometry = {coordinates: MapTools.projection.project(props.geometry.value.coordinates)}
                     res.geometry = Transaction.formattedGeometry(geometry)
                 } else {
                     res[key] = props[key].value

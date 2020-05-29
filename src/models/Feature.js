@@ -51,7 +51,7 @@ export default class Feature {
                 feature.mutations.setSelected(feature.state, this)
                 feature.mutations.setOgProperties(feature.state, this.copyProperties())
             }
-            return this.representation = MapTools.createRepresentation(this, cb)
+            return this.representation = MapTools.representation.create(this, cb)
         }
         throw 'Feature has no coordinates'
     }
