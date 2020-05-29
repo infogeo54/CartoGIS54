@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import Layers from './MenuComponents/Layers'
-import Legend from './MenuComponents/Legend'
+import Layers from './Menu/Layers'
+import Legend from './Menu/Legend/index'
 import Feature from '../models/Feature'
 import {mapGetters, mapMutations} from 'vuex'
 

@@ -6,10 +6,7 @@
 
     The use of 'xml-js' obliges to respect a data format (compact format here)
  */
-
-//const converter = require ('xml-js')
-
-import converter from 'xml-js'
+import * as converter from 'xml-js'
 import MapTools from './MapTools'
 
 export default class Transaction {

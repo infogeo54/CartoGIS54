@@ -8,14 +8,20 @@
 </template>
 
 <script>
-import Loader from './components/Loader'
-import Menu from './components/Menu'
-import Map from './components/Map'
-import Form from './components/Form'
+import Loader from '@/components/Loader'
+import Menu from '@/components/Menu'
+import Map from '@/components/Map'
+import Form from '@/components/Form'
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
   name: 'App',
+  components: {
+    Loader,
+    Menu,
+    Map,
+    Form
+  },
   computed: {
     ...mapGetters({
         layers: 'layer/list',
@@ -34,12 +40,6 @@ export default {
   },
   mounted() {
     this.getLayers()
-  },
-  components: {
-    Loader,
-    Menu,
-    Map,
-    Form
   }
 }
 </script>

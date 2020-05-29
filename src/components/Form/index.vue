@@ -1,6 +1,6 @@
 <template>
     <form id="form" @submit.prevent="action">
-        <FormGroup v-for="property in properties"
+        <Group v-for="property in properties"
                    :key="property"
                    :property="{name: property, ...feature.properties[property]}"
                    @changed="onChange"
@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import FormGroup from './FormComponents/FormGroup'
+import Group from './Group'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
     name: "Form",
-    components: { FormGroup },
+    components: { Group },
     computed: {
         ...mapGetters({
             map: 'map',
@@ -89,7 +89,6 @@ export default {
     beforeDestroy() {
         this.reset()
     }
-
 }
 </script>
 

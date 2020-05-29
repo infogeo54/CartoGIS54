@@ -1,5 +1,5 @@
-import WFS from '../../API/WFS'
-import Layer from '../../models/Layer'
+import WFS from '@/API/WFS'
+import Layer from '@/models/Layer'
 
 export default {
     namespaced: true,

@@ -1,7 +1,6 @@
 import axios from 'axios'
 import * as convert from 'xml-js'
-import config from '../config'
-import {xml2js} from "xml-js";
+import config from '@/config'
 
 const baseUrl = `http://${config.qgisserver.host}?SERVICE=WFS&VERSION=1.1.0`
 
@@ -93,12 +92,11 @@ async function sendTransaction(transaction) {
     const url = `${baseUrl}&REQUEST=Transaction`
     const res = await axios.post(url, transaction)
     console.log(res.data)
-    return xml2js(res.data, {compact: true})
+    return convert.xml2js(res.data, {compact: true})
 }
 
 export default {
     fetchLayers,
-    extractLayers,
     fetchFeatures,
     fetchAllFeatureDescriptions,
     sendTransaction
