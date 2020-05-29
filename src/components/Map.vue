@@ -30,9 +30,11 @@ export default {
         ...mapMutations(['setMap']),
         mapClicked: async function (e) {
             if (this.feature) {
-                if (this.feature.representation) this.feature.representation.remove()
                 const point = [e.latlng.lat, e.latlng.lng]
-                MapTools.manageFeature(this.feature, point).addTo(this.map)
+                if (this.feature.representation) this.feature.deleteRepresentation()
+                if (this.feature.parent.shape === 'Point') this.feature.coordinates = point
+                else this.feature.coordinates.push(point)
+                this.feature.createRepresentation().addTo(this.map)
             }
         }
     },

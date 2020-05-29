@@ -1,3 +1,4 @@
+import feature from '@/store/modules/feature'
 import MapTools from '../tools/MapTools'
 import _ from 'lodash'
 
@@ -45,7 +46,13 @@ export default class Feature {
     }
 
     createRepresentation () {
-        if (this.coordinates) return this.representation = MapTools.createRepresentation(this)
+        if (this.coordinates) {
+            const cb = () => {
+                feature.mutations.setSelected(feature.state, this)
+                feature.mutations.setOgProperties(feature.state, this.copyProperties())
+            }
+            return this.representation = MapTools.createRepresentation(this, cb)
+        }
         throw 'Feature has no coordinates'
     }
 

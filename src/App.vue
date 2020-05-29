@@ -20,7 +20,6 @@ export default {
     ...mapGetters({
         layers: 'layer/list',
         feature: 'feature/selected',
-        copy: 'feature/copy',
     }),
     loading: function () {
       return !this.layers.length
