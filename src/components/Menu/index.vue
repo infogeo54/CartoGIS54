@@ -61,4 +61,5 @@ export default {
         text-align: center
         display: flex
         flex-direction: row
+        background-color: lightgrey
 </style>
