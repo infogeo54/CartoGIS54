@@ -100,15 +100,15 @@
   #form
     background-color: #D3D3D3
     border-left: solid 1px black
-    min-width: 200px
+    min-width: 250px
     position: relative
     overflow: hidden
     .groups
-      height: 85%
+      height: 90%
       overflow-x: hidden
       overflow-y: scroll
     .buttons
-      height: 15%
+      height: 10%
       display: flex
       flex-wrap: wrap
       flex: 0 1 49%
@@ -118,6 +118,8 @@
         padding: 4px 0
         width: 80px
         margin: auto
+        border: solid 1px black
+        border-radius: 2px
         &:hover
           cursor: pointer
           &[disabled]
