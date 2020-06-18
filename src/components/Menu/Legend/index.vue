@@ -46,4 +46,12 @@
 <style lang="sass" scoped>
   #legend
     border-left: solid 1px grey
+    input
+      font-weight: bold
+      display: flex
+      margin: 5px 5px 0 auto
+      background-color: #00000000
+      border: none
+      &:hover
+        cursor: pointer
 </style>
