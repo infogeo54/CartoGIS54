@@ -6,6 +6,7 @@
         <Legend v-if="legendVisibility"
                 :layer="layer"
                 @legendItemClicked="legendItemClicked"
+                @legendCloseClicked="legendCloseClicked"
         />
     </div>
 </template>
@@ -51,6 +52,9 @@ export default {
                 parent: this.layer
             }
             this['feature/setSelected'](new Feature(options))
+        },
+        legendCloseClicked: function () {
+          this['layer/setSelected'](null)
         }
     },
 }

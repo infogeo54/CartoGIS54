@@ -1,5 +1,6 @@
 <template>
   <div id="legend">
+    <input type="button" value="X" @click="close">
     <h3>{{ title }}</h3>
     <Item v-for="(style, index) in styles"
           :key="index"
@@ -34,9 +35,10 @@
         methods: {
             itemClicked: function (featureType) {
                 this.$emit('legendItemClicked', featureType)
+            },
+            close: function () {
+                this.$emit('legendCloseClicked')
             }
-
-
         }
     }
 </script>
