@@ -1,13 +1,17 @@
 <template>
   <form id="form" @submit.prevent="action">
-    <Group v-for="property in properties"
-           :key="property"
-           :property="{name: property, ...feature.properties[property]}"
-           @changed="onChange"
-    />
-    <button name="save">Enregistrer</button>
-    <button name="delete">Supprimer</button>
-    <button name="cancel" type="button" @click="onCancelClick">Annuler</button>
+    <div class="groups">
+      <Group v-for="property in properties"
+             :key="property"
+             :property="{name: property, ...feature.properties[property]}"
+             @changed="onChange"
+      />
+    </div>
+    <div class="buttons">
+      <input type="submit" name="save" value="Enregistrer">
+      <input type="submit" name="delete" value="Supprimer" :disabled="!feature.id">
+      <input type="button" name="cancel" @click="onCancelClick" value="Annuler">
+    </div>
   </form>
 </template>
 
@@ -27,7 +31,7 @@
             }),
             properties: function () {
                 return Object.keys(this.feature.properties).sort((a, b) => a < b ? -1 : a > b ? 1 : 0)
-            },
+            }
         },
         methods: {
             ...mapMutations('feature', ['updateAttribute']),
@@ -96,4 +100,32 @@
   #form
     background-color: #D3D3D3
     border-left: solid 1px black
+    min-width: 200px
+    position: relative
+    overflow: hidden
+    .groups
+      height: 85%
+      overflow-x: hidden
+      overflow-y: scroll
+    .buttons
+      height: 15%
+      display: flex
+      flex-wrap: wrap
+      flex: 0 1 49%
+      justify-content: space-evenly
+      background-color: #808080
+      input
+        padding: 4px 0
+        width: 80px
+        margin: auto
+        &:hover
+          cursor: pointer
+          &[disabled]
+            cursor: not-allowed
+        &[name="save"]
+          background-color: #00FF0066
+        &[name="delete"]
+          background-color: #FF000066
+        &[name="cancel"]
+          background-color: #D3D3D366
 </style>

@@ -85,8 +85,17 @@
 
 <style lang="sass" scoped>
   .form-group
+    display: flex
+    flex-direction: column
+    text-align: center
+    margin: 6px 0
     input, textarea, select
       background-color: #E6E6E6
       border: solid 1px black
       border-radius: 2px
+      width: 90%
+      max-width: 300px
+      margin: auto
+      padding: 4px 0
+      text-align: center
 </style>
