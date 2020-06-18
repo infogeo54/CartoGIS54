@@ -15,7 +15,13 @@
             }
         },
         methods: {
-            clicked: function () {
+            clicked: function (e) {
+                const clickedItem = e.target
+                const isActive = clickedItem.getAttribute('class').includes('active')
+                document.querySelectorAll('p.layer-item').forEach(item => {
+                    item.setAttribute('class', 'layer-item')
+                })
+                if (!isActive) clickedItem.setAttribute('class', 'layer-item active')
                 this.$emit('itemClicked', this.name)
             }
         }
@@ -29,4 +35,6 @@
     &:hover
       text-decoration: underline
       cursor: pointer
+    &.active
+      text-decoration: underline
 </style>
