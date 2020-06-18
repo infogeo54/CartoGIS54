@@ -46,6 +46,7 @@
 <style lang="sass" scoped>
   #legend
     border-left: solid 1px grey
+    overflow-y: scroll
     input
       font-weight: bold
       display: flex
