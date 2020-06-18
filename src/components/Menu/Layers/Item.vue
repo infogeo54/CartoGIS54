@@ -1,5 +1,5 @@
 <template>
-    <p class="layer-item" @click="clicked">{{ title }}</p>
+  <p class="layer-item" @click="clicked">{{ title }}</p>
 </template>
 
 <script>
@@ -22,6 +22,11 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="sass" scoped>
+  .layer-item
+    width: fit-content
+    margin: 10px auto
+    &:hover
+      text-decoration: underline
+      cursor: pointer
 </style>

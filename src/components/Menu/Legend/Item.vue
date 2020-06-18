@@ -1,7 +1,7 @@
 <template>
-    <div class="legend-item" @click="clicked">
-        <img :src="icon" :alt="name">
-        <h4>{{ title }}</h4>
+    <div class="legend-item">
+        <img :src="icon" :alt="name" @click="clicked">
+        <p>{{ title }}</p>
     </div>
 </template>
 
@@ -42,10 +42,13 @@ export default {
 
 <style lang="sass" scoped>
     .legend-item
+        margin-bottom: 10px
         img
             max-width: 64px
             height: auto
-        h4
-            font-weight: normal
-            margin: 0
+            &:hover
+                cursor: pointer
+        p
+            width: fit-content
+            margin: auto
 </style>
