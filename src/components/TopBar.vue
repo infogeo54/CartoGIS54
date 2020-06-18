@@ -13,15 +13,20 @@
 
 <style lang="sass" scoped>
   .top-bar
-    background-color: lightgrey
     display: flex
     justify-content: space-between
     align-items: center
+    background-color: grey
+    border-bottom: solid 1px black
   img
-    height: 100%
+    height: 190%
     max-height: 204px
+    z-index: 800
+    transform: translate(-5%, 23%)
   svg
+    top: 50%
     height: 32px
     width: auto !important
     padding: 15px
+    color: lightgrey
 </style>
