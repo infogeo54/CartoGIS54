@@ -81,7 +81,7 @@
                         await this.onSaveClick()
                         break
                     case 'delete':
-                        await this.onDeleteClick()
+                        if (confirm('Êtes-vous sûr.e de vouloir supprimer cette entité ?')) await this.onDeleteClick()
                         break
                 }
                 this.$destroy()
