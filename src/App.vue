@@ -1,9 +1,11 @@
 <template>
-  <Loader v-if="loading" />
-  <div v-else id="app">
-    <Menu />
-    <Map />
-    <Form v-if="formVisible" />
+  <div id="app" :is="layout">
+    <Loader v-if="loading" />
+    <main v-else>
+      <Menu />
+      <Map />
+      <Form v-if="formVisible" />
+    </main>
   </div>
 </template>
 
@@ -27,6 +29,9 @@ export default {
         layers: 'layer/list',
         feature: 'feature/selected',
     }),
+    layout: function () {
+      return 'default-layout'
+    },
     loading: function () {
       return !this.layers.length
     },
@@ -45,11 +50,6 @@ export default {
 </script>
 
 <style lang="sass">
-  body
-      height: 100vh
-      margin: 0
-  #app
-      height: 100%
-      display: flex
-      flex-direction: row
+  main
+    display: flex
 </style>
