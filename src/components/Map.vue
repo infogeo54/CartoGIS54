@@ -47,7 +47,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-    #map
-        height: 100%
-        width: 100%
+  #map
+    height: 100%
+    width: 100%
 </style>

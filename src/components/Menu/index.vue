@@ -57,9 +57,12 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-    #menu
-        text-align: center
-        display: flex
-        flex-direction: row
-        background-color: lightgrey
+  #menu
+    text-align: center
+    display: flex
+    background-color: #D3D3D3
+    border-right: solid 1px black
+  #menu > *
+    min-width: 200px
+
 </style>
