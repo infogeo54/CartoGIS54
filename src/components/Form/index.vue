@@ -98,7 +98,8 @@
 
 <style lang="sass" scoped>
   #form
-    background-color: #D3D3D3
+    color: #EBEBEB
+    background-color: #2A353B
     border-left: solid 1px black
     min-width: 250px
     position: relative
@@ -113,7 +114,7 @@
       flex-wrap: wrap
       flex: 0 1 49%
       justify-content: space-evenly
-      background-color: #808080
+      background-color: #0BB4F5
       input
         padding: 4px 0
         width: 80px
@@ -125,9 +126,9 @@
           &[disabled]
             cursor: not-allowed
         &[name="save"]
-          background-color: #00FF0066
+          background-color: #0CF574
         &[name="delete"]
-          background-color: #FF000066
+          background-color: #FF595E
         &[name="cancel"]
-          background-color: #D3D3D366
+          background-color: #E6E6E9
 </style>

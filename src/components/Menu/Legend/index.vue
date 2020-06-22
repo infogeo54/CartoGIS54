@@ -45,13 +45,15 @@
 
 <style lang="sass" scoped>
   #legend
-    border-left: solid 1px grey
+    color: #EFEFEF
+    border-left: solid 1px #EFEFEF
     overflow-y: scroll
     input
+      color: #EFEFEF
+      background-color: #00000000
       font-weight: bold
       display: flex
       margin: 5px 5px 0 auto
-      background-color: #00000000
       border: none
       &:hover
         cursor: pointer
