@@ -33,6 +33,5 @@
 
 <style lang="sass" scoped>
   #layers
-    padding-top: 60px
     color: #EFEFEF
 </style>

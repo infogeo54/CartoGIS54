@@ -1,7 +1,9 @@
 <template>
   <div id="legend">
-    <input type="button" value="X" @click="close">
-    <h3>{{ title }}</h3>
+    <div class="header">
+      <input type="button" value="X" @click="close">
+      <h3>{{ title }}</h3>
+    </div>
     <Item v-for="(style, index) in styles"
           :key="index"
           :feature-style="style"
@@ -48,6 +50,15 @@
     color: #EFEFEF
     border-left: solid 1px #EFEFEF
     overflow-y: scroll
+    .header
+      h3
+        margin-top: 0
+      input
+        height: 19px
+        width: fit-content
+        margin: auto 0 auto auto
+        &:hover
+           color: #565656
     input
       color: #EFEFEF
       background-color: #00000000

@@ -98,4 +98,7 @@
       margin: auto
       padding: 4px 0
       text-align: center
+    textarea
+      height: 80px
+      resize: vertical
 </style>
