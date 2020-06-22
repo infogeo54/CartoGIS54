@@ -24,8 +24,8 @@
             }
         },
         methods: {
-            itemClicked: function (layerName) {
-                this.$emit('layerItemClicked', layerName)
+            itemClicked: function (args) {
+                this.$emit('layerItemClicked', args)
             }
         }
     }
@@ -34,4 +34,5 @@
 <style lang="sass" scoped>
   #layers
     padding-top: 60px
+    color: #EFEFEF
 </style>
