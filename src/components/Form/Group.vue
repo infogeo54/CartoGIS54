@@ -98,7 +98,11 @@
       margin: auto
       padding: 4px 0
       text-align: center
+      &[disabled]
+        cursor: not-allowed
     textarea
-      height: 80px
+      min-height: 80px
       resize: vertical
+    select
+      cursor: pointer
 </style>

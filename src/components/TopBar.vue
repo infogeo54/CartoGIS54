@@ -28,7 +28,7 @@
       top: 50%
       height: 32px
       width: auto !important
-      padding: 15px
+      margin: 15px
       color: #2A353B
       &:hover
         cursor: pointer

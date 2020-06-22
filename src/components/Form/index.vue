@@ -108,6 +108,8 @@
       height: 90%
       overflow-x: hidden
       overflow-y: scroll
+      & > *
+        margin: 15px 0
     .buttons
       height: 10%
       display: flex
