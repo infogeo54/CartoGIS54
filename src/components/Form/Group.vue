@@ -92,7 +92,7 @@
     input, textarea, select
       background-color: #E6E6E6
       border: solid 1px black
-      border-radius: 2px
+      border-radius: 4px
       width: 90%
       max-width: 300px
       margin: auto

@@ -50,6 +50,8 @@ export default {
 </script>
 
 <style lang="sass">
+  #app
+    background-color: #2A353B
   main
     display: flex
 </style>

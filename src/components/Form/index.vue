@@ -122,15 +122,16 @@
         width: 80px
         margin: auto
         border: solid 1px black
-        border-radius: 2px
+        border-radius: 4px
+        color: #EFEFEF
         &:hover
           cursor: pointer
           &[disabled]
             cursor: not-allowed
         &[name="save"]
-          background-color: #0CF574
+          background-color: #2A353BCC
         &[name="delete"]
-          background-color: #FF595E
+          background-color: #2A353BAA
         &[name="cancel"]
-          background-color: #E6E6E9
+          background-color: #2A353B88
 </style>
