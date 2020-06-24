@@ -46,14 +46,12 @@ export default class Feature {
     }
 
     createRepresentation () {
-        if (this.coordinates) {
-            const cb = () => {
-                feature.mutations.setSelected(feature.state, this)
-                feature.mutations.setOgProperties(feature.state, this.copyProperties())
-            }
-            return this.representation = MapTools.representation.create(this, cb)
+        if (!this.coordinates) throw 'Feature has no coordinates'
+        const cb = () => {
+            feature.mutations.setSelected(feature.state, this)
+            feature.mutations.setOgProperties(feature.state, this.copyProperties())
         }
-        throw 'Feature has no coordinates'
+        return this.representation = MapTools.representation.create(this, cb)
     }
 
     /**
