@@ -9,7 +9,11 @@ export default {
     },
     getters: {
         selected: state => state.selected,
-        ogProperties: state => state.ogProperties
+        ogProperties: state => state.selected.id ? state.ogProperties : null,
+        ogCoordinates: (state, getters) => {
+            if (getters.ogProperties) return getters.ogProperties.geometry.value.coordinates
+            return null
+        }
     },
     mutations: {
         setSelected: function (state, feature) {
