@@ -105,7 +105,7 @@ export default class Transaction {
      * @returns Object
      */
     static formattedGeometry (geometry) {
-        const coordinates = geometry.coordinates
+        const coordinates = MapTools.projection.project(geometry.coordinates)
         if (Array.isArray(coordinates)) return Transaction.polygon(coordinates)
         return Transaction.point(coordinates)
     }
@@ -120,8 +120,7 @@ export default class Transaction {
         for (let key in props) {
             if (props[key].value) {
                 if (key === 'geometry') {
-                    const geometry = {coordinates: MapTools.projection.project(props.geometry.value.coordinates)}
-                    res.geometry = Transaction.formattedGeometry(geometry)
+                    res.geometry = Transaction.formattedGeometry(props.geometry.value)
                 } else {
                     res[key] = props[key].value
                 }
@@ -137,13 +136,12 @@ export default class Transaction {
      * @returns Object
      */
     static toUpdateProperty (key, value) {
+        let wfsValue = key === 'geometry' ? Transaction.formattedGeometry(value) : { '_text' : value }
         return {
             'wfs:Name': {
                 '_text': key
             },
-            'wfs:Value': {
-                '_text': value
-            }
+            'wfs:Value': wfsValue
         }
     }
 
@@ -155,7 +153,7 @@ export default class Transaction {
     static toUpdateProperties (properties) {
         let props = []
         for (let key in properties) {
-           if (properties[key]) {
+           if (properties[key].value) {
                props.push(Transaction.toUpdateProperty(key, properties[key].value))
            }
         }
@@ -175,8 +173,7 @@ export default class Transaction {
     static insert (feature) {
         let t = new Transaction()
         t['wfs:Transaction']['wfs:Insert'] = {}
-        const properties = Transaction.toInsertProperties(feature.properties)
-        t['wfs:Transaction']['wfs:Insert'][feature.parent.properties.name] = properties
+        t['wfs:Transaction']['wfs:Insert'][feature.parent.properties.name] = Transaction.properties(feature)
         return t
     }
 
@@ -188,7 +185,7 @@ export default class Transaction {
     static update (feature) {
         let t = new Transaction()
         t['wfs:Transaction']['wfs:Update'] = {}
-        const properties = Transaction.properties(feature.properties)
+        const properties = Transaction.properties(feature)
         t['wfs:Transaction']['wfs:Update'] = {
             '_attributes': {
                 'typeName': feature.parent.properties.name
