@@ -51,7 +51,7 @@
              * Call store's save action
              */
             onSaveClick: async function () {
-                await this['feature/save'](this.layer.name)
+                await this['feature/save']()
             },
             /**
              * Call store's delete action
