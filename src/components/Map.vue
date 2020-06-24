@@ -5,6 +5,7 @@
 <script>
 import {mapGetters, mapMutations} from 'vuex'
 import MapTools from '@/tools/MapTools'
+import _ from 'lodash'
 
 export default {
     name: "Map",
@@ -15,6 +16,7 @@ export default {
             featureList: 'layer/features',
             layer: 'layer/selected',
             feature: 'feature/selected',
+            ogCoordinates: 'feature/ogCoordinates'
         }),
         cursor: function () {
             return this.feature ? 'crosshair' : 'grab'
@@ -33,7 +35,13 @@ export default {
                 const point = [e.latlng.lat, e.latlng.lng]
                 if (this.feature.representation) this.feature.deleteRepresentation()
                 if (this.feature.parent.shape === 'Point') this.feature.coordinates = point
-                else this.feature.coordinates.push(point)
+                else {
+                    if (this.feature.coordinates) {
+                        if (_.isEqual(this.feature.coordinates, this.ogCoordinates)) this.feature.coordinates = [point]
+                        else this.feature.coordinates.push(point)
+                    }
+                    else this.feature.coordinates = [point]
+                }
                 this.feature.createRepresentation().addTo(this.map)
             }
         }
