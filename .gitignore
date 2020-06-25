@@ -22,3 +22,6 @@ yarn-error.log*
 
 # Test file
 test.js
+
+# Config file
+src/config/index.js

@@ -1,8 +1,10 @@
 import axios from 'axios'
 import * as convert from 'xml-js'
-import config from '@/config'
+import { server } from '@/config'
 
-const baseUrl = `http://${config.qgisserver.host}?SERVICE=WMS&VERSION=1.3.0`
+const defaultQueryParams = server.queryParams.join('&')
+const baseUrl = `http://${server.host}?${defaultQueryParams}&SERVICE=WMS&VERSION=1.1.0`
+
 
 function extractStyles(stylesXML) {
     const stylesJS = convert.xml2js(stylesXML, {compact: true, spaces: 4})
@@ -15,4 +17,4 @@ async function fetchStyles(layerName) {
     return extractStyles(res.data)
 }
 
-export default {fetchStyles}
+export default { fetchStyles }

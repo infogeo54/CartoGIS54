@@ -1,8 +1,9 @@
 import axios from 'axios'
 import * as convert from 'xml-js'
-import config from '@/config'
+import { server } from '@/config'
 
-const baseUrl = `http://${config.qgisserver.host}?SERVICE=WFS&VERSION=1.1.0`
+const defaultQueryParams = server.queryParams.join('&')
+const baseUrl = `http://${server.host}?${defaultQueryParams}&SERVICE=WFS&VERSION=1.1.0`
 
 /**
  * Make a GetCapabilities AJAX request and return a stringified XML document from the response
