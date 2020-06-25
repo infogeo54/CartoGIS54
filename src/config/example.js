@@ -21,6 +21,18 @@ export const app = {
             textAreaFields: [
                 'observations'
             ],
+            selectFields: [
+                {
+                    field: 'my-field',
+                    options: [
+                        { value: '1', text: 'Un' },
+                        { value: '2', text: 'Deux' },
+                        { value: '3', text: 'Trois' },
+                        { value: '4', text: 'Quatre' },
+                        { value: '5', text: 'Cinq' }
+                    ]
+                }
+            ],
             requiredFields: [
                 'nom',
                 'projet',
