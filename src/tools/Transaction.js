@@ -153,7 +153,7 @@ export default class Transaction {
     static toUpdateProperties (properties) {
         let props = []
         for (let key in properties) {
-           if (properties[key].value) {
+           if (properties[key].value !== null && properties[key].value !== null) {
                props.push(Transaction.toUpdateProperty(key, properties[key].value))
            }
         }
