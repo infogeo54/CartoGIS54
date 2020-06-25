@@ -23,7 +23,7 @@ export default class Feature {
             if (!value) {
                 switch (type) {
                     case 'boolean':
-                        value = 'FALSE' // New Feature's booleans are init at FALSE
+                        value = false // New Feature's booleans are init at false
                         break
                     case 'gml:PointPropertyType':
                     case 'gml:MultiPolygonPropertyType':
