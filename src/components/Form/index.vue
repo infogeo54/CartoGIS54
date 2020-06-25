@@ -105,13 +105,13 @@
     position: relative
     overflow: hidden
     .groups
-      height: 90%
+      height: 95%
       overflow-x: hidden
       overflow-y: scroll
       & > *
         margin: 15px 0
     .buttons
-      height: 10%
+      height: 5%
       display: flex
       flex-wrap: wrap
       flex: 0 1 49%
