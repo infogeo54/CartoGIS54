@@ -1,77 +1,61 @@
 <template>
-  <div class="form-group">
+  <div v-if="category" class="form-group">
     <label>{{ title }}</label>
     <textarea
-        v-if="isTextArea"
+        v-if="category === 'textArea'"
         :value="value"
-        @change="changed">
+        @change="changed"
+    >
     </textarea>
-    <BooleanSelect
-        v-else-if="isBooleanSelect"
+    <Select
+        v-else-if="category === 'selectBox'"
         :value="value"
-        :required="isRequired"
-        @change="changed" />
-    <ClassicSelect
-        v-else-if="isClassicSelect"
-        :value="value"
-        :options="classicSelectOptions"
-        :required="isRequired"
+        :field="field"
         @change="changed"
     />
-    <input v-else
-           :type="type"
-           :disabled="isDisabled"
-           :required="isRequired"
-           :value="value"
-           @change="changed">
+    <Input
+        v-else
+        :category="category"
+        :value="value"
+        :field="field"
+        @change="changed"
+    />
   </div>
 </template>
 
 <script>
-import { app as appConfig } from '@/config'
-import BooleanSelect from './BooleanSelect'
-import ClassicSelect from './ClassicSelect'
+import { form as config } from '@/config/app.config.json'
+import Select from './Select'
+import Input from './Input'
 
 export default {
-    name: "FormGroup",
-    components: { BooleanSelect, ClassicSelect },
+    components: { Select, Input },
     props: {
-        property: {
-            type: Object,
-            default: null
-        }
+        property: { type: Object, default: null }
     },
     computed: {
-        isTextArea () { return appConfig.form.groups.textAreaFields.includes(this.property.name) },
-        isClassicSelect () { return appConfig.form.groups.selectFields.find(el => el.field === this.property.name) },
-        classicSelectOptions () { return this.isClassicSelect.options },
-        isBooleanSelect () { return this.property.type === 'boolean' },
-        isDate () { return this.property.type === 'date' },
-        isNumber () { return this.property.type === 'number' },
-        type: function () {
-            if (this.isDate) return 'date'
-            if (this.isNumber) return 'number'
-            return 'text'
-        },
-        isDisabled () {  return appConfig.form.groups.disabledFields.includes(this.property.name) },
-        isRequired () { return appConfig.form.groups.requiredFields.includes(this.property.name) },
-        title: function () {
-            if (this.property.name !== 'geometry') {
-                const words = this.property.name.split('_').join(' ')
-                return words[0].toUpperCase() + words.slice(1)
+        category () {
+            let res
+            for (let category in config) {
+                const field = config[category].find(f => f.name === this.property.name)
+                if (field) { res = category }
             }
-            return 'Coordonnées'
+            return res
+        },
+        field () { return config[this.category].find(field => field.name === this.property.name) },
+        title: function () {
+           return this.field.alias ? this.field.alias : this.field.name.toUpperCase()
         },
         value: function () {
-            if (this.property.name !== 'geometry') return this.property.value
+            if (this.property.name !== 'geometry') return this.property.value || this.field.default
             return this.property.value.coordinates.join(', ')
         }
     },
     methods: {
         changed (e) {
             let value = e.target.value
-            if (value === 'false') value = false
-            else if (value === 'true') value = true
+            /*if (value === 'false') value = false
+            else if (value === 'true') value = true*/
             this.$emit('changed', { name: this.property.name, value })
         }
     }
@@ -79,23 +63,19 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  .form-group
-    display: flex
-    flex-direction: column
-    text-align: center
-    margin: 6px 0
-    input, textarea
-      background-color: #E6E6E6
-      border: solid 1px black
-      border-radius: 4px
-      width: 90%
-      max-width: 300px
-      margin: auto
-      padding: 4px 0
-      text-align: center
-      &[disabled]
-        cursor: not-allowed
-    textarea
-      min-height: 80px
-      resize: vertical
+.form-group
+  display: flex
+  flex-direction: column
+  text-align: center
+  margin: 6px 0
+  input, textarea, select
+    width: 90%
+    max-width: 300px
+    margin: auto
+  textarea
+    background-color: #E6E6E6
+    border: solid 1px black
+    border-radius: 4px
+    min-height: 80px
+    resize: vertical
 </style>
