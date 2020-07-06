@@ -1,0 +1,10 @@
+{
+  "form": {
+    "selectBox": [],
+    "inputNumber": [],
+    "inputDate": [],
+    "inputText": [],
+    "inputRange": [],
+    "textArea": []
+  }
+}
