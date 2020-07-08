@@ -22,12 +22,9 @@ export default class Feature {
             let value = params.props ? params.props[attr] : null
             if (!value) {
                 switch (type) {
-                    case 'boolean':
-                        value = false // New Feature's booleans are init at false
-                        break
                     case 'gml:PointPropertyType':
                     case 'gml:MultiPolygonPropertyType':
-                        value = {coordinates: []} // New Feature's geometry is init at empty coordinates
+                        value = { coordinates: [] } // New Feature's geometry is init at empty coordinates
                         break
                 }
             }
