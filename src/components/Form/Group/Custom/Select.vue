@@ -30,7 +30,7 @@ export default {
     computed: {
         options () { return this.field.options },
         map () { return this.options.map },
-        hint () { return this.value === '' || this.value === undefined },
+        hint () { return this.value === '' || this.value === undefined || this.value === null },
     },
     methods: {
         change (e) { this.$emit('change', e) }
