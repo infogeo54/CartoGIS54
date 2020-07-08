@@ -4,6 +4,7 @@
     <textarea
         v-if="category === 'textArea'"
         :disabled="options.disabled"
+        :required="options.required"
         :value="value"
         @change="changed"
     >

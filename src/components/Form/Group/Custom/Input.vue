@@ -2,6 +2,7 @@
   <input
       :type="type"
       :disabled="options.disabled"
+      :required="options.required"
       :value="value"
       :min="options.Min"
       :max="options.Max"

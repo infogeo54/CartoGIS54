@@ -2,6 +2,7 @@
   <select
       :disabled="options.disabled"
       :value="value"
+      :required="options.required"
       @change="change"
   >
     <option
