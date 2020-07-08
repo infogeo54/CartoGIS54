@@ -1,9 +1,9 @@
 import axios from 'axios'
 import * as convert from 'xml-js'
-import { server } from '@/config'
+import { host, queryParams } from '@/config/server.config.json'
 
-const defaultQueryParams = server.queryParams.join('&')
-const baseUrl = `http://${server.host}?${defaultQueryParams}&SERVICE=WMS&VERSION=1.1.0`
+const defaultQueryParams = queryParams.join('&')
+const baseUrl = `http://${host}?${defaultQueryParams}&SERVICE=WMS&VERSION=1.1.0`
 
 
 function extractStyles(stylesXML) {

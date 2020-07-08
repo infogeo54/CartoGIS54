@@ -1,9 +1,9 @@
 import axios from 'axios'
 import * as convert from 'xml-js'
-import { server } from '@/config'
+import { host, queryParams } from '@/config/server.config.json'
 
-const defaultQueryParams = server.queryParams.join('&')
-const baseUrl = `http://${server.host}?${defaultQueryParams}&SERVICE=WFS&VERSION=1.1.0`
+const defaultQueryParams = queryParams.join('&')
+const baseUrl = `http://${host}?${defaultQueryParams}&SERVICE=WFS&VERSION=1.1.0`
 
 /**
  * Make a GetCapabilities AJAX request and return a stringified XML document from the response
