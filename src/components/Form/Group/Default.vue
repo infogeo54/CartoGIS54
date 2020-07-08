@@ -23,10 +23,7 @@ export default {
     },
     methods: {
         changed (e) {
-            let value = e.target.value
-            /*if (value === 'false') value = false
-            else if (value === 'true') value = true*/
-            this.$emit('changed', { name: this.property.name, value })
+            this.$emit('changed', e)
         }
     }
 }

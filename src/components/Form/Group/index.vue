@@ -2,12 +2,14 @@
   <Custom
       v-if="isCustom"
       :property="property"
+      @changed="changed"
       class="form-group"
   />
   <Default
       v-else
       :property="property"
       class="form-group"
+      @changed="changed"
   />
 </template>
 
@@ -40,8 +42,6 @@ export default {
     methods: {
         changed (e) {
             let value = e.target.value
-            /*if (value === 'false') value = false
-            else if (value === 'true') value = true*/
             this.$emit('changed', { name: this.property.name, value })
         }
     }
