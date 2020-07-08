@@ -1,14 +1,20 @@
 <template>
   <select
       :disabled="options.disabled"
-      :value="value"
       :required="options.required"
       @change="change"
   >
     <option
+        v-if="hint"
+        value=""
+    >
+      Choisir une option
+    </option>
+    <option
         v-for="option in map"
         :key="option.text"
         :value="option.value"
+        :selected="option.value === value"
     >
       {{ option.text }}
     </option>
@@ -23,7 +29,8 @@ export default {
     },
     computed: {
         options () { return this.field.options },
-        map () { return this.options.map }
+        map () { return this.options.map },
+        hint () { return this.value === '' || this.value === undefined },
     },
     methods: {
         change (e) { this.$emit('change', e) }
@@ -41,4 +48,6 @@ select
   text-align: center
   &[disabled]
     cursor: not-allowed
+
+
 </style>

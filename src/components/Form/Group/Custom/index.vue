@@ -49,7 +49,7 @@
             hidden () { return this.options.hidden || false },
             title () { return this.field.alias ? this.field.alias : this.field.name.toUpperCase() },
             value: function () {
-                if (this.property.name !== 'geometry') return this.property.value || this.field.default
+                if (this.property.name !== 'geometry') { return this.property.value }
                 return this.property.value.coordinates.join(', ')
             }
         },
