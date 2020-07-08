@@ -1,5 +1,6 @@
 <template>
   <select
+      :disabled="options.disabled"
       :value="value"
       @change="change"
   >

@@ -1,6 +1,7 @@
 <template>
   <input
       :type="type"
+      :disabled="options.disabled"
       :value="value"
       :min="options.Min"
       :max="options.Max"
@@ -22,8 +23,9 @@ export default {
             switch (this.category) {
                 case 'inputDate':
                     return 'date'
-                case 'inputNumber':
                 case 'inputRange':
+                    return 'range'
+                case 'inputNumber':
                     return 'number'
                 default:
                     return 'text'
