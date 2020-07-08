@@ -5,10 +5,11 @@
       @change="change"
   >
     <option
-        v-for="(value, text) in options"
-        :key="text"
+        v-for="option in map"
+        :key="option.text"
+        :value="option.value"
     >
-      {{ text }}
+      {{ option.text }}
     </option>
   </select>
 </template>
@@ -20,7 +21,8 @@ export default {
         field: { type: Object, default: () => {} }
     },
     computed: {
-        options () { return this.field.options.map },
+        options () { return this.field.options },
+        map () { return this.options.map }
     },
     methods: {
         change (e) { this.$emit('change', e) }
