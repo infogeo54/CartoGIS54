@@ -56,6 +56,13 @@ export default {
         save: async function ({state, dispatch}) {
             if (state.selected.id) return await dispatch('update')
             return await dispatch('insert')
-        }
+        },
+        cancel ({ getters, rootGetters }) {
+            getters.selected.deleteRepresentation()
+            if (getters.ogProperties) {
+                getters.selected.properties = getters.ogProperties
+                getters.selected.createRepresentation().addTo(rootGetters.map)
+            }
+        },
     }
 }
