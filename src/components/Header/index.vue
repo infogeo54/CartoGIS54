@@ -3,30 +3,31 @@
     <a href="http://meurthe-et-moselle.fr">
       <img src="@/assets/design/meurthe-et-moselle_blue.png" alt="Meurthe et Moselle">
     </a>
-    <Buttons :buttons="buttons" />
+   <div class="buttons">
+     <Button
+       v-for="button in buttons"
+       :key="button.name"
+       :button="button"
+       @clicked="buttonClicked"
+     />
+   </div>
   </div>
 </template>
 
 <script>
-import Buttons from './Buttons'
+import Button from './Button'
 
 export default {
     name: 'Header',
-    components: { Buttons },
-    data () {
-        return {
-            buttons: [
-                {
-                    name: 'help',
-                    icon: 'fas fa-question-circle'
-                },
-                {
-                    name: 'user',
-                    icon: 'fas fa-user-circle'
-                }
-            ]
-        }
+    components: { Button },
+    props: {
+      buttons: { type: Array, default: () => [] }
     },
+    methods: {
+      buttonClicked (button) {
+        this.$emit('button-clicked', button)
+      }
+    }
 }
 </script>
 
@@ -41,4 +42,7 @@ export default {
     height: 100%
   a
     max-width: 150px
+
+.buttons
+  display: flex
 </style>
