@@ -1,10 +1,10 @@
 <template>
   <div id="app" :is="layout">
-    <Loader v-if="loading" />
+    <Loader v-if="isLoading" />
     <main v-else>
       <Menu />
       <Map />
-      <Form v-if="formVisible" />
+      <Form v-if="isFormVisible" />
     </main>
   </div>
 </template>
@@ -14,7 +14,7 @@ import Loader from '@/components/Loader'
 import Menu from '@/components/Menu'
 import Map from '@/components/Map'
 import Form from '@/components/Form'
-import {mapGetters, mapActions} from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'App',
@@ -29,22 +29,24 @@ export default {
         layers: 'layer/list',
         feature: 'feature/selected',
     }),
-    layout: function () {
+    layout () {
       return 'default-layout'
     },
-    loading: function () {
+    isLoading () {
       return !this.layers.length
     },
-    formVisible: function () {
+    isFormVisible () {
       if (this.feature) return !!this.feature.representation
       return false
     }
   },
-  methods: {
-    ...mapActions('layer', ['getLayers']),
+  mounted () {
+      this['layer/getLayers']()
   },
-  mounted() {
-    this.getLayers()
+  methods: {
+    ...mapActions([
+        'layer/getLayers'
+    ]),
   }
 }
 </script>
