@@ -25,3 +25,5 @@ test.js
 
 # Config file
 src/config/index.js
+
+.editorconfig
