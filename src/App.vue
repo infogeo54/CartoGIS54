@@ -1,16 +1,28 @@
 <template>
   <div id="app" :is="layout">
+    <Header
+      class="header"
+      :buttons="buttons"
+      @button-clicked="toggleModal"
+    />
     <Loader v-if="isLoading" />
     <main v-else>
       <Menu />
       <Map />
       <Form v-if="isFormVisible" />
     </main>
+    <Modal
+      v-for="modal in modals"
+      :key="modal.name"
+      :modal="modal"
+    />
   </div>
 </template>
 
 <script>
 import Loader from '@/components/UX/Loader'
+import Modal from '@/components/UX/Modal'
+import Header from '@/components/Header'
 import Menu from '@/components/Menu'
 import Map from '@/components/Map'
 import Form from '@/components/Form'
@@ -20,9 +32,18 @@ export default {
   name: 'App',
   components: {
     Loader,
+    Header,
     Menu,
     Map,
-    Form
+    Form,
+    Modal
+  },
+  data () {
+    return {
+      modals: [
+        { name: 'help', icon: 'fas fa-question-circle', visible: false, content: { title: 'Aide' } }
+      ]
+    }
   },
   computed: {
     ...mapGetters({
@@ -41,6 +62,12 @@ export default {
     isFormVisible () {
       if (this.feature) return !!this.feature.representation
       return false
+    },
+    buttons () {
+      return this.modals.map(m => {
+        const { name, icon } = m
+        return { name, icon }
+      })
     }
   },
   created () {
@@ -60,13 +87,24 @@ export default {
         'layer/getLayers',
         'feature/cancel'
     ]),
+    toggleModal (button) {
+      const modal = this.modals.find(m => m.name === button.name)
+      modal.visible = true
+    }
   }
 }
 </script>
 
 <style lang="sass">
   #app
+    height: 100%
+    overflow-y: hidden
     background-color: #2A353B
+    font-family: Arial, 'sans-serif'
+  .header
+    height: 10%
+    min-height: 80px
   main
+    height: 90%
     display: flex
 </style>
