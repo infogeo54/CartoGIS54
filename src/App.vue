@@ -35,17 +35,31 @@ export default {
     isLoading () {
       return !this.layers.length
     },
+    isEditing () {
+        return !!this.feature
+    },
     isFormVisible () {
       if (this.feature) return !!this.feature.representation
       return false
     }
   },
+  created () {
+      document.addEventListener('keyup', e => {
+          if (this.isEditing && e.key === 'Escape') {
+              this['feature/cancel']()
+              this.reset()
+          }
+      })
+  },
   mounted () {
       this['layer/getLayers']()
+      console.log(this)
   },
   methods: {
     ...mapActions([
-        'layer/getLayers'
+        'reset',
+        'layer/getLayers',
+        'feature/cancel'
     ]),
   }
 }
