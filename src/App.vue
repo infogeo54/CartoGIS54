@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Loader from '@/components/Loader'
+import Loader from '@/components/UX/Loader'
 import Menu from '@/components/Menu'
 import Map from '@/components/Map'
 import Form from '@/components/Form'
@@ -53,7 +53,6 @@ export default {
   },
   mounted () {
       this['layer/getLayers']()
-      console.log(this)
   },
   methods: {
     ...mapActions([
