@@ -8,15 +8,17 @@
       class="modal"
     >
       <div class="modal-header">
-        <h3>{{ title }}</h3>
+        <h3>{{ modal.title }}</h3>
         <div @click="close">
           <i class="fas fa-times-circle"></i>
         </div>
       </div>
-      <div class="modal-body">
+      <div
+        class="modal-body"
+        v-html="content"
+      >
       </div>
-      <div class="modal-footer">
-      </div>
+      <div class="modal-footer"></div>
     </div>
   </div>
 </template>
@@ -26,9 +28,16 @@ export default {
   props: {
     modal: { type: Object, default: () => {} }
   },
+  data () {
+    return {
+      content: null
+    }
+  },
   computed: {
     isVisible () { return this.modal.visible || false },
-    title () { return this.modal.content.title }
+  },
+  mounted () {
+    this.content = require(`@/modals/${this.modal.name}`)
   },
   methods: {
     close () {
@@ -54,7 +63,7 @@ export default {
   align-self: center
   margin: auto
   height: 90%
-  width: 70%
+  width: 50%
   border: solid 1px #EFEFEF
   border-radius: 4px
   color: #EFEFEF
