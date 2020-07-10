@@ -1,6 +1,11 @@
 <template>
-  <div v-if="category && !hidden">
-    <label>{{ title }}</label>
+  <div
+    v-if="category && !hidden"
+    :class="options.required && !options.disabled ? 'required' : ''"
+  >
+    <label>
+      {{ title }}
+    </label>
     <textarea
         v-if="category === 'textArea'"
         :disabled="options.disabled"
@@ -60,3 +65,10 @@
         }
     }
 </script>
+
+<style lang="sass">
+.required
+  & > label:after
+    content: ' *'
+    color: red
+</style>
