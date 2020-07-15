@@ -37,7 +37,7 @@ export default {
     isVisible () { return this.modal.visible || false },
   },
   mounted () {
-    this.content = require(`@/modals/${this.modal.name}`)
+    this.content = require(`@/modals/${this.modal.filename}`)
   },
   methods: {
     close () {
@@ -62,8 +62,8 @@ export default {
   position: relative
   align-self: center
   margin: auto
-  height: 90%
-  width: 50%
+  height: 800px
+  width: 600px
   border: solid 1px #EFEFEF
   border-radius: 4px
   color: #EFEFEF
@@ -72,22 +72,29 @@ export default {
 
 .modal-header, .modal-body, .modal-footer
   padding: 10px
+  box-sizing: border-box
 
 .modal-header, .modal-footer
   background-color: #0BB4F5
 
 .modal-header
+  height: 40px
   display: flex
   justify-content: space-between
+  align-items: center
   border-top-left-radius: 4px
   border-top-right-radius: 4px
   h3
     margin: 0
+    height: fit-content
   div
     height: fit-content
-    align-self: center
     &:hover
       cursor: pointer
+
+.modal-body
+  height: 740px
+  overflow-y: scroll
 
 .modal-footer
   position: absolute
