@@ -20,7 +20,7 @@ export default {
             L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
                 attribution: 'données © OpenStreetMap/ODbL - rendu OSM France',
                 minZoom: 1,
-                maxZoom: 20
+                maxZoom: 18
             }).addTo(map)
             return map
         },
