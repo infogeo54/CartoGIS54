@@ -37,7 +37,7 @@ export default {
     isVisible () { return this.modal.visible || false },
   },
   mounted () {
-    this.content = require(`@/modals/${this.modal.filename}`)
+    this.content = require(`@/modals/${this.modal.name}.html`)
   },
   methods: {
     close () {
