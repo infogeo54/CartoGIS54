@@ -95,16 +95,21 @@ export default {
 }
 </script>
 
-<style lang="sass">
-  #app
-    height: 100%
-    overflow-y: hidden
-    background-color: #2A353B
-    font-family: Arial, 'sans-serif'
-  .header
-    height: 10%
-    min-height: 80px
-  main
-    height: 90%
-    display: flex
+<style>
+@import "./assets/style/custom.css";
+
+#app {
+  height: 100%;
+  overflow-y: hidden;
+  background-color: #2A353B;
+  font-family: Arial, 'sans-serif';
+}
+.header {
+  height: 10%;
+  min-height: 80px;
+}
+main {
+  height: 90%;
+  display: flex;
+}
 </style>
