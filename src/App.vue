@@ -41,7 +41,7 @@ export default {
   data () {
     return {
       modals: [
-        { name: 'help', icon: 'fas fa-question-circle', visible: false, content: { title: 'Aide' } }
+        { name: 'help', filename: 'help.html', title: 'Help', icon: 'fas fa-question-circle', visible: false }
       ]
     }
   },
