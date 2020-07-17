@@ -27,6 +27,7 @@ import Menu from '@/components/Menu'
 import Map from '@/components/Map'
 import Form from '@/components/Form'
 import { mapGetters, mapActions } from 'vuex'
+import { modals } from '@/config/app.config.json'
 
 export default {
   name: 'App',
@@ -40,9 +41,7 @@ export default {
   },
   data () {
     return {
-      modals: [
-        { name: 'help', title: 'Help', icon: 'fas fa-question-circle', visible: false }
-      ]
+      modals
     }
   },
   computed: {
