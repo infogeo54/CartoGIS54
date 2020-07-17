@@ -48,7 +48,7 @@ export default {
         }
     },
     actions: {
-        getLayers: async function ({commit}) {
+        getLayers: async function ({ commit }) {
             const layerList = await WFS.fetchLayers()
             const descriptionList = await WFS.fetchAllFeatureDescriptions()
             const layers = await Promise.all(
@@ -63,7 +63,7 @@ export default {
             )
             commit('setList', layers)
         },
-        reset: function ({commit}) {
+        reset: function ({ commit }) {
             commit('setList', [])
             commit('setSelected', null)
         }
