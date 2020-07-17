@@ -37,7 +37,7 @@ export default {
         delete: async function ({state, getters, commit}){
             const t = Transaction.delete(state.selected).toXML()
             await WFS.sendTransaction(t)
-            commit('layer/removeFeature', getters.selected, {root: true})
+            commit('layer/removeFeature', getters.selected, { root: true })
 
         },
         insert: async function ({state, commit}) {
@@ -46,7 +46,7 @@ export default {
             const id = res['TransactionResponse']['InsertResults']['Feature']['ogc:FeatureId']['_attributes']['fid']
             if (id) {
                 commit('setId', id)
-                commit('layer/addFeature', state.selected, {root: true})
+                commit('layer/addFeature', state.selected, { root: true })
             }
         },
         update: async function ({state}) {
@@ -54,7 +54,9 @@ export default {
             return await WFS.sendTransaction(t)
         },
         save: async function ({state, dispatch}) {
-            if (state.selected.id) return await dispatch('update')
+            if (state.selected.id) {
+              return await dispatch('update')
+            }
             return await dispatch('insert')
         },
         cancel ({ getters, rootGetters }) {
