@@ -1,10 +1,15 @@
 {
+  "modals": [],
+  "server": {
+    "queryParams": [],
+    "host": ""
+  },
   "form": {
     "selectBox": [],
-    "inputNumber": [],
+    "inputRange": [],
     "inputDate": [],
     "inputText": [],
-    "inputRange": [],
+    "inputNumber": [],
     "textArea": []
   }
 }
