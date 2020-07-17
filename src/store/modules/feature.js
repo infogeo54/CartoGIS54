@@ -58,7 +58,9 @@ export default {
             return await dispatch('insert')
         },
         cancel ({ getters, rootGetters }) {
-            getters.selected.deleteRepresentation()
+            if (getters.selected.representation) {
+              getters.selected.deleteRepresentation()
+            }
             if (getters.ogProperties) {
                 getters.selected.properties = getters.ogProperties
                 getters.selected.createRepresentation().addTo(rootGetters.map)
