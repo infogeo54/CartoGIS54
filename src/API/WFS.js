@@ -9,7 +9,7 @@ const baseUrl = `http://${server.host}?${defaultQueryParams}&SERVICE=WFS&VERSION
  * Make a GetCapabilities AJAX request and return a stringified XML document from the response
  * @returns String
  */
-async function fetchLayers() {
+const fetchLayers = async () => {
     const url = `${baseUrl}&REQUEST=GetCapabilities`
     const res = await axios.get(url)
     return extractLayers(res.data)
@@ -19,7 +19,7 @@ async function fetchLayers() {
  * Extract a list of layers from a Capabilities XML document
  * @param capabilitiesXML : String - Capabilities stringified XML document
  */
-function extractLayers(capabilitiesXML) {
+const extractLayers = capabilitiesXML => {
     const capabilities = convert.xml2js(capabilitiesXML, {compact: true})
     return capabilities['WFS_Capabilities']['FeatureTypeList']['FeatureType']
 }
@@ -29,7 +29,7 @@ function extractLayers(capabilitiesXML) {
  * @param coordinates : Array - Returns reversed coordinates
  * @returns Array
  */
-function reverseCoordinates (coordinates) {
+const reverseCoordinates = coordinates => {
     if (coordinates.length === 2) {
         return coordinates.reverse()
     } else {
@@ -43,7 +43,7 @@ function reverseCoordinates (coordinates) {
  * @param layer : String - The name of the associated layer
  * @returns Object
  */
-async function fetchFeatures(layer) {
+const fetchFeatures = async layer => {
     const url = `${baseUrl}&REQUEST=GetFeature&TYPENAME=${layer}&OUTPUTFORMAT=GEOJSON`
     const res = await axios.get(url)
     return res.data.features.map(f => {
@@ -56,13 +56,13 @@ async function fetchFeatures(layer) {
  * Make a DescribeFeature AJAX request and return a list of descriptions
  * @returns Array
  */
-async function fetchAllFeatureDescriptions() {
+const fetchAllFeatureDescriptions = async () => {
     const url = `${baseUrl}&REQUEST=DescribeFeatureType`
     const res = await axios.get(url)
     return extractAllDescriptions(res.data)
 }
 
-function extractAllDescriptions(XMLDescriptions) {
+const extractAllDescriptions = XMLDescriptions => {
     const descriptions = convert.xml2js(XMLDescriptions, {compact: true})
     return descriptions['schema']['complexType'].map(t => {
         const layer = t['_attributes']['name'].replace('Type', '')
@@ -72,7 +72,7 @@ function extractAllDescriptions(XMLDescriptions) {
     })
 }
 
-function extractAttributes(sequence) {
+const extractAttributes = sequence => {
     const attributes = sequence.element.map(e => {
         const name = e['_attributes']['name']
         const type = e['_attributes']['type']
@@ -81,14 +81,14 @@ function extractAttributes(sequence) {
     return Object.fromEntries(attributes)
 }
 
-function extractShape(sequence) {
+const extractShape = sequence => {
     const geometryElement = sequence.element.find(e => e['_attributes']['name'] === 'geometry')
     const geometryType = geometryElement['_attributes']['type']
     if (geometryType === 'gml:PointPropertyType') return 'Point'
     else return 'Polygon'
 }
 
-async function sendTransaction(transaction) {
+const sendTransaction = async transaction => {
     console.log(transaction)
     const url = `${baseUrl}&REQUEST=Transaction`
     const res = await axios.post(url, transaction)

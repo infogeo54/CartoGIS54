@@ -15,7 +15,7 @@ export default {
          * @param center : Array<number> - The point where the map will be centered
          * @returns Object
          */
-        create: function (center) {
+        create (center) {
             const map = L.map('map').setView(center, 15)
             L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
                 attribution: 'données © OpenStreetMap/ODbL - rendu OSM France',
@@ -29,7 +29,7 @@ export default {
          * @param map : L.map - A Leaflet map instance
          * @param representations : Array<Object>
          */
-        representations: function (map, representations) {
+        representations (map, representations) {
             representations.forEach(r => r.addTo(map))
         }
     },
@@ -40,7 +40,7 @@ export default {
          * @param cb : Function - The function to trigger when the representation is clicked
          * @returns Leaflet Layer
          */
-        create: function (f, cb) {
+        create (f, cb) {
             const rep = f.parent.shape === 'Point' ? this.marker(f) :  this.polygon(f)
             rep.on('click', (e) => {
                 L.DomEvent.stopPropagation(e) // Avoid map clicked event when a feature is clicked
@@ -53,7 +53,7 @@ export default {
          * @param f : Feature - The feature to represent
          * @returns Leaflet Layer
          */
-        marker: function (f) {
+        marker (f) {
             const icon = this.icon(f)
             return L.marker(f.coordinates, {icon: icon})
         },
@@ -62,7 +62,7 @@ export default {
          * @param f : Feature
          * @returns Leaflet Layer
          */
-        polygon: function (f) {
+        polygon (f) {
             return L.polygon(f.coordinates, {fillOpacity: 0.5})
         },
         /**
@@ -70,7 +70,7 @@ export default {
          * @param f : Feature - The feature to represent
          * @returns layers: 'layer/list',
          */
-        icon: function (f) {
+        icon (f) {
             let icon
             try { icon = require(`@/assets/icons/${f.properties.type.value}.svg`) }
             catch { icon = require('@/assets/icons/poi.svg') }
@@ -88,7 +88,7 @@ export default {
          * @param coordinates : Array - Point's coordinates
          * @returns Object - A proj4 Point instance
          */
-        point: function (coordinates) {
+        point (coordinates) {
             const latlng = L.latLng(coordinates)
             const projection = L.Projection.SphericalMercator.project(latlng)
             return proj4('EPSG:900913', 'EPSG:2154', projection)
@@ -99,7 +99,7 @@ export default {
          * @param coordinates : Array - Polygon's list of points
          * @returns Array - A list of proj4 Point instance
          */
-        polygon: function (coordinates) {
+        polygon (coordinates) {
             return coordinates.map(c => this.point(c))
         },
 
@@ -108,7 +108,7 @@ export default {
          * @param coordinates : Array - Feature's coordinates
          * @returns Array | Object - A list or an instance of proj4 Point
          */
-        project: function (coordinates) {
+        project (coordinates) {
             if (Array.isArray(coordinates[0])) {
                 return this.polygon(coordinates)
             }
