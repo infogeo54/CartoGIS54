@@ -51,17 +51,17 @@ The `form` section is used to customize the **Form component** in order to make 
 You can add a **field object** to the appropiate section :
 
 * `selectBox` : fields that will be rendered as **select boxes**
-* `inputNumber` : fields that will be rendered as **number input**
-* `inputDate` : fields that will be rendered as **date input**
-* `inputText` : fields that will be rendered as **text input**
-* `inputRange` : fields that will be rendered as **range input**
-* `textArea` : fields that will be rendered as **text area**
+* `inputNumber` : fields that will be rendered as **number inputs**
+* `inputDate` : fields that will be rendered as **date inputs**
+* `inputText` : fields that will be rendered as **text inputs**
+* `inputRange` : fields that will be rendered as **range inputs**
+* `textArea` : fields that will be rendered as **text areas**
 
 Each section must be composed of **valid Field objects**. 
 
 ### Field object
 
-A field object must respect a **pre-defined structure** an implement some required parameters :
+A field object must respect a **pre-defined structure** and implement some required parameters :
 
 ```json
 {
@@ -96,7 +96,7 @@ There are many different options, depending on the field's type :
 
 This section is used to configure modals that can be added to your the app.
 
-The idea here, is to provide meta-data about your modal before writing its content within an HTML file, placed into the`src/modals` directory.
+The idea here, is to provide meta-data about your modal before writing its content within an HTML file, placed into the `src/modals` directory.
 
 Those meta-data must respect a *pre-defined structure* :
 
