@@ -1,8 +1,11 @@
 {
-  "modals": [],
   "server": {
     "queryParams": [],
     "host": ""
+  },
+  "header": {
+    "brand": "",
+    "modals": []
   },
   "form": {
     "selectBox": [],
