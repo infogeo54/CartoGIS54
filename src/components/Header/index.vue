@@ -1,20 +1,19 @@
 <template>
   <div class="header">
-    <a href="http://meurthe-et-moselle.fr">
-      <img src="@/assets/design/meurthe-et-moselle_blue.png" alt="Meurthe et Moselle">
-    </a>
-   <div class="buttons">
-     <Button
-       v-for="button in buttons"
-       :key="button.name"
-       :button="button"
-       @clicked="buttonClicked"
-     />
-   </div>
+    <img v-if="brand" :src="brand">
+    <div class="buttons">
+      <Button
+        v-for="button in buttons"
+        :key="button.name"
+        :button="button"
+        @clicked="buttonClicked"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import { header as config } from '@/app.config.json'
 import Button from './Button'
 
 export default {
@@ -23,9 +22,20 @@ export default {
     props: {
       buttons: { type: Array, default: () => [] }
     },
+    data () {
+      return {
+        brand: null
+      }
+    },
     methods: {
       buttonClicked (button) {
         this.$emit('button-clicked', button)
+      }
+    },
+    mounted () {
+      const brand = require(`${config.header}`)
+      if (brand) {
+        this.brand = brand
       }
     }
 }
