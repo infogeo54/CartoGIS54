@@ -24,18 +24,12 @@ export default {
     },
     data () {
       return {
-        brand: null
+        brand: config.brand
       }
     },
     methods: {
       buttonClicked (button) {
         this.$emit('button-clicked', button)
-      }
-    },
-    mounted () {
-      const brand = require(`${config.header}`)
-      if (brand) {
-        this.brand = brand
       }
     }
 }
