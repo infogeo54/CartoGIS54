@@ -27,7 +27,7 @@ import Menu from '@/components/Menu'
 import Map from '@/components/Map'
 import Form from '@/components/Form'
 import { mapGetters, mapActions } from 'vuex'
-import { modals } from '@/config/app.config.json'
+import { modals } from '@/app.config.json'
 
 export default {
   name: 'App',

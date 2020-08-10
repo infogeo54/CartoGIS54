@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import { form as config } from '@/config/app.config.json'
+    import { form as config } from '@/app.config.json'
     import Select from './Select'
     import Input from './Input'
 

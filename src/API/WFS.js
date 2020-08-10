@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as convert from 'xml-js'
-import { server } from '@/config/app.config.json'
+import { server } from '@/app.config.json'
 
 const defaultQueryParams = server.queryParams.map(param => `${param.key}=${param.value}`).join('&')
 const baseUrl = `http://${server.host}?${defaultQueryParams}&SERVICE=WFS&VERSION=1.1.0`
