@@ -27,7 +27,7 @@ import Menu from '@/components/Menu'
 import Map from '@/components/Map'
 import Form from '@/components/Form'
 import { mapGetters, mapActions } from 'vuex'
-import { modals } from '@/app.config.json'
+import { header } from '@/app.config.json'
 
 export default {
   name: 'App',
@@ -41,7 +41,7 @@ export default {
   },
   data () {
     return {
-      modals
+      modals: header.modals
     }
   },
   computed: {
