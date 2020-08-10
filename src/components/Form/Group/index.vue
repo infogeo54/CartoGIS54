@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { form as config } from '@/config/app.config.json'
+import { form as config } from '@/app.config.json'
 import _ from 'lodash'
 import Default from './Default'
 import Custom from './Custom'
