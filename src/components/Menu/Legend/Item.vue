@@ -1,6 +1,6 @@
 <template>
     <div class="legend-item">
-        <img :src="icon" :alt="name" @click="clicked">
+        <img :src="icon" :alt="literal" @click="clicked">
         <p>{{ title }}</p>
     </div>
 </template>
@@ -18,14 +18,13 @@ export default {
         title: function() {
             return this.featureStyle['se:Name']['_text']
         },
-        name: function () {
-            return this.title.toLowerCase()
+        literal: function () {
+            return this.featureStyle['ogc:Filter']['ogc:PropertyIsEqualTo']['ogc:Literal']['_text']
         },
         icon: function () {
-            const name = this.name.toLowerCase()
             let icon
             try {
-                icon = require(`@/assets/icons/${name}.svg`)
+                icon = require(`@/assets/icons/${this.literal}.svg`)
             } catch (e) {
                 icon = require('@/assets/icons/poi.svg')
             }
@@ -34,7 +33,7 @@ export default {
     },
     methods: {
         clicked: function () {
-            this.$emit('itemClicked', this.name)
+            this.$emit('itemClicked', this.literal)
         }
     }
 }
