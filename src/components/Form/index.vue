@@ -75,7 +75,7 @@ export default {
          * @param e : Event - An event created by clicking on a form's button
          */
         action: async function (e) {
-            switch (e.submitter.name) {
+            switch (e.explicitOriginalTarget.name) {
                 case 'save':
                     await this.onSaveClick()
                     break
