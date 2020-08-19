@@ -62,13 +62,21 @@ const fetchAllFeatureDescriptions = async () => {
     return extractAllDescriptions(res.data)
 }
 
+const extractDescription = complexType => {
+    const layer = complexType['_attributes']['name'].replace('Type', '')
+    const attributes = extractAttributes(complexType['complexContent']['extension']['sequence'])
+    const shape = extractShape(complexType['complexContent']['extension']['sequence'])
+    return { layer: layer, attributes: attributes, shape: shape }
+}
+
 const extractAllDescriptions = XMLDescriptions => {
     const descriptions = convert.xml2js(XMLDescriptions, {compact: true})
-    return descriptions['schema']['complexType'].map(t => {
-        const layer = t['_attributes']['name'].replace('Type', '')
-        const attributes = extractAttributes(t['complexContent']['extension']['sequence'])
-        const shape = extractShape(t['complexContent']['extension']['sequence'])
-        return {layer: layer, attributes: attributes, shape: shape}
+    const complexTypes = descriptions['schema']['complexType']
+    if (!Array.isArray(complexTypes)) {
+        return extractDescription(complexTypes)
+    }
+    return complexTypes.map(t => {
+        return extractDescription(t)
     })
 }
 
