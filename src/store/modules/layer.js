@@ -27,7 +27,7 @@ export default {
             state.selected = layer !== state.selected ? layer : null
         },
         /**
-         * After an Insert Transacation, add a feature to it's parent layer
+         * After an Insert Transaction, add a feature to it's parent layer
          * @param state
          * @param feature : Feature
          */

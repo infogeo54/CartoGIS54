@@ -2,20 +2,21 @@
   <div id="app" :is="layout">
     <Header
       class="header"
-      :buttons="buttons"
-      @button-clicked="toggleModal"
     />
     <Loader v-if="isLoading" />
     <main v-else>
       <Menu />
-      <Map />
-      <Form v-if="isFormVisible" />
+      <MapContainer 
+        :buttons="buttons"
+        @button-clicked="toggleModal"
+      />
+      <Form v-if="formVisible" />
     </main>
-    <Modal
+    <!-- <Modal
       v-for="modal in modals"
       :key="modal.name"
       :modal="modal"
-    />
+    /> -->
   </div>
 </template>
 
@@ -24,9 +25,9 @@ import Loader from '@/components/UX/Loader'
 import Modal from '@/components/UX/Modal'
 import Header from '@/components/Header'
 import Menu from '@/components/Menu'
-import Map from '@/components/Map'
+import MapContainer from '@/components/Map'
 import Form from '@/components/Form'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { header } from '@/app.config.json'
 
 export default {
@@ -35,19 +36,22 @@ export default {
     Loader,
     Header,
     Menu,
-    Map,
+    MapContainer,
     Form,
-    Modal
+    Modal,
   },
   data () {
+
     return {
-      modals: header.modals
+      modals: header.modals,
     }
   },
   computed: {
     ...mapGetters({
-        layers: 'layer/list',
-        feature: 'feature/selected',
+      layers: 'layer/list',
+      feature: 'feature/selected',
+      formVisible: 'form/formVisible',
+      map: 'map',
     }),
     layout () {
       return 'default-layout'
@@ -56,10 +60,10 @@ export default {
       return !this.layers.length
     },
     isEditing () {
-        return !!this.feature
+      return !!this.feature
     },
     isFormVisible () {
-      if (this.feature) return !!this.feature.representation
+      if (this.feature && this.formVisible) return !!this.feature.representation
       return false
     },
     buttons () {
@@ -69,46 +73,73 @@ export default {
       })
     }
   },
-  created () {
-      document.addEventListener('keyup', e => {
-          if (this.isEditing && e.key === 'Escape') {
-              this['feature/cancel']()
-              this.reset()
-          }
-      })
-  },
   mounted () {
-      this['layer/getLayers']()
+    this['layer/getLayers']()
   },
   methods: {
+
+    ...mapMutations(['form/setVisibility']),
     ...mapActions([
         'reset',
         'layer/getLayers',
-        'feature/cancel'
+        'feature/cancel',
     ]),
     toggleModal (button) {
       const modal = this.modals.find(m => m.name === button.name)
       modal.visible = true
-    }
-  }
+    },
+  },
+  created () {
+    document.addEventListener('keyup', e => {
+        if (this.isEditing && e.key === 'Escape') {
+            this['feature/cancel']()
+            this.reset()
+        }
+    })
+  },
 }
 </script>
 
 <style>
 @import "./assets/style/custom.css";
-
+html{
+  height: auto !important
+}
+body{
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
 #app {
-  height: 100%;
-  overflow-y: hidden;
-  background-color: #2A353B;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: #0e0e0e;
   font-family: Arial, 'sans-serif';
+  box-sizing: border-box;
 }
 .header {
-  height: 10%;
+  height: 10vh;
   min-height: 80px;
+  box-sizing: border-box;
 }
 main {
-  height: 90%;
-  display: flex;
+  height: 90vh;
+  max-height: calc(100vh - 80px);
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
 }
+
+@media screen and (min-width: 768px){
+  main{
+    display: flex;
+    flex-direction: row;
+    max-height: calc(100vh - 80px);
+    height: 90vh;
+
+  } 
+}
+
 </style>

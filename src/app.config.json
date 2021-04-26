@@ -1,18 +1,250 @@
 {
   "server": {
-    "queryParams": [],
-    "host": ""
+    "host": "172.16.17.1:8080/cgi-bin/qgis_mapserv.fcgi",
+    "queryParams": [{
+      "key": "map",
+      "value": "/var/www/html/bourg-centre/bourg-centre.qgs"
+    }]
   },
   "header": {
-    "brand": "",
-    "modals": []
+    "brand": "img/cd54.png",
+    "title": "Je localise mon projet",
+    "modals": [{
+      "name": "help",
+      "title": "Bourg Centre",
+      "icon": "far fa-question-circle",
+      "visible": true
+    }]
   },
   "form": {
-    "selectBox": [],
-    "inputRange": [],
-    "inputDate": [],
-    "inputText": [],
-    "inputNumber": [],
-    "textArea": []
+    "inputText": [
+      {
+        "name": "id",
+        "alias": "",
+        "type": "TextEdit",
+        "options": {
+          "IsMultiline": false,
+          "UseHtml": false,
+          "disabled": true,
+          "hidden": true,
+          "required": false
+        },
+        "default": ""
+      },
+      {
+        "name": "geometry",
+        "alias": "",
+        "type": "TextEdit",
+        "options": {
+          "IsMultiline": false,
+          "UseHtml": false,
+          "disabled": true,
+          "hidden": true,
+          "required": false
+        },
+        "default": ""
+      },
+      {
+        "name": "proprio",
+        "alias": "Propriétaire",
+        "type": "TextEdit",
+        "options": [],
+        "default": ""
+      }
+    ],
+    "inputNumber": [
+      {
+      "name": "nb_place",
+      "alias": "Nombre de place",
+      "type": "Range",
+      "options": {
+        "AllowNull": true,
+        "Max": 2147483648,
+        "Min": 0,
+        "Precision": 0,
+        "Step": 1,
+        "Style": "SpinBox",
+        "disabled": false,
+        "hidden": false,
+        "required": false
+      },
+      "default": ""
+    }],
+    "inputDate": [
+      {
+        "name": "date_disponible",
+        "alias": "Date disponible",
+        "type": "DateTime",
+        "options": {
+          "allow_null": true,
+          "calendar_popup": true,
+          "display_format": "yyyy-MM-dd",
+          "field_format": "yyyy-MM-dd",
+          "field_iso_format": false,
+          "disabled": false,
+          "hidden": false,
+          "required": false
+        },
+        "default": ""
+      },
+      {
+        "name": "date_maj",
+        "alias": "Date de mise à jour",
+        "type": "DateTime",
+        "options": {
+          "allow_null": true,
+          "calendar_popup": true,
+          "display_format": "yyyy-MM-dd",
+          "field_format": "yyyy-MM-dd",
+          "field_iso_format": false,
+          "disabled": false,
+          "hidden": false,
+          "required": false
+        },
+        "default": ""
+      }
+    ],
+    "inputRange": [
+      {
+      "name": "etat_locaux",
+      "alias": "Etat des locaux",
+      "type": "Range",
+      "options": {
+        "AllowNull": true,
+        "Max": 10,
+        "Min": 0,
+        "Precision": 0,
+        "Step": 1,
+        "Style": "Slider",
+        "disabled": false,
+        "hidden": false,
+        "required": false
+      },
+      "default": "0"
+    }],
+    "textArea": [
+      {
+      "name": "observations",
+      "alias": "Observations",
+      "type": "TextEdit",
+      "options": {
+        "IsMultiline": true,
+        "UseHtml": false,
+        "disabled": false,
+        "hidden": false,
+        "required": false
+      },
+      "default": ""
+    }],
+    "selectBox": [{
+      "name": "covoiturage",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Oui",
+            "value": true
+          },
+          {
+            "text": "Non",
+            "value": false
+          }
+        ],
+        "disabled": false,
+        "hidden": false,
+        "required": false
+      },
+      "default": "Oui"
+    }],
+    "radio": [{
+      "name": "statut",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Ouvert",
+            "value": "open"
+          },
+          {
+            "text": "Fermé",
+            "value": "close"
+          }
+        ],
+        "disabled": false,
+        "hidden": false,
+        "required": false
+      },
+      "default": "Oui"
+    }],
+    "checkBox": [{
+      "name": "contr_acce",
+      "alias": "Contrôle d'accés",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Aucun",
+            "value": "none"
+          },
+          {
+            "text": "Badge",
+            "value": "badge"
+          },
+          {
+            "text": "Digicode",
+            "value": "code"
+          }
+        ],
+        "disabled": false,
+        "hidden": false,
+        "required": false
+      },
+      "default": "Oui"
+    }],
+    "notEnterable": [
+      {
+      "name": "perimeter",
+      "alias": "Périmètre",
+      "type": "TextEdit",
+      "default": 0,
+      "unit": "metre",
+      "options": {
+        "order": 2
+      } 
+    },{
+      "name": "area",
+      "alias": "Aire",
+      "type": "TextEdit",
+      "default": 0,
+      "unit": "squareMetre",
+      "options": {
+        "order": 2
+      } 
+    },{
+      "name": "longueur",
+      "alias": "Longueur totale",
+      "type": "TextEdit",
+      "default": 0,
+      "unit": "metre",
+      "options": {
+        "order": 2
+      } 
+    }
+  ],
+  "thumbnail": [
+    {
+    "name": "photo",
+    "alias": "",
+    "type": "Image",
+    "default": "",
+    "options": {
+      "order": 1
+    } 
+  }],
+  "fileInput": [
+    {
+    "name": "p_jointe",
+    "alias": "Pièce jointe",
+    "type": "TextEdit",
+    "default": "",
+    "options": {} 
+  }]
   }
 }

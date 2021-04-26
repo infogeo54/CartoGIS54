@@ -29,12 +29,16 @@ const extractLayers = capabilitiesXML => {
  * @param coordinates : Array - Returns reversed coordinates
  * @returns Array
  */
-const reverseCoordinates = coordinates => {
-    if (coordinates.length === 2) {
-        return coordinates.reverse()
-    } else {
-        const polygon = coordinates[0][0]
+const reverseCoordinates = geometry => {
+
+    if (geometry.type === 'Point') {
+        return geometry.coordinates.reverse()
+    } else if(geometry.type === 'MultiPolygon'){
+        const polygon = geometry.coordinates[0][0]
         return polygon.map(p => p.reverse())
+    } else if(geometry.type === 'MultiLineString'){
+        const polyline = geometry.coordinates[0]
+        return polyline.map(p => p.reverse())
     }
 }
 
@@ -47,7 +51,7 @@ const fetchFeatures = async layer => {
     const url = `${baseUrl}&REQUEST=GetFeature&TYPENAME=${layer}&OUTPUTFORMAT=GEOJSON`
     const res = await axios.get(url)
     return res.data.features.map(f => {
-        f.geometry.coordinates = reverseCoordinates(f.geometry.coordinates)
+        f.geometry.coordinates = reverseCoordinates(f.geometry)
         return f
     })
 }
@@ -93,7 +97,8 @@ const extractShape = sequence => {
     const geometryElement = sequence.element.find(e => e['_attributes']['name'] === 'geometry')
     const geometryType = geometryElement['_attributes']['type']
     if (geometryType === 'gml:PointPropertyType') return 'Point'
-    else return 'Polygon'
+    else if(geometryType === 'gml:MultiPolygonPropertyType') return 'Polygon'
+    else if(geometryType === 'gml:MultiLineStringPropertyType') return 'Polyline('
 }
 
 const sendTransaction = async transaction => {

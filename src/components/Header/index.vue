@@ -1,37 +1,25 @@
 <template>
   <div class="header">
     <img v-if="brand" :src="brand">
-    <div class="buttons">
-      <Button
-        v-for="button in buttons"
-        :key="button.name"
-        :button="button"
-        @clicked="buttonClicked"
-      />
+    <h1>{{ title }}</h1>
+    <div class="button">
+        <i :class="'far fa-user-circle'"></i>
     </div>
   </div>
 </template>
 
 <script>
 import { header as config } from '@/app.config.json'
-import Button from './Button'
 
 export default {
     name: 'Header',
-    components: { Button },
-    props: {
-      buttons: { type: Array, default: () => [] }
-    },
     data () {
+
       return {
-        brand: config.brand
+        brand: config.brand,
+        title: config.title
       }
     },
-    methods: {
-      buttonClicked (button) {
-        this.$emit('button-clicked', button)
-      }
-    }
 }
 </script>
 
@@ -40,13 +28,40 @@ export default {
   display: flex
   justify-content: space-between
   align-items: center
-  background-color: #0BB4F5
+  background-color: #0e0e0e
   border-bottom: solid 1px #2A353B
-  a, img
-    height: 100%
+  z-index: 2000
   a
+    height: 100%
     max-width: 150px
+  img
+    min-height: 100px
+    max-height: 10.5rem
+    align-self: flex-start
 
-.buttons
+  h1
+    color: white
+    font-size: 1.7rem
+    margin-left: 1rem
+      
+.button
   display: flex
+  svg
+    max-height: 3rem
+    min-height: 1.5rem
+    height: auto
+    width: auto !important
+    margin: 1rem
+    color: white
+    &:hover
+      cursor: pointer
+      color: #e0e0e0
+
+@media screen and (min-width: 768px)
+  .header
+    h1
+      font-size: 2.3rem
+      text-align: center
+
+  
 </style>

@@ -1,18 +1,24 @@
 <template>
-  <div id="legend">
-    <div class="legend-header">
-      <div @click="close">
-        <i class="fas fa-times-circle"></i>
+  <div class="legend-modal">
+    <div class="legend-divider"></div>
+    <div id="legend" class="legend-modal-content">
+      <div class="legend-header">
+        <div @click="close">
+          <i class="fas fa-times-circle"></i>
+        </div>
       </div>
-      <h3>{{ title }}</h3>
-    </div>
-    <div class="legend-body">
-      <Item
-        v-for="(style, index) in styles"
-        :key="index"
-        :feature-style="style"
-        @itemClicked="itemClicked"
-      />
+      <div class="legend-title component-title">
+        <h2>2</h2>
+        <h3>{{ title }}</h3>
+      </div>
+      <div class="legend-body">
+        <Item
+          v-for="(style, index) in styles"
+          :key="index"
+          :feature-style="style"
+          @itemClicked="itemClicked"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -49,23 +55,48 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+
+.legend-modal
+
+  &>.legend-divider
+    background-color: #0e0e0e
+    height: 1px
+    width: 66%
+    margin: 1rem auto 0 auto
+
 #legend
-  color: #EFEFEF
-  border-left: solid 1px #EFEFEF
+  color: #0e0e0e
+  display: flex
+  flex-direction: column
+
   .legend-header
-    height: 10%
     h3
       margin-top: 0
     div
-      height: 19px
       width: fit-content
       margin: 5px 5px auto auto
-      color: #EFEFEF
+      color: #303030
       &:hover
-        color: #565656
+        color: #0e0e0e
         cursor: pointer
   .legend-body
-    height: 90%
-    overflow-y: scroll
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr))
+    row-gap: 2rem
+    padding-bottom: 2rem
+
+@media screen and (min-width: 768px)
+  .legend-modal
+
+    width: 14rem
+
+    &>.legend-divider
+      display: none
+
+    &>#legend
+      border-left: solid 1px #0e0e0e
+
+      .legend-body
+        display: block
 
 </style>

@@ -4,6 +4,11 @@
 
 import L from 'leaflet'
 import proj4 from 'proj4'
+import 'leaflet-editable'
+import 'leaflet-measure-path/leaflet-measure-path'
+require('leaflet-measure-path/leaflet-measure-path.css')
+import 'leaflet-draw'
+import 'leaflet-geometryutil/src/leaflet.geometryutil'
 
 // Adding EPSG:2154 to proj4 projections
 proj4.defs("EPSG:2154", "+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
@@ -16,12 +21,32 @@ export default {
          * @returns Object
          */
         create (center) {
-            const map = L.map('map').setView(center, 15)
-            L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
-                attribution: 'données © OpenStreetMap/ODbL - rendu OSM France',
-                minZoom: 1,
-                maxZoom: 18
-            }).addTo(map)
+            const map = L.map('map', { editable: true})
+            map.setView(center, 14)
+            map.doubleClickZoom.disable()
+            const baseLayers = {
+                Carte : L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+                    attribution: 'données © OpenStreetMap/ODbL - rendu OSM France',
+                    minZoom: 14,
+                    maxZoom: 18
+                }),
+                Satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: 'données © ESRI.WorldImagery',
+                    minZoom: 14,
+                    maxZoom: 18
+                })
+            }
+
+            baseLayers.Satellite.addTo(map)
+            
+            L.control.layers(baseLayers).addTo(map);
+            L.control.scale().addTo(map);
+
+            //Can't go outside the bounds (here the town);
+            map.setMaxBounds(map.getBounds());
+
+            map.setZoom(15)
+
             return map
         },
         /**
@@ -31,7 +56,7 @@ export default {
          */
         representations (map, representations) {
             representations.forEach(r => r.addTo(map))
-        }
+        },
     },
     representation: {
         /**
@@ -41,12 +66,30 @@ export default {
          * @returns Leaflet Layer
          */
         create (f, cb) {
-            const rep = f.parent.shape === 'Point' ? this.marker(f) :  this.polygon(f)
+            let rep = null
+
+            switch (f.properties.geometry.type) {
+                case 'gml:PointPropertyType':
+                    rep = this.marker(f)
+                    break;
+
+                case 'gml:MultiPolygonPropertyType':
+                    rep = this.polygon(f)
+                    break;
+            
+                case 'gml:MultiLineStringPropertyType':
+                    rep = this.polyline(f)
+                    break;
+                    
+                default:
+                    break;
+            }
+
             rep.on('click', (e) => {
                 L.DomEvent.stopPropagation(e) // Avoid map clicked event when a feature is clicked
                 cb()
             })
-            return rep
+                return rep
         },
         /**
          * Create a Leaflet marker representation
@@ -55,15 +98,24 @@ export default {
          */
         marker (f) {
             const icon = this.icon(f)
-            return L.marker(f.coordinates, {icon: icon})
+            let marker = L.marker(f.coordinates, {icon: icon})
+            return marker
         },
         /**
-         * Create a Leaflet poylgon representation
+         * Create a Leaflet polygon representation
          * @param f : Feature
          * @returns Leaflet Layer
          */
         polygon (f) {
             return L.polygon(f.coordinates, {fillOpacity: 0.5})
+        },
+        /**
+         * Create a Leaflet polyline representation
+         * @param f : Feature
+         * @returns Leaflet Layer
+         */
+        polyline (f) {
+            return L.polyline(f.coordinates, {fillOpacity: 0.5})
         },
         /**
          * Create a Leaflet marker custom icon
@@ -95,13 +147,14 @@ export default {
 
         },
         /**
-         * Project a Polygon's coordinates from EPSG:900913 to EPSG:2154
-         * @param coordinates : Array - Polygon's list of points
+         * Project a Polygon or a Polyline's coordinates from EPSG:900913 to EPSG:2154
+         * @param coordinates : Array - Polygon/Polyline's list of points
          * @returns Array - A list of proj4 Point instance
          */
-        polygon (coordinates) {
+        polygonPolyline (coordinates) {
             return coordinates.map(c => this.point(c))
         },
+        
 
         /**
          * Project coordinates from EPSG:900913 to EPSG:2154
@@ -110,9 +163,10 @@ export default {
          */
         project (coordinates) {
             if (Array.isArray(coordinates[0])) {
-                return this.polygon(coordinates)
+                return this.polygonPolyline(coordinates)
             }
             return this.point(coordinates)
         }
-    }
+    },
+    
 }

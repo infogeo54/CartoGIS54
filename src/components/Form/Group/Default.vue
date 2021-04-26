@@ -28,3 +28,10 @@ export default {
     }
 }
 </script>
+
+<style lang="sass" scoped>
+label
+    margin-bottom: .2rem
+input
+    border: none
+</style>

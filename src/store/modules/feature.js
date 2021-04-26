@@ -5,7 +5,8 @@ export default {
     namespaced: true,
     state: {
         selected: null,
-        ogProperties: null
+        ogProperties: null,
+        editable: false,
     },
     getters: {
         selected: state => state.selected,
@@ -13,7 +14,9 @@ export default {
         ogCoordinates: (state, getters) => {
             if (getters.ogProperties) return getters.ogProperties.geometry.value.coordinates
             return null
-        }
+        },
+        editable: state => state.editable,
+
     },
     mutations: {
         setSelected: function (state, feature) {
@@ -28,10 +31,26 @@ export default {
         setId: function (state, id) {
             state.selected.id = id
         },
+        setEditable: function (state, bool = true){
+            state.editable = bool
+        },
         reset: function (state) {
             state.selected = null
             state.ogProperties = null
+            state.editable = false
         },
+        toggleEdit: function (state, map) {
+            if(state.selected){
+                if (state.editable) {
+                    state.selected.representation.enableEdit(map)
+                } else {
+                    state.selected.representation.disableEdit(map)
+                }
+            }
+        },
+
+
+
     },
     actions: {
         delete: async function ({state, getters, commit}){

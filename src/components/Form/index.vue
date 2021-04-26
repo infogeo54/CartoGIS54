@@ -1,17 +1,22 @@
 <template>
   <form id="form" @submit.prevent="action">
-    <div class="groups">
-      <Group v-for="property in properties"
-             :key="property"
-             :property="{name: property, ...feature.properties[property]}"
-             @changed="onChange"
-      />
+    <div class="form-title component-title">
+      <h2>3</h2>
+      <h3>La fiche</h3>
     </div>
-    <div class="buttons">
-      <input type="submit" name="save" value="Enregistrer">
-      <input type="submit" name="delete" value="Supprimer" :disabled="!feature.id">
-      <input type="button" name="cancel" @click="onCancelClick" value="Annuler">
-    </div>
+        <div class="groups">
+            <Group v-for="property in properties"
+                  :key="property"
+                  :property="{name: property, ...feature.properties[property]}"
+                  @changed="onChange"
+            />
+        </div>
+
+        <div class="buttons">
+          <input type="submit" name="save" value="Enregistrer">
+          <input type="submit" name="delete" value="Supprimer" :disabled="!feature.id">
+          <input type="button" name="cancel" @click="onCancelClick" value="Annuler">
+        </div>
   </form>
 </template>
 
@@ -21,14 +26,15 @@ import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
     name: "Form",
-    components: { Group },
+  components: { Group },
     computed: {
         ...mapGetters({
             feature: 'feature/selected',
         }),
         properties: function () {
-            return Object.keys(this.feature.properties).sort((a, b) => a < b ? -1 : a > b ? 1 : 0)
-        }
+          // console.log(this.feature.properties);
+            return Object.keys(this.feature.properties).sort((a, b) => this.sortProperties(a, b))
+        },
     },
     /**
      * Call store's reset action before destroying the component
@@ -37,13 +43,19 @@ export default {
         this.reset()
     },
     methods: {
-        ...mapMutations('feature', ['updateAttribute']),
+        ...mapMutations('feature', ['updateAttribute', 'setEditable', 'toggleEdit']),
         ...mapActions([
             'reset',
             'feature/save',
             'feature/delete',
             'feature/cancel'
         ]),
+
+
+        sortProperties: function (a, b){
+          return a < b ? -1 : a > b ? 1 : 0;
+        },
+
         /**
          * Saves changes in the Store
          * @param attribute
@@ -56,6 +68,10 @@ export default {
          */
         onSaveClick: async function () {
             await this['feature/save']()
+            this.feature.representation.hideMeasurements();
+            this.setEditable(false)
+            this.toggleEdit()
+
         },
         /**
          * Call store's delete action
@@ -91,40 +107,46 @@ export default {
 
 <style lang="sass" scoped>
   #form
-    color: #EBEBEB
-    background-color: #2A353B
-    border-left: solid 1px black
-    min-width: 250px
+    grid-column: 1/2
+    grid-row: 1/3
+    z-index: 1000
+    display: flex
+    flex-direction: column
+    color: #0e0e0e
+    background-color: white
+    box-sizing: border-box
+    min-width: 20rem
     position: relative
-    overflow: hidden
     .groups
-      height: 95%
-      overflow-x: hidden
-      overflow-y: scroll
+      display: flex
+      flex-direction: column
       & > *
-        margin: 15px 0
+        margin: 1rem 0
     .buttons
-      height: 5%
       display: flex
       flex-wrap: wrap
-      flex: 0 1 49%
       justify-content: space-evenly
-      background-color: #0BB4F5
+      padding-bottom: 1rem
       input
-        padding: 4px 0
-        width: 80px
-        margin: auto
-        border: solid 1px black
-        border-radius: 4px
+        padding: 1.2rem .5rem
         color: #EFEFEF
+        &:hover, 
+        &:focus,
+        &:active
+          box-shadow: 0px 2px 5px 1px #000000
+          -webkit-box-shadow: 0px 2px 5px 1px #000000
         &:hover
           cursor: pointer
           &[disabled]
             cursor: not-allowed
         &[name="save"]
-          background-color: #2A353BCC
+          background-color: green
         &[name="delete"]
-          background-color: #2A353BAA
+          background-color: red
         &[name="cancel"]
-          background-color: #2A353B88
+          color: initial
+
+  @media screen and (min-width: 768px) 
+    #form
+      overflow-y: auto
 </style>

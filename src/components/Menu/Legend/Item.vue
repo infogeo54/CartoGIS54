@@ -41,13 +41,12 @@ export default {
 
 <style lang="sass" scoped>
     .legend-item
-        margin-bottom: 10px
+        margin-bottom: 10p
         img
             max-width: 64px
             height: auto
             &:hover
                 cursor: pointer
         p
-            width: fit-content
             margin: auto
 </style>

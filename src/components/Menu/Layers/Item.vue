@@ -1,10 +1,20 @@
 <template>
-  <p class="layer-item" @click="clicked">{{ title }}</p>
+<swiper-slide>
+  <div @click="clicked">{{ title }}</div>
+</swiper-slide>
 </template>
 
 <script>
+import { Swiper as SwiperClass } from 'swiper/js/swiper.esm'
+
+import getAwesomeSwiper from 'vue-awesome-swiper/dist/exporter'
+
+const { SwiperSlide } = getAwesomeSwiper(SwiperClass)
+
+
 export default {
     props: ['layer'],
+    components: { SwiperSlide },
     computed: {
         name () {
             return this.layer.properties.name
@@ -22,12 +32,20 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  .layer-item
-    width: fit-content
-    margin: 10px auto
-    &:hover
-      text-decoration: underline
-      cursor: pointer
-    &.active
-      text-decoration: underline
+  .swiper-slide
+    justify-content: center
+    background: #e4e4e4
+    display: flex
+    align-items: center
+    height: auto
+    min-height: 3rem
+    &>div  
+      font-size: 1.2rem
+      box-sizing: border-box
+      &:hover
+        text-decoration: underline
+        cursor: pointer
+      &.active
+        text-decoration: underline
+
 </style>

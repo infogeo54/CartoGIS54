@@ -49,7 +49,7 @@ export default {
 
 <style lang="sass" scoped>
 .modal-container
-  z-index: 1000
+  z-index: 2500
   position: absolute
   top: 0
   left: 0
@@ -62,12 +62,12 @@ export default {
   position: relative
   align-self: center
   margin: auto
-  height: 800px
-  width: 600px
-  border: solid 1px #EFEFEF
-  border-radius: 4px
-  color: #EFEFEF
-  background-color: #2A353B
+  max-width: 50rem
+  min-width: 15rem
+  border: solid 1px white
+  border-radius: .5rem
+  color: #0e0e0e
+  background-color: white
   box-shadow: 10px 5px 5px #2A353B
 
 .modal-header, .modal-body, .modal-footer
@@ -75,32 +75,22 @@ export default {
   box-sizing: border-box
 
 .modal-header, .modal-footer
-  background-color: #0BB4F5
+  background-color: #101010
+  color: white
 
 .modal-header
-  height: 40px
+  height: 2.5rem
   display: flex
   justify-content: space-between
   align-items: center
-  border-top-left-radius: 4px
-  border-top-right-radius: 4px
+  border-top-left-radius: .5rem
+  border-top-right-radius: .5rem
   h3
     margin: 0
-    height: fit-content
-  div
-    height: fit-content
-    &:hover
-      cursor: pointer
-
-.modal-body
-  height: 740px
-  overflow-y: scroll
+  div:hover
+    cursor: pointer
 
 .modal-footer
-  position: absolute
-  bottom: 0
-  left: 0
-  right: 0
-  border-bottom-left-radius: 4px
-  border-bottom-right-radius: 4px
+  border-bottom-left-radius: .5rem
+  border-bottom-right-radius: .5rem
 </style>

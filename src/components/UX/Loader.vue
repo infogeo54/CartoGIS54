@@ -9,6 +9,11 @@
 </script>
 
 <style scoped>
+
+    #loader {
+        width: 100%;
+    }
+
     .lds-ellipsis {
         display: flex;
         margin: auto;
@@ -16,6 +21,7 @@
         position: relative;
         width: 80px;
         height: 80px;
+        margin-top: 20vh;
     }
     .lds-ellipsis div {
         position: absolute;

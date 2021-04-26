@@ -68,8 +68,9 @@ export default class Transaction {
      * @returns Object
      */
     static polygon (coordinates) {
-        coordinates = coordinates.concat(coordinates[0]) // Closing polygon
-        const coordinatesList = coordinates.map(c => [c.x, c.y])
+
+        let coord = coordinates.concat(coordinates[0]) // Closing polygon
+        const coordinatesList = coord.map(c => [c.x, c.y])
         return {
             'gml:MultiPolygon': {
                 '_attributes': {
@@ -100,14 +101,72 @@ export default class Transaction {
     }
 
     /**
-     * Create a formatted geometry tag for Insert and Update Transactions
+     * Create a formatted MultiLineString tag
+     * @param coordinates : Array<Array> - The polyline's coordinates
+     * @returns Object
+     */
+    static polyline (coordinates) {
+
+        const coordinatesList = coordinates.map(c => [c.x, c.y])
+        return {
+            'gml:MultiLineString': {
+                '_attributes': {
+                    'srsName': "EPSG:2154"
+                },
+                'gml:lineStringMember': {
+                    'gml:LineString': {
+                        '_attributes': {
+                            'srsName': "EPSG:2154"
+                        },
+                        'gml:exterior': {
+                            'gml:LinearRing': {
+                                '_attributes': {
+                                    'srsName': "EPSG:2154"
+                                },
+                                'gml:posList': {
+                                    '_attributes': {
+                                        'srsDimension': 2
+                                    },
+                                    '_text': coordinatesList.flat().join(' ')
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Create a formatted geometry tag for Insert Transactions
      * @param geometry
      * @returns Object
      */
-    static formattedGeometry (geometry) {
+    static formattedGeometryInsert (geometry) {
+        const coordinates = MapTools.projection.project(geometry.value.coordinates)
+        switch (geometry.type) {
+            case 'gml:PointPropertyType': return Transaction.point(coordinates);
+            case 'gml:MultiPolygonPropertyType' : return Transaction.polygon(coordinates)
+            case 'gml:MultiLineStringPropertyType' : return Transaction.polyline(coordinates)
+            default: break;
+        }
+    }
+
+    /**
+     * Create a formatted geometry tag for Update Transactions
+     * @param geometry
+     * @returns Object
+     */
+    static formattedGeometryUpdate (geometry) {
         const coordinates = MapTools.projection.project(geometry.coordinates)
-        if (Array.isArray(coordinates)) return Transaction.polygon(coordinates)
-        return Transaction.point(coordinates)
+        if (Array.isArray(coordinates)) {
+            switch (geometry.type) {
+                case 'MultiPolygon': return Transaction.polygon(coordinates);
+                case 'MultiLineString' : return Transaction.polyline(coordinates);            
+                default: break;
+            }
+        }else return Transaction.point(coordinates)
+        return null
     }
 
     /**
@@ -120,7 +179,7 @@ export default class Transaction {
         for (let key in props) {
             if (props[key].value) {
                 if (key === 'geometry') {
-                    res.geometry = Transaction.formattedGeometry(props.geometry.value)
+                    res.geometry = Transaction.formattedGeometryInsert(props.geometry)
                 } else {
                     res[key] = props[key].value
                 }
@@ -136,7 +195,7 @@ export default class Transaction {
      * @returns Object
      */
     static toUpdateProperty (key, value) {
-        let wfsValue = key === 'geometry' ? Transaction.formattedGeometry(value) : { '_text' : value }
+        let wfsValue = key === 'geometry' ? Transaction.formattedGeometryUpdate(value) : { '_text' : value }
         return {
             'wfs:Name': {
                 '_text': key

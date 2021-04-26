@@ -1,16 +1,18 @@
 <template>
-  <Custom
-      v-if="isCustom"
-      :property="property"
-      @changed="changed"
-      class="form-group"
-  />
-  <Default
-      v-else
-      :property="property"
-      class="form-group"
-      @changed="changed"
-  />
+    <Custom
+        v-if="isCustom"
+        :property="property"
+        @changed="changed"
+        class="form-group"
+        :style="{ order: order }"
+    />
+    <Default
+        v-else
+        :property="property"
+        @changed="changed"
+        class="form-group"
+        :style="{ order: order }"
+    />
 </template>
 
 <script>
@@ -19,8 +21,14 @@ import _ from 'lodash'
 import Default from './Default'
 import Custom from './Custom'
 
+
 export default {
     components: { Default, Custom },
+    data() {
+        return {
+            order: 10
+        }
+    },
     props: {
         property: { type: Object, default: null }
     },
@@ -33,9 +41,15 @@ export default {
             categories.forEach(c => {
                 const fields = config[c]
                 fields.forEach(f => {
-                    if (f.name === this.property.name) { matchingField = f}
+                    if (f.name === this.property.name) { 
+                        matchingField = f
+                        this.orderField(matchingField);
+                    }
                 })
             })
+
+
+
             return !!matchingField
         },
     },
@@ -43,7 +57,13 @@ export default {
         changed (e) {
             let value = e.target.value
             this.$emit('changed', { name: this.property.name, value })
-        }
+        },
+        orderField (f){
+            if (f.options && f.options.order) {
+                this.order = f.options.order
+                // console.log(this.order);
+            }
+        },
     }
 }
 </script>
@@ -59,11 +79,11 @@ export default {
     max-width: 300px
     text-align: center
     margin: auto
+    border: none
   & > input
     width: 90%
     max-width: 300px
     background-color: #E6E6E6
-    border: solid 1px black
     border-radius: 4px
     padding: 4px 0
     text-align: center
@@ -71,8 +91,9 @@ export default {
       cursor: not-allowed
   textarea
     background-color: #E6E6E6
-    border: solid 1px black
     border-radius: 4px
     min-height: 80px
     resize: vertical
+    text-align: justify
+    padding: .5rem
 </style>

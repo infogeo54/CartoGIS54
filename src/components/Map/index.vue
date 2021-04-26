@@ -1,61 +1,248 @@
 <template>
-    <div id="map" :style="{cursor: cursor}"></div>
+    <div id="map-container">
+        <div class="ux-buttons">
+            <button id="btn-validate" v-if="isValidate" @click="validateButtonClicked">
+                Voir la fiche
+            </button>
+            <button id="btn-edit" v-if="isEditable" @click="editableButtonClicked" >
+                <template v-if="editable">Enlever la modification</template>
+                <template v-else>Modifier l'objet</template>
+            </button>
+            <button id="btn-measurements" v-if="isMeasurable" @click="measurementsButtonClicked" >
+                <template v-if="isMeasuring">Retirer les mesures</template>
+                <template v-else>Afficher les mesures</template>
+            </button>
+        </div>
+        <div class="buttons">
+            <HelpButton
+                v-for="button in buttons"
+                :key="button.name"
+                :button="button"
+                @clicked="buttonClicked"
+            />
+            <div v-if="isQuickMeasuring" class="quick-measure">
+                <button @click="quickMeasuringCancel" class="quick-draw-cancel">Annuler</button>
+            </div>
+            <div v-else class="quick-measure">
+                <button v-if="!showDrawIcon" class="quick-measure-label" @mouseover="showDrawIcon=true" @click="showDrawIcon=true">Mesure rapide</button>
+
+                <div v-if="showDrawIcon" @mouseout="showDrawIcon=false">
+                    <button @click="drawPolygon"><img class="draw-icon" src="/img/icon_polygon.png"></button>
+                    <button @click="drawPolyline"><img class="draw-icon" src="/img/icon_polyline.png"></button>
+                </div>
+
+            </div>
+
+        </div>
+        <Map />
+    </div>
 </template>
 
 <script>
-import {mapGetters, mapMutations} from 'vuex'
-import MapTools from '@/tools/MapTools'
-import _ from 'lodash'
+import Map from "./Map";
+import HelpButton from "./Button";
+import { mapGetters, mapMutations } from 'vuex'
+import { bus } from '@/main.js'
+// import L from 'leaflet'
 
 export default {
-    name: "Map",
-    computed: {
-        ...mapGetters({
-            map: 'map',
-            layerList: 'layer/list',
-            featureList: 'layer/features',
-            layer: 'layer/selected',
-            feature: 'feature/selected',
-            ogCoordinates: 'feature/ogCoordinates'
-        }),
-        cursor: function () {
-            return this.feature ? 'crosshair' : 'grab'
-        },
-        representations: function () {
-            return this.featureList.map(f => {
-                f.createRepresentation()
-                return f.representation
-            })
+    name: "MapContainer",
+    components: { Map, HelpButton },
+    props: {
+      buttons: { type: Array, default: () => [] }
+    },
+    data() {
+        return {
+            isMeasuring: false,
+            showDrawIcon: false,
+            isQuickMeasuring: false,
         }
     },
-    methods: {
-        ...mapMutations(['setMap']),
-        mapClicked: async function (e) {
-            if (this.feature) {
-                const point = [e.latlng.lat, e.latlng.lng]
-                if (this.feature.representation) this.feature.deleteRepresentation()
-                if (this.feature.parent.shape === 'Point') this.feature.coordinates = point
-                else {
-                    if (this.feature.coordinates) {
-                        if (_.isEqual(this.feature.coordinates, this.ogCoordinates)) this.feature.coordinates = [point]
-                        else this.feature.coordinates.push(point)
-                    }
-                    else this.feature.coordinates = [point]
+    computed: {
+        ...mapGetters({
+            feature: 'feature/selected',
+            formVisible: 'form/formVisible',
+            ogCoordinates: 'feature/ogCoordinates',
+            editable: 'feature/editable',
+            map: 'map',
+            quickMeasure: 'quickMeasure/quickMeasure',
+            
+        }),
+        isValidate(){
+            if (this.feature && !this.formVisible){
+
+                if (this.feature.properties.geometry.type=="gml:MultiPolygonPropertyType") {
+                    if (this.feature.coordinates.length < 3) return false;
                 }
-                this.feature.createRepresentation().addTo(this.map)
+                if (this.feature.properties.geometry.type=="gml:MultiLineStringPropertyType") {
+                    if (this.feature.coordinates.length < 2) return false;
+                }
+                return !!this.feature.representation
+
+            } 
+            return false
+        },
+        isEditable(){
+            
+            if (this.feature) {
+                if (window.innerWidth < 768 && this.formVisible) return false;
+                return !!this.feature.representation
+            }
+            return false
+
+        },
+        isMeasurable(){
+            if (this.feature){
+                if(this.feature.representation && this.feature.representation._latlngs) return !!this.feature.representation
+                else if (this.feature.properties.geometry.type != 'gml:PointPropertyType') return true 
+                
+            }
+            return false
+        },
+
+    },
+
+    methods: {
+        ...mapMutations([
+            'form/toggleVisibility', 
+            'feature/setEditable', 
+            'feature/toggleEdit',
+            'quickMeasure/setType',
+            'quickMeasure/cancel',
+        ]),
+
+        validateButtonClicked (){
+            this['feature/setEditable'](false)
+            this['feature/toggleEdit'](this.map)
+            this['form/toggleVisibility']()
+        },
+        
+
+        editableButtonClicked (){
+            (this.editable) ? this['feature/setEditable'](false) : this['feature/setEditable']()
+            this['feature/toggleEdit'](this.map)
+        },
+
+        measurementsButtonClicked(){
+            (this.isMeasuring == true) ? this.isMeasuring = false : this.isMeasuring = true;
+        },
+
+        buttonClicked (button) {
+            this.$emit('button-clicked', button)
+        },
+
+        drawPolygon () {
+            this.isQuickMeasuring=true;            
+            this['quickMeasure/setType']('polygon');
+        },
+
+        drawPolyline () {
+            this.isQuickMeasuring=true;
+            this['quickMeasure/setType']('polyline');
+        },
+
+        quickMeasuringCancel () {
+            this.isQuickMeasuring=false; 
+            this.showDrawIcon=false;
+            this['quickMeasure/cancel']();           
+        },
+
+        centerOnFeature (f) {
+            let c = (f.coordinates[0].length) 
+                    ? f.representation.getBounds().getCenter() 
+                    : c = f.coordinates;
+            this.map.panTo(c)
+        }
+
+    },
+
+    watch: {
+        isValidate(){
+            if (this.isValidate && window.innerWidth >= 768) this.validateButtonClicked();
+        },
+
+        isMeasuring: function(){
+            if (this.feature) {
+                this.feature.representation.hideMeasurements()
+                if (this.isMeasuring && this.feature.representation) this.feature.representation.showMeasurements()
             }
         }
     },
+
     mounted() {
-        const map = MapTools.map.create([49.305, 5.78]).on('click', e => this.mapClicked(e))
-        this.setMap(map)
-        MapTools.map.representations(this.map, this.representations)
+        bus.$on('resetIsMeasuring', () => { this.isMeasuring=false })
+        bus.$on('centerOnFeature', (f) => { this.centerOnFeature(f) });
     }
+
 }
 </script>
 
 <style lang="sass" scoped>
-  #map
-    height: 100%
+    
+#map-container
+    grid-row: 2/3
+    grid-column: 1/2
     width: 100%
+    position: relative
+    overflow: hidden
+
+    & > .ux-buttons 
+        position: absolute
+        top: 5rem
+        right: .5rem
+        z-index: 1500
+        display: flex
+        flex-direction: column
+
+        & > #btn-validate
+            background-color: #259325
+            margin-bottom: .5rem
+
+        & > #btn-edit
+            background-color: #ff8000
+            margin-bottom: .5rem
+
+        & > #btn-measurements
+            background-color: #087519
+
+    & > .buttons
+        position: absolute
+        top: .5rem
+        left: 12px
+        z-index: 1000
+
+    .quick-measure
+        margin-top: 6rem
+
+        .quick-measure-label,
+        .quick-draw-cancel
+            max-width: 5rem
+            max-height: 2.5rem
+            font-size: 0.8rem
+            font-weight: normal
+            color: black
+
+        button
+            max-width: 2.5rem
+            max-height: 2.5rem
+
+            .draw-icon
+                max-width: 100%
+                max-height: 100%
+
+        button:hover,
+        button:focus,
+        button:active
+            background-color: #9e9e9e
+                
+
+            
+
+
+    @media screen and (min-width: 768px)
+        & > .ux-buttons
+            top: .5rem
+        
+        & > .buttons
+            top: 5.5rem
 </style>

@@ -3,6 +3,10 @@ import Vuex from 'vuex'
 
 import layer from './modules/layer'
 import feature from './modules/feature'
+import form from './modules/form'
+import quickMeasure from './modules/quickMeasure'
+import { bus } from '@/main.js'
+
 
 Vue.use(Vuex)
 
@@ -20,12 +24,23 @@ export default new Vuex.Store({
     },
     actions: {
         reset: function ({commit}) {
+            bus.$emit('resetIsMeasuring', null)
             commit('feature/reset')
             commit('layer/setSelected', null)
+            commit('form/setVisibility', false)
+            commit('feature/setEditable', false)
+        },
+        centerOnFeature: function ({ state }) {
+            let c = (feature.state.selected.coordinates[0].length) 
+            ? feature.state.selected.representation.getBounds().getCenter() 
+            : c = feature.state.selected.coordinates;
+            state.map.panTo(c);
         }
     },
     modules : {
         layer,
-        feature
-    }
+        feature,
+        form,
+        quickMeasure,
+    },
 })

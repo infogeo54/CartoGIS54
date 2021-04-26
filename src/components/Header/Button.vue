@@ -17,12 +17,13 @@ export default {
 
 <style lang="sass" scoped>
 svg
-  top: 50%
-  height: 32px
+  max-height: 3rem
+  min-height: 1.5rem
+  height: auto
   width: auto !important
-  margin: 15px
-  color: #2A353B
+  margin: 1rem
+  color: #efefef
   &:hover
    cursor: pointer
-   color: #565656
+   color: #ffffff
 </style>

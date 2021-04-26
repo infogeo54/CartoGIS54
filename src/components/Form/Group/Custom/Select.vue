@@ -42,7 +42,6 @@ export default {
 select
   cursor: pointer
   background-color: #E6E6E6
-  border: solid 1px black
   border-radius: 4px
   padding: 4px 0
   text-align: center
