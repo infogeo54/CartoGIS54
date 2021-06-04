@@ -23,19 +23,19 @@ export default {
             quickMeasure: 'quickMeasure/quickMeasure',
             formVisible: 'form/formVisible',
         }),
-        cursor: function (){ 
-            if (this.feature) {
+        cursor: function (){
+            if (this.feature && this.feature.id == undefined) {
                 switch (this.feature.parent.shape ) {
                     case 'Point': return "url('/img/cursor_marker.svg') 11.5 17, crosshair";
                     case 'Polygon': return "url('/img/cursor_polygon.svg') 11.5 17, crosshair";
                     case 'Polyline(': return "url('/img/cursor_line.svg') 11.5 17, crosshair";
-                    default: return 'crosshair';
+                    default: return 'crosshair'
                 }
             }else if (this.quickMeasure.type) {
                 switch (this.quickMeasure.type) {
                     case 'polygon': return "url('/img/cursor_polygon.svg') 11.5 17, crosshair";
-                    case 'polyline(': return "url('/img/cursor_line.svg') 11.5 17, crosshair";   
-                    default: return 'crosshair';
+                    case 'polyline(': return "url('/img/cursor_line.svg') 11.5 17, crosshair"; 
+                    default: return 'crosshair'
                 }
             }
             return 'grab'
@@ -65,9 +65,7 @@ export default {
         },
 
         mapClicked: async function (e) {
-
-            // console.log(this.feature);
-            
+                        
             const point = L.latLng(e.latlng.lat, e.latlng.lng);
             const p = [e.latlng.lat, e.latlng.lng];
 

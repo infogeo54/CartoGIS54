@@ -1,5 +1,6 @@
 import Transaction from '@/tools/Transaction'
 import WFS from '@/API/WFS'
+import { deleteAllFiles } from '../../fileAPI'
 
 export default {
     namespaced: true,
@@ -16,7 +17,6 @@ export default {
             return null
         },
         editable: state => state.editable,
-
     },
     mutations: {
         setSelected: function (state, feature) {
@@ -48,17 +48,18 @@ export default {
                 }
             }
         },
-
-
-
     },
     actions: {
         delete: async function ({state, getters, commit}){
-            const t = Transaction.delete(state.selected).toXML()
-            await WFS.sendTransaction(t)
-            commit('layer/removeFeature', getters.selected, { root: true })
-
+                let filesDeleted = await deleteAllFiles(state.selected);
+                if (filesDeleted) {
+                    const t = Transaction.delete(state.selected).toXML()
+                    await WFS.sendTransaction(t)
+                    commit('layer/removeFeature', getters.selected, { root: true })
+                    return true;
+                }
         },
+
         insert: async function ({state, commit}) {
             const t = Transaction.insert(state.selected).toXML()
             const res = await WFS.sendTransaction(t)

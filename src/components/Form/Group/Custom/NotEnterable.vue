@@ -56,9 +56,6 @@ export default {
     methods: {
         change (e) { this.$emit('change', e) },
     },
-    // mounted() {
-    //     console.log(this.value);
-    // }
 }
 </script>
 

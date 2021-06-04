@@ -1,20 +1,21 @@
 <template>
-<swiper-slide>
+<div class="swiper-slide">
   <div @click="clicked">{{ title }}</div>
-</swiper-slide>
+</div>
 </template>
 
 <script>
-import { Swiper as SwiperClass } from 'swiper/js/swiper.esm'
+// import { Swiper as SwiperClass } from 'swiper/js/swiper.esm'
 
-import getAwesomeSwiper from 'vue-awesome-swiper/dist/exporter'
+// import getAwesomeSwiper from 'vue-awesome-swiper/dist/exporter'
 
-const { SwiperSlide } = getAwesomeSwiper(SwiperClass)
+// const { SwiperSlide } = getAwesomeSwiper(SwiperClass)
 
+// import { SwiperSlide } from 'swiper/vue';
 
 export default {
     props: ['layer'],
-    components: { SwiperSlide },
+    // components: { SwiperSlide },
     computed: {
         name () {
             return this.layer.properties.name

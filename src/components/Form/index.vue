@@ -1,5 +1,5 @@
 <template>
-  <form id="form" @submit.prevent="action">
+  <form id="form" @submit.prevent="onSaveClick">
     <div class="form-title component-title">
       <h2>3</h2>
       <h3>La fiche</h3>
@@ -14,7 +14,7 @@
 
         <div class="buttons">
           <input type="submit" name="save" value="Enregistrer">
-          <input type="submit" name="delete" value="Supprimer" :disabled="!feature.id">
+          <input type="button" name="delete" @click="onDeleteClick" value="Supprimer" :disabled="!feature.id">
           <input type="button" name="cancel" @click="onCancelClick" value="Annuler">
         </div>
   </form>
@@ -32,7 +32,6 @@ export default {
             feature: 'feature/selected',
         }),
         properties: function () {
-          // console.log(this.feature.properties);
             return Object.keys(this.feature.properties).sort((a, b) => this.sortProperties(a, b))
         },
     },
@@ -68,16 +67,20 @@ export default {
          */
         onSaveClick: async function () {
             await this['feature/save']()
-            this.feature.representation.hideMeasurements();
+            // console.log('gml:prop');
+            if (this.feature.properties.geometry.type != 'gml:PointPropertyType') this.feature.representation.hideMeasurements(); 
             this.setEditable(false)
             this.toggleEdit()
-
+            this.$destroy()
         },
         /**
          * Call store's delete action
          */
         onDeleteClick: async function () {
-            await this['feature/delete']()
+            if (confirm('Êtes-vous sûr.e de vouloir supprimer cette entité ?')) {
+              const deleteSuccess = await this['feature/delete']();
+            if (deleteSuccess) this.$destroy();
+            }
         },
         /**
          * Call store's cancel action
@@ -86,21 +89,29 @@ export default {
             this['feature/cancel']()
             this.$destroy()
         },
+        /*
+          onCancelClick: async function () {
+          let res = await this['feature/cancel']()
+          console.log(res);
+          if(res) this.$destroy()
+        },
+        */
         /**
          * Call the appropriated action then destroy the component
          * @param e : Event - An event created by clicking on a form's button
          */
-        action: async function (e) {
-            switch (e.explicitOriginalTarget.name) {
-                case 'save':
-                    await this.onSaveClick()
-                    break
-                case 'delete':
-                    if (confirm('Êtes-vous sûr.e de vouloir supprimer cette entité ?')) await this.onDeleteClick()
-                    break
-            }
-            this.$destroy()
-        }
+        // action: async function (e) {
+        //   console.log(e.explicitOriginalTarget);
+        //     switch (e.explicitOriginalTarget.name) {
+        //         case 'save':
+        //             await this.onSaveClick()
+        //             break
+        //         case 'delete':
+        //             if (confirm('Êtes-vous sûr.e de vouloir supprimer cette entité ?')) await this.onDeleteClick()
+        //             break
+        //     }
+        //     this.$destroy()
+        // }
     }
 }
 </script>

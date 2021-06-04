@@ -1,5 +1,8 @@
 <template>
   <div id="app" :is="layout">
+    <template v-if="img!=null">
+      <img :src="img">
+    </template>
     <Header
       class="header"
     />
@@ -44,6 +47,7 @@ export default {
 
     return {
       modals: header.modals,
+      img: null,
     }
   },
   computed: {

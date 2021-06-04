@@ -12,15 +12,22 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        map: null
+        map: null,
     },
     getters: {
-        map: state => state.map
+        map: state => state.map,
+        isDrawing: () => {
+            if ((feature.state.selected && (feature.state.editable || feature.state.selected.id == undefined)) 
+                || quickMeasure.state.type != null) {
+                return true;
+            }  
+            return false
+        },
     },
     mutations: {
         setMap: function (state, map) {
             state.map = map
-        }
+        },
     },
     actions: {
         reset: function ({commit}) {

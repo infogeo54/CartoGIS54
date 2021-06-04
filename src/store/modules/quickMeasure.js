@@ -63,6 +63,7 @@ export default {
                     break;
             }
             state.feature.addTo(rootGetters.map).showMeasurements();
+            state.feature.enableEdit(rootGetters.map);
         },
 
         addLatlng: function ({commit, dispatch}, latlng){

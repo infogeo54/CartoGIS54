@@ -46,9 +46,9 @@ export default {
             switch (this.category) {
                 case 'inputDate':
                     return 'date'
-                case 'inputRange':
+                case 'inputRangeSlider':
                     return 'range'
-                case 'inputNumber':
+                case 'inputRangeSpinBox':
                     return 'number'                
                 default:
                     return 'text'
@@ -73,10 +73,7 @@ export default {
     methods: {
         change (e) { this.$emit('change', e) }
     },
-    // mounted() {
 
-    //     console.log(this.datalist);
-    // },
 }
 </script>
 

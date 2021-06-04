@@ -4,7 +4,7 @@
       <h2>1</h2>
       <h3>Mes couches</h3>
     </div>
-    <swiper class="swiper" ref="layersSwiper" :options="swiperOption">
+    <!-- <swiper class="swiper" ref="layersSwiper" :options="swiperOption"> -->
       <Item
           v-for="(layer, index) in layers"
           :key="index"
@@ -12,11 +12,11 @@
           :class="layer === selectedLayer ? 'active' : ''"
           @itemClicked="itemClicked"
         />
-      <div class="swiper-scrollbar" slot="scrollbar"></div>
+      <!-- <div class="swiper-scrollbar" slot="scrollbar"></div>
 
       <div class="swiper-button-prev" slot="button-prev"></div>
-      <div class="swiper-button-next" slot="button-next"></div>
-    </swiper>
+      <div class="swiper-button-next" slot="button-next"></div> -->
+    <!-- </swiper> -->
         
 
     </div>
@@ -24,62 +24,73 @@
 
 <script>
 import Item from './Item'
-import { Swiper as SwiperClass, Navigation, Scrollbar, Keyboard } from 'swiper/js/swiper.esm'
+// import { Swiper as SwiperClass, Navigation, Scrollbar, Keyboard } from 'swiper/js/swiper.esm'
 
-import getAwesomeSwiper from 'vue-awesome-swiper/dist/exporter'
+// import getAwesomeSwiper from 'vue-awesome-swiper/dist/exporter'
 
-import 'swiper/css/swiper.css'
+// import 'swiper/css/swiper.css'
 
-SwiperClass.use([ Navigation, Scrollbar, Keyboard ])
+// SwiperClass.use([ Navigation, Scrollbar, Keyboard ])
 
-const { Swiper } = getAwesomeSwiper(SwiperClass)
+// const { Swiper } = getAwesomeSwiper(SwiperClass)
+
+// import SwiperCore, { Navigation, Scrollbar, Keyboard, Pagination } from 'swiper'
+// import {  Swiper } from 'swiper/vue';
+// import 'swiper/swiper.scss'
+// import 'swiper/components/navigation/navigation.scss';
+// import 'swiper/components/pagination/pagination.scss';
+// import 'swiper/components/scrollbar/scrollbar.scss';
+
+
+// SwiperCore.use([Navigation, Pagination, Scrollbar, Keyboard ])
+
 
 export default {
   props: ['layers', 'selectedLayer'],
-    components: { Swiper, Item },
+    components: { Item },
     data() {
       return {
-        swiperOption: {
-          direction: 'horizontal',
-          slidesPerView: '1',
-          spaceBetween: 15,
-          grabCursor: true,
-          mousewheel: true,
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
-          },
-          scrollbar: {
-            el: '.swiper-scrollbar',
-            draggable: true,
-            dragSize: 50,
-          },
-          keyboard: {
-            enabled: true
-          },
-          breakpoints: {
-            320: {
-              direction: 'horizontal',
-              slidesPerView: 2,
-            },            
-            576: {
-              direction: 'horizontal',
-              slidesPerView: 3
-            },
-            768: {
-              direction: 'vertical',
-              slidesPerView: 'auto',
-            }
-          }
-        }
+      //   swiperOption: {
+      //     direction: 'horizontal',
+      //     slidesPerView: '1',
+      //     spaceBetween: 15,
+      //     grabCursor: true,
+      //     mousewheel: true,
+      //     navigation: {
+      //       nextEl: '.swiper-button-next',
+      //       prevEl: '.swiper-button-prev'
+      //     },
+      //     scrollbar: {
+      //       el: '.swiper-scrollbar',
+      //       draggable: true,
+      //       dragSize: 50,
+      //     },
+      //     keyboard: {
+      //       enabled: true
+      //     },
+      //     breakpoints: {
+      //       320: {
+      //         direction: 'horizontal',
+      //         slidesPerView: 2,
+      //       },            
+      //       576: {
+      //         direction: 'horizontal',
+      //         slidesPerView: 3
+      //       },
+      //       768: {
+      //         direction: 'vertical',
+      //         slidesPerView: 'auto',
+      //       }
+      //     }
+      //   }
       }
     },
 
-    computed: {
-      swiper(){
-        return this.$$refs.layersSwiper.$swiper
-      }
-    },
+    // computed: {
+    //   swiper(){
+    //     return this.$$refs.layersSwiper.$swiper
+    //   }
+    // },
 
     methods: {
       itemClicked (layerName) {

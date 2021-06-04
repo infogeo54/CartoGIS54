@@ -25,7 +25,7 @@ export default {
         changed (e) {
             this.$emit('changed', e)
         }
-    }
+    },
 }
 </script>
 

@@ -76,10 +76,14 @@ export default class Feature {
         }
     }
 
+    get layer () {
+        return this.parent.description.layer;
+    }
+
     createRepresentation () {
         if (!this.coordinates) throw 'Feature has no coordinates'
         const cb = () => {
-            if (feature.state.selected == null) {
+            if (!feature.getters.isDrawing) {
                 feature.mutations.setSelected(feature.state, this)
                 feature.mutations.setOgProperties(feature.state, this.copyProperties())
                 bus.$emit('centerOnFeature', feature.state.selected)

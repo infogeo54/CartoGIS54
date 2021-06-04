@@ -61,7 +61,6 @@ export default {
         orderField (f){
             if (f.options && f.options.order) {
                 this.order = f.options.order
-                // console.log(this.order);
             }
         },
     }

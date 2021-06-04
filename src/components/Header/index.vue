@@ -5,11 +5,12 @@
     <div class="button">
         <i :class="'far fa-user-circle'"></i>
     </div>
+    
   </div>
 </template>
 
 <script>
-import { header as config } from '@/app.config.json'
+import { header as config } from '@/app.config.json';
 
 export default {
     name: 'Header',
@@ -17,9 +18,10 @@ export default {
 
       return {
         brand: config.brand,
-        title: config.title
+        title: config.title,
       }
     },
+
 }
 </script>
 

@@ -1,6 +1,6 @@
 {
   "server": {
-    "host": "172.16.17.1:8080/cgi-bin/qgis_mapserv.fcgi",
+    "host": "sgeol3.cg54.local:8080/cgi-bin/qgis_mapserv.fcgi",
     "queryParams": [{
       "key": "map",
       "value": "/var/www/html/bourg-centre/bourg-centre.qgs"
@@ -17,42 +17,41 @@
     }]
   },
   "form": {
+    "hidden": [
+      {  "name": "geometry" },
+      { "name": "porteur_pr" }
+    ],
     "inputText": [
-      {
-        "name": "id",
-        "alias": "",
-        "type": "TextEdit",
-        "options": {
-          "IsMultiline": false,
-          "UseHtml": false,
-          "disabled": true,
-          "hidden": true,
-          "required": false
-        },
-        "default": ""
-      },
-      {
-        "name": "geometry",
-        "alias": "",
-        "type": "TextEdit",
-        "options": {
-          "IsMultiline": false,
-          "UseHtml": false,
-          "disabled": true,
-          "hidden": true,
-          "required": false
-        },
-        "default": ""
-      },
       {
         "name": "proprio",
         "alias": "Propriétaire",
         "type": "TextEdit",
-        "options": [],
+        "options": {},
+        "default": ""
+      },
+      {
+        "name": "type_autre",
+        "alias": "Autre type",
+        "type": "TextEdit",
+        "options": {},
+        "default": ""
+      },
+      {
+        "name": "etude_ec",
+        "alias": "Études",
+        "type": "TextEdit",
+        "options": {},
+        "default": ""
+      },
+      {
+        "name": "chenillepro",
+        "alias": "Chenille Pro",
+        "type": "TextEdit",
+        "options": {},
         "default": ""
       }
     ],
-    "inputNumber": [
+    "inputRangeSpinBox": [
       {
       "name": "nb_place",
       "alias": "Nombre de place",
@@ -63,10 +62,7 @@
         "Min": 0,
         "Precision": 0,
         "Step": 1,
-        "Style": "SpinBox",
-        "disabled": false,
-        "hidden": false,
-        "required": false
+        "Style": "SpinBox"
       },
       "default": ""
     }],
@@ -80,10 +76,7 @@
           "calendar_popup": true,
           "display_format": "yyyy-MM-dd",
           "field_format": "yyyy-MM-dd",
-          "field_iso_format": false,
-          "disabled": false,
-          "hidden": false,
-          "required": false
+          "field_iso_format": false
         },
         "default": ""
       },
@@ -96,18 +89,15 @@
           "calendar_popup": true,
           "display_format": "yyyy-MM-dd",
           "field_format": "yyyy-MM-dd",
-          "field_iso_format": false,
-          "disabled": false,
-          "hidden": false,
-          "required": false
+          "field_iso_format": false
         },
         "default": ""
       }
     ],
-    "inputRange": [
+    "inputRangeSlider": [
       {
       "name": "etat_locaux",
-      "alias": "Etat des locaux",
+      "alias": "État des locaux",
       "type": "Range",
       "options": {
         "AllowNull": true,
@@ -115,10 +105,7 @@
         "Min": 0,
         "Precision": 0,
         "Step": 1,
-        "Style": "Slider",
-        "disabled": false,
-        "hidden": false,
-        "required": false
+        "Style": "Slider"
       },
       "default": "0"
     }],
@@ -129,14 +116,12 @@
       "type": "TextEdit",
       "options": {
         "IsMultiline": true,
-        "UseHtml": false,
-        "disabled": false,
-        "hidden": false,
-        "required": false
+        "UseHtml": false
       },
       "default": ""
     }],
-    "selectBox": [{
+    "selectBox": [
+      {
       "name": "covoiturage",
       "type": "ValueMap",
       "options": {
@@ -148,14 +133,29 @@
             "text": "Non",
             "value": false
           }
-        ],
-        "disabled": false,
-        "hidden": false,
-        "required": false
+        ]
       },
       "default": "Oui"
-    }],
-    "radio": [{
+    },
+    {
+      "name": "type",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Gratuit",
+            "value": "gratuit"
+          },
+          {
+            "text": "Payant",
+            "value": "payant"
+          }
+        ]
+      },
+      "default": "Gratuit"
+    }
+  ],
+    "radio": [
+      {
       "name": "statut",
       "type": "ValueMap",
       "options": {
@@ -167,13 +167,45 @@
             "text": "Fermé",
             "value": "close"
           }
-        ],
-        "disabled": false,
-        "hidden": false,
-        "required": false
+        ]
       },
       "default": "Oui"
-    }],
+    },
+    {
+      "name": "visible_ext",
+      "alias": "Visible depuis l'extérieur",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Oui",
+            "value": true
+          },
+          {
+            "text": "Non",
+            "value": false
+          }
+        ]
+      },
+      "default": "Oui"
+    },
+    {
+      "name": "partage_int",
+      "alias": "Partage Internet",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Oui",
+            "value": true
+          },
+          {
+            "text": "Non",
+            "value": false
+          }
+        ]
+      },
+      "default": "Oui"
+    }
+  ],
     "checkBox": [{
       "name": "contr_acce",
       "alias": "Contrôle d'accés",
@@ -191,10 +223,7 @@
             "text": "Digicode",
             "value": "code"
           }
-        ],
-        "disabled": false,
-        "hidden": false,
-        "required": false
+        ]
       },
       "default": "Oui"
     }],
@@ -225,7 +254,16 @@
       "unit": "metre",
       "options": {
         "order": 2
-      } 
+      }
+    },
+    {
+      "name": "id",
+      "alias": "",
+      "type": "TextEdit",
+      "unit": null,
+      "options": {
+      },
+      "default": ""
     }
   ],
   "thumbnail": [

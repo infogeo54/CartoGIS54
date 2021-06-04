@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="category && !hidden"
+    v-if="category && category!='hidden'"
     :class="options.required && !options.disabled ? 'required' : ''"
   >
     <label>
@@ -88,7 +88,6 @@
             },
             field () { return config[this.category].find(field => field.name === this.property.name) || null },
             options () { return this.field ? this.field.options : {} },
-            hidden () { return this.options.hidden || false },
             title () { return this.field.alias ? this.field.alias : this.field.name.toUpperCase()[0] + this.field.name.slice(1) },
             value: function () {
                 if (this.property.name !== 'geometry') { return this.property.value }

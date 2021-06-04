@@ -64,9 +64,9 @@ export default {
             formVisible: 'form/formVisible',
             ogCoordinates: 'feature/ogCoordinates',
             editable: 'feature/editable',
-            map: 'map',
             quickMeasure: 'quickMeasure/quickMeasure',
-            
+            map: 'map',
+            isDrawing: 'isDrawing',          
         }),
         isValidate(){
             if (this.feature && !this.formVisible){
@@ -148,7 +148,7 @@ export default {
         },
 
         centerOnFeature (f) {
-            let c = (f.coordinates[0].length) 
+            let c = (Array.isArray(f.coordinates[0])) 
                     ? f.representation.getBounds().getCenter() 
                     : c = f.coordinates;
             this.map.panTo(c)
@@ -166,7 +166,7 @@ export default {
                 this.feature.representation.hideMeasurements()
                 if (this.isMeasuring && this.feature.representation) this.feature.representation.showMeasurements()
             }
-        }
+        },        
     },
 
     mounted() {
@@ -190,7 +190,7 @@ export default {
         position: absolute
         top: 5rem
         right: .5rem
-        z-index: 1500
+        z-index: 1000
         display: flex
         flex-direction: column
 
