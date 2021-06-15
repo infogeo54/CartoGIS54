@@ -1,14 +1,14 @@
-import { form as config } from '@/app.config.json'
+import { form as config, fileAPI as confAPI } from '@/app.config.json'
 import axios from "axios";
-
-const baseUrl = "http://localhost:8888"
+const baseUrl = confAPI.baseUrl
 
 const deleteImages = async (f) => {
+    const layer = f.parent.layer;
     for await (const i of config["thumbnail"]) {
         let fileIndex = Object.keys(f.properties).indexOf(i.name);
-        let fileName = Object.entries(f.properties)[fileIndex][1].value;
-        if (fileName) {
-            await axios.delete(`${baseUrl}/test/images/${fileName}`)
+        let fileName = Object.entries(f.properties)[fileIndex];
+        if (fileName && fileName[1] && fileName[1].value) {
+            await axios.delete(`${baseUrl}/${layer}/images/${fileName.value}`)
                         .then((r) => {
                             console.log(r.data);
                             f.properties[i.name].value = null;
@@ -23,11 +23,12 @@ const deleteImages = async (f) => {
 }
 
 const deleteFiles = async (f) => {
+    const layer = f.parent.layer;
     for await (const i of config['fileInput']){
         let fileIndex = Object.keys(f.properties).indexOf(i.name);
-        let fileName = Object.entries(f.properties)[fileIndex][1].value;
-        if (fileName) {
-            await axios.delete(`${baseUrl}/test/files/${fileName}`)
+        let fileName = Object.entries(f.properties)[fileIndex]
+        if (fileName && fileName[1] && fileName[1].value) {
+            await axios.delete(`${baseUrl}/${layer}/files/${fileName.value}`)
                         .then((r) => { 
                             console.log(r.data);
                             f.properties[i.name].value = null;
@@ -43,8 +44,8 @@ const deleteFiles = async (f) => {
 
 const deleteAFile = async (fileName, layer, isImage = false) => {
     
-    // let uri = `${baseUrl}/${layer}/${isImage?'images':'files'}/${fileName}`
-    let uri = `${baseUrl}/test/${isImage?'images':'files'}/${fileName}`
+    let uri = `${baseUrl}/${layer}/${isImage?'images':'files'}/${fileName}`
+    // let uri = `${baseUrl}/test/${isImage?'images':'files'}/${fileName}`
 
     let r;
     await axios.delete(uri)

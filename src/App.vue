@@ -30,7 +30,7 @@ import Header from '@/components/Header'
 import Menu from '@/components/Menu'
 import MapContainer from '@/components/Map'
 import Form from '@/components/Form'
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { header } from '@/app.config.json'
 
 export default {
@@ -77,13 +77,10 @@ export default {
       })
     }
   },
-  mounted () {
-    this['layer/getLayers']()
-  },
   methods: {
 
-    ...mapMutations(['form/setVisibility']),
     ...mapActions([
+        'pingApi',
         'reset',
         'layer/getLayers',
         'feature/cancel',
@@ -100,6 +97,12 @@ export default {
             this.reset()
         }
     })
+  },
+  mounted () {
+    this['layer/getLayers']()
+    setInterval(async () => {
+      await this['pingApi']()
+    }, 60000);
   },
 }
 </script>

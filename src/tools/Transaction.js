@@ -181,6 +181,7 @@ export default class Transaction {
                 if (key === 'geometry') {
                     res.geometry = Transaction.formattedGeometryInsert(props.geometry)
                 } else {
+                    console.log(props[key].value);
                     res[key] = props[key].value
                 }
             }
@@ -212,7 +213,7 @@ export default class Transaction {
     static toUpdateProperties (properties) {
         let props = []
         for (let key in properties) {
-           if (properties[key].value !== null && properties[key].value !== null) {
+           if (properties[key].value !== null && properties[key].value !== undefined) {
                props.push(Transaction.toUpdateProperty(key, properties[key].value))
            }
         }

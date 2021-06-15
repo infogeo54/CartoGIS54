@@ -7,6 +7,7 @@
     }]
   },
   "header": {
+    "hasHeader": false,
     "brand": "img/cd54.png",
     "title": "Je localise mon projet",
     "modals": [{
@@ -15,6 +16,12 @@
       "icon": "far fa-question-circle",
       "visible": true
     }]
+  },
+  "fileAPI": {
+    "baseUrl": "http://sgeol3.cg54.local:8888",
+    "typesAccepted": [
+      "image/*", ".docx", ".doc", ".pdf"
+    ]
   },
   "form": {
     "hidden": [

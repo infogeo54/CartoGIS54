@@ -50,14 +50,16 @@ export default {
         },
     },
     actions: {
-        delete: async function ({state, getters, commit}){
-                let filesDeleted = await deleteAllFiles(state.selected);
+        delete: async function ({state, getters, rootGetters, commit}){
+            if(rootGetters.apiWorking){
+                const filesDeleted = await deleteAllFiles(state.selected);
                 if (filesDeleted) {
                     const t = Transaction.delete(state.selected).toXML()
                     await WFS.sendTransaction(t)
                     commit('layer/removeFeature', getters.selected, { root: true })
                     return true;
                 }
+            }else alert("Le système de gestion des fichiers et images ne répond pas. Impossible de supprimer l'objet.");
         },
 
         insert: async function ({state, commit}) {

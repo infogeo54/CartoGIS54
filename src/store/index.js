@@ -6,6 +6,7 @@ import feature from './modules/feature'
 import form from './modules/form'
 import quickMeasure from './modules/quickMeasure'
 import { bus } from '@/main.js'
+import { ping } from '../fileAPI'
 
 
 Vue.use(Vuex)
@@ -13,9 +14,11 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         map: null,
+        apiWorking: null,
     },
     getters: {
         map: state => state.map,
+        apiWorking: state => state.apiWorking,
         isDrawing: () => {
             if ((feature.state.selected && (feature.state.editable || feature.state.selected.id == undefined)) 
                 || quickMeasure.state.type != null) {
@@ -28,6 +31,10 @@ export default new Vuex.Store({
         setMap: function (state, map) {
             state.map = map
         },
+        setApiWorking: function(state, bool) {
+            state.apiWorking = bool;
+        }
+
     },
     actions: {
         reset: function ({commit}) {
@@ -42,7 +49,11 @@ export default new Vuex.Store({
             ? feature.state.selected.representation.getBounds().getCenter() 
             : c = feature.state.selected.coordinates;
             state.map.panTo(c);
-        }
+        },
+        pingApi: async function ({commit}) {
+            let res = await ping();
+            commit('setApiWorking', res)
+        },
     },
     modules : {
         layer,

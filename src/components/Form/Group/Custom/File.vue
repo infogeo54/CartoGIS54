@@ -1,28 +1,34 @@
 <template>
-    <div v-if="modifying || !fileName">
-        <input type="file" id="fileInput" @change="changeFiles" :accept="typeAccepted">
-        <div class="form-buttons">
-            <div v-if="files.length" @click="saveClick" class="save-button">Enregistrer</div>
-            <div v-if="fileName" @click="cancel">Annuler</div>
+    <div v-if="apiWorking">
+        <div v-if="modifying || !fileName">
+            <input type="file" id="fileInput" @change="changeFiles" :accept="typeAccepted">
+            <div class="form-buttons">
+                <div v-if="files.length" @click="saveClick" class="save-button">Enregistrer</div>
+                <div v-if="fileName" @click="cancel">Annuler</div>
+            </div>
+        </div>
+        <div v-else>
+            <template v-if="url!=null">
+                <a :href="url" download>
+                    Télécharger la pièce jointe
+                </a>
+            </template>
+            <p v-else>File loading ...</p>
+            <div class="form-buttons">
+                <div @click="deleteClick" class="delete-button">Supprimer</div>
+                <div @click="modifying=true">Modifier</div>
+            </div>
         </div>
     </div>
-    <div v-else>
-        <template v-if="url!=null">
-            <a :href="url" download>
-                {{ url }}
-            </a>
-        </template>
-        <p v-else>File loading ...</p>
-        <div class="form-buttons">
-            <div @click="deleteClick" class="delete-button">Supprimer</div>
-            <div @click="modifying=true">Modifier</div>
-        </div>
-    </div>
+
+    <div v-else>Gestion des fichiers non disponible pour le moment</div>
 
 </template>
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { fileAPI as confAPI } from '@/app.config.json'
+
 import fileAPI from '@/fileAPI'
 
 export default {
@@ -37,14 +43,14 @@ export default {
         category: { type: String, default: '' },
         field: { type: Object, default: () => {} },
         value: { type: [String, Number, Boolean, Date], default: () => null },
-        
     },
     computed: {
         typeAccepted: function(){
-            return "image/*, .docx, .doc, .pdf"
+            return confAPI.typesAccepted.join();
         },
         ...mapGetters({
             feature: 'feature/selected',
+            apiWorking: 'apiWorking',
         }),
         fileName: function(){
             return this.feature.properties[this.field.name].value;
@@ -74,16 +80,18 @@ export default {
         },
 
         async updateFile () {
-            try {
-                let newFileName = await fileAPI.putFile(this.files[0], this.fileName, this.feature.layer)
-                if (newFileName) {
-                    this.$emit('change', { target : { value: newFileName }})
-                    this.resetFileInput()
-                    this.modifying = false
-                    this.getFile()
+            if(this.fileName && this.fileName.length){
+                try {
+                    let newFileName = await fileAPI.putFile(this.files[0], this.fileName, this.feature.layer)
+                    if (newFileName) {
+                        this.$emit('change', { target : { value: newFileName }})
+                        this.resetFileInput()
+                        this.modifying = false
+                        this.getFile()
+                    }
+                } catch (err) {
+                    console.log(err);
                 }
-            } catch (err) {
-                console.log(err);
             }
         },    
 
@@ -102,24 +110,26 @@ export default {
         },
 
         async deleteClick(){
-
-            if (confirm("Êtes-vous sûr de vouloir supprimer le fichier ?")) {
-                console.log("delete");
-    
-                try {
-                    let resDelete = await fileAPI.deleteAFile(this.fileName, this.feature.layer);
-                    if (resDelete) {
-                        this.$emit('change', { target : { value: null }})
-                        this.url = null
+            if (this.fileName && this.fileName.length) {
+                if (confirm("Êtes-vous sûr de vouloir supprimer le fichier ?")) {        
+                    try {
+                        let resDelete = await fileAPI.deleteAFile(this.fileName, this.feature.layer);
+                        console.log(resDelete);
+                        if (resDelete) {
+                            this.$emit('change', { target : { value: "" }})
+                            this.url = null
+                        }
+                        await this['feature/save']()
+                    } catch (err) {
+                        console.log(err);
                     }
-                } catch (err) {
-                    console.log(err);
                 }
             }
+            
         },
 
         async getFile(){   
-            if(this.fileName) {
+            if(this.fileName && this.fileName.length) {
                 try {
                     const fileUrl = await fileAPI.getFile(this.fileName, this.feature.layer);
                     if (fileUrl) this.url = fileUrl 
@@ -130,7 +140,7 @@ export default {
         }
     },
     mounted() {
-        this.getFile()
+        if (this.apiWorking) this.getFile()
     }
 }
 </script>

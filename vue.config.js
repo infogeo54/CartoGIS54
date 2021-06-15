@@ -1,5 +1,6 @@
 module.exports = {
     publicPath: '/',
+    filenameHashing: false,
     chainWebpack: config => {
       config.module
         .rule('html')

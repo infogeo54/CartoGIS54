@@ -1,22 +1,26 @@
 <template>
-    <div v-if="modifying || !fileName">
-        <input type="file" id="imageInput" @change="changeFiles" :accept="typeAccepted">
-        <div class="form-buttons">
-            <div v-if="files.length" @click="saveClick" class="save-button">Enregistrer</div>
-            <div v-if="fileName" @click="cancel">Annuler</div>
+    <div v-if="apiWorking">
+        <div v-if="modifying || !fileName">
+            <input type="file" id="imageInput" @change="changeFiles" :accept="typeAccepted">
+            <div class="form-buttons">
+                <div v-if="files.length" @click="saveClick" class="save-button">Enregistrer</div>
+                <div v-if="fileName" @click="cancel">Annuler</div>
+            </div>
         </div>
-    </div>
-    <div v-else>
-        <template v-if="img!=null">
-            <img :src="img">
-        </template>
-        <p v-else >Image loading ...</p>
-        <div class="form-buttons">
-            <div @click="deleteClick" class="delete-button">Supprimer</div>
-            <div @click="modifying=true" >Modifier</div>
+        <div v-else>
+            <template v-if="img!=null">
+                <img :src="img">
+            </template>
+            <p v-else >Image loading ...</p>
+            <div class="form-buttons">
+                <div @click="deleteClick" class="delete-button">Supprimer</div>
+                <div @click="modifying=true" >Modifier</div>
+            </div>
         </div>
     </div>
 
+    <div v-else>Gestion des images non disponible pour le moment</div>
+        
 </template>
 
 <script>
@@ -42,6 +46,7 @@ export default {
         },
         ...mapGetters({
             feature: 'feature/selected',
+            apiWorking: 'apiWorking',
         }),
         fileName: function(){
             return this.feature.properties[this.field.name].value;
@@ -71,22 +76,22 @@ export default {
         },
 
         async updateImage(){
-            console.log("update");
-            try {
-                let newFileName = await fileAPI.putFile(this.files[0], this.fileName, this.feature.layer, true)
-                if (newFileName) {
-                    this.$emit('change', { target : { value: newFileName }})
-                    this.resetFileInput()
-                    this.modifying = false
-                    this.getImage()
+            if(this.fileName && this.fileName.length) {
+                try {
+                    let newFileName = await fileAPI.putFile(this.files[0], this.fileName, this.feature.layer, true)
+                    if (newFileName) {
+                        this.$emit('change', { target : { value: newFileName }})
+                        this.resetFileInput()
+                        this.modifying = false
+                        this.getImage()
+                    }
+                } catch (err) {
+                    console.log(err);
                 }
-            } catch (err) {
-                console.log(err);
             }
         },
 
         async postImage(){
-            console.log("post");
             try {
                 let newFileName = await fileAPI.postFile(this.files[0], this.feature.layer, true)
                 if (newFileName) {
@@ -101,24 +106,24 @@ export default {
         },
 
         async deleteClick(){
-
-            if (confirm("Êtes-vous sûr de vouloir supprimer l'image ?")) {
-                console.log("delete");
-    
-                try {
-                    let resDelete = await fileAPI.deleteAFile(this.fileName, this.feature.layer, true);
-                    if (resDelete) {
-                        this.$emit('change', { target : { value: null }})
-                        this.img = null
+            if(this.fileName && this.fileName.length) {
+                if (confirm("Êtes-vous sûr de vouloir supprimer l'image ?")) {    
+                    try {
+                        let resDelete = await fileAPI.deleteAFile(this.fileName, this.feature.layer, true);
+                        if (resDelete) {
+                            this.$emit('change', { target : { value: "" }})
+                            this.img = null
+                        }
+                        await this['feature/save']()
+                    } catch (err) {
+                        console.log(err);
                     }
-                } catch (err) {
-                    console.log(err);
                 }
             }
         },
 
         async getImage(){
-            if(this.fileName) {
+            if(this.fileName && this.fileName.length) {
                 try {
                     const imgUrl = await fileAPI.getFile(this.fileName, this.feature.layer, true);
                     if (imgUrl) this.img = imgUrl;
@@ -129,7 +134,7 @@ export default {
          }
     },
     mounted() {
-        this.getImage()
+        if (this.apiWorking) this.getImage()
     },
 }
 </script>
