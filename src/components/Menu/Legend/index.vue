@@ -12,12 +12,17 @@
         <h3>{{ title }}</h3>
       </div>
       <div class="legend-body">
-        <Item
-          v-for="(style, index) in styles"
-          :key="index"
-          :feature-style="style"
-          @itemClicked="itemClicked"
-        />
+        <div class="legend-container">
+            <Item
+              v-for="(style, index) in styles" :key="index"
+              :feature-style="style"
+              @itemClicked="itemClicked"
+            />
+        </div>
+        <!-- <swiper ref="legendSwiper" :options="options"> -->
+          <!-- <swiper-slide v-for="(style, index) in styles" :key="index"> -->
+          <!-- </swiper-slide> -->
+        <!-- </swiper> -->
       </div>
     </div>
   </div>
@@ -25,15 +30,20 @@
 
 <script>
 import Item from './Item'
+// import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+import 'swiper/css/swiper.css'
 
 export default {
     name: "Legend",
-    components: { Item },
     props: {
         layer: {
             type: Object,
             default: null
         }
+    },
+    components: {
+      Item,
+      // Swiper, SwiperSlide
     },
     computed: {
         title () {
@@ -58,6 +68,8 @@ export default {
 
 .legend-modal
 
+
+
   &>.legend-divider
     background-color: #0e0e0e
     height: 1px
@@ -66,6 +78,7 @@ export default {
 
 #legend
   color: #0e0e0e
+  width: 100%
   display: flex
   flex-direction: column
 
@@ -80,14 +93,18 @@ export default {
         color: #0e0e0e
         cursor: pointer
   .legend-body
-    display: grid
-    grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr))
-    row-gap: 2rem
     padding-bottom: 2rem
+    height: 100%
+    overflow-y: auto
+    .legend-container
+      display: grid
+      grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr))
+      row-gap: 2rem
 
 @media screen and (min-width: 768px)
   .legend-modal
-
+    height: auto
+    display: flex
     width: 14rem
 
     &>.legend-divider
@@ -97,6 +114,9 @@ export default {
       border-left: solid 1px #0e0e0e
 
       .legend-body
-        display: block
+        height: 100%
+        overflow-y: auto
 
+        .legend-container
+          display: block
 </style>

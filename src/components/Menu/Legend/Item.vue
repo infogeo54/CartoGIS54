@@ -41,7 +41,7 @@ export default {
 
 <style lang="sass" scoped>
     .legend-item
-        margin-bottom: 10p
+        margin-bottom: 1.5rem
         img
             max-width: 64px
             height: auto

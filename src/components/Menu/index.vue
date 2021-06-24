@@ -5,7 +5,6 @@
       :selected-layer="selectedLayer"
       @layerItemClicked="layerItemClicked"
     />
-    <button v-if="selectedFeature" @click="cancel" id="btn-cancel">Annuler</button>
     <Legend
       v-if="legendVisibility"
       :layer="selectedLayer"
@@ -20,6 +19,8 @@ import Layers from './Layers'
 import Legend from './Legend'
 import Feature from '@/models/Feature'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { bus } from '@/main.js'
+
 
 export default {
     name: "Menu",
@@ -39,9 +40,6 @@ export default {
         ...mapMutations([
             'layer/setSelected',
             'feature/setSelected',
-            'form/setVisibility',
-            'feature/toggleEdit',
-            'feature/setEditable',
         ]),
         ...mapActions([
             'feature/cancel'
@@ -60,48 +58,26 @@ export default {
         legendCloseClicked () {
             this['layer/setSelected'](null)
         },
-        cancel () {
-            this['feature/cancel']()
-            this['feature/setSelected'](null)
-            this['form/setVisibility'](false)
-            this['feature/setEditable'](false)
-            this['feature/toggleEdit'](this.map)
-
-            if (this.selectedLayer) {
-                const layer = this.layers.find(l => l.properties.name === this.selectedLayer.properties.name)
-                this.layerItemClicked(this.selectedLayer.properties.name)
-                this['layer/setSelected'](layer)
-            }
-        }
+        
     },
+    mounted() {
+        
+        bus.$on('layerItemClicked', () => { this.layerItemClicked(this.selectedLayer.properties.name) });
+
+    }
 }
 </script>
 
 <style lang="sass" scoped>
 #menu
     position: relative
-    grid-row: 1/2
-    grid-column: 1/2
     z-index: 500
     text-align: center
     background-color: #fafafa
-
-    & > #btn-cancel
-        // background-color: #EE2525
-        background-color: #f4f4f4
-        color: #0e0e0e
-        position: absolute
-        bottom: -4.5rem
-        right: .5rem
-   
+  
     @media screen and (min-width: 768px)
         &
             display: flex
             padding-top: 4rem
-
-            & > #btn-cancel
-                top: .5rem
-                left: calc( 100% + 6rem )
-                z-index: 1500
 
 </style>

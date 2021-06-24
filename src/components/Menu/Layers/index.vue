@@ -4,104 +4,84 @@
       <h2>1</h2>
       <h3>Mes couches</h3>
     </div>
-    <!-- <swiper class="swiper" ref="layersSwiper" :options="swiperOption"> -->
-      <Item
-          v-for="(layer, index) in layers"
-          :key="index"
-          :layer="layer"
-          :class="layer === selectedLayer ? 'active' : ''"
-          @itemClicked="itemClicked"
-        />
-      <!-- <div class="swiper-scrollbar" slot="scrollbar"></div>
-
-      <div class="swiper-button-prev" slot="button-prev"></div>
-      <div class="swiper-button-next" slot="button-next"></div> -->
-    <!-- </swiper> -->
-        
-
+    <div class="layers-swiper-container">
+      <swiper ref="layerSwiper" :options="options">
+          <swiper-slide v-for="(layer, index) in layers" :key="index" >
+            <Item
+                :layer="layer"
+                :class="layer === selectedLayer ? 'active' : ''"
+                @itemClicked="itemClicked"
+              />
+          </swiper-slide>
+          <div class="swiper-scrollbar" slot="scrollbar"></div>
+          <div class="swiper-button-prev" slot="button-prev"></div>
+          <div class="swiper-button-next" slot="button-next"></div>
+      </swiper>
     </div>
+  </div>
 </template>
 
 <script>
-import Item from './Item'
-// import { Swiper as SwiperClass, Navigation, Scrollbar, Keyboard } from 'swiper/js/swiper.esm'
 
-// import getAwesomeSwiper from 'vue-awesome-swiper/dist/exporter'
-
-// import 'swiper/css/swiper.css'
-
-// SwiperClass.use([ Navigation, Scrollbar, Keyboard ])
-
-// const { Swiper } = getAwesomeSwiper(SwiperClass)
-
-// import SwiperCore, { Navigation, Scrollbar, Keyboard, Pagination } from 'swiper'
-// import {  Swiper } from 'swiper/vue';
-// import 'swiper/swiper.scss'
-// import 'swiper/components/navigation/navigation.scss';
-// import 'swiper/components/pagination/pagination.scss';
-// import 'swiper/components/scrollbar/scrollbar.scss';
-
-
-// SwiperCore.use([Navigation, Pagination, Scrollbar, Keyboard ])
+import Item from './Item';
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+import 'swiper/css/swiper.css'
 
 
 export default {
   props: ['layers', 'selectedLayer'],
-    components: { Item },
+    components: { 
+      Item,
+      Swiper, SwiperSlide,
+    },
     data() {
       return {
-      //   swiperOption: {
-      //     direction: 'horizontal',
-      //     slidesPerView: '1',
-      //     spaceBetween: 15,
-      //     grabCursor: true,
-      //     mousewheel: true,
-      //     navigation: {
-      //       nextEl: '.swiper-button-next',
-      //       prevEl: '.swiper-button-prev'
-      //     },
-      //     scrollbar: {
-      //       el: '.swiper-scrollbar',
-      //       draggable: true,
-      //       dragSize: 50,
-      //     },
-      //     keyboard: {
-      //       enabled: true
-      //     },
-      //     breakpoints: {
-      //       320: {
-      //         direction: 'horizontal',
-      //         slidesPerView: 2,
-      //       },            
-      //       576: {
-      //         direction: 'horizontal',
-      //         slidesPerView: 3
-      //       },
-      //       768: {
-      //         direction: 'vertical',
-      //         slidesPerView: 'auto',
-      //       }
-      //     }
-      //   }
+        options: {
+          direction: 'horizontal',
+          slidesPerView: '1',
+          spaceBetween: 15,
+          // grabCursor: true,
+          mousewheel: true,
+          keyboard: {
+            enabled: true
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+          },
+          scrollbar: {
+            el: '.swiper-scrollbar',
+            draggable: true,
+            snapOnRelease: true,
+            dragSize: 'auto',
+          },
+          breakpoints: {
+            320: {
+              direction: 'horizontal',
+              slidesPerView: 2,
+            },            
+            576: {
+              direction: 'horizontal',
+              slidesPerView: 3
+            },
+            768: {
+              direction: 'vertical',
+              slidesPerView: 'auto',
+
+            }
+          }
+        }
       }
     },
-
-    // computed: {
-    //   swiper(){
-    //     return this.$$refs.layersSwiper.$swiper
-    //   }
-    // },
-
     methods: {
       itemClicked (layerName) {
           this.$emit('layerItemClicked', layerName)
-      }
+      },
     },
 }
 </script>
 
 <style lang="sass" scoped>
-
   #layers-container
     padding-top: 1.5rem
     position: relative
@@ -109,15 +89,35 @@ export default {
     max-width: 95vw
     box-sizing: border-box
     margin: 0 auto
+    
+  .layers-swiper-container
+    height: 100%
+    overflow-y: auto
 
   .swiper-scrollbar
-    height: .5rem
     width: 80%
+    height: .4rem
     margin: 0 10%
 
   .swiper-button-next,
   .swiper-button-prev
-    top: 35%
+    top: 47%
+    color: rgba(0,0,0,0.5)
+
+  .swiper-button-next::after,
+  .swiper-button-prev::after
+    font-size: 1.5rem
+    font-weight: bold
+
+
+  .swiper-button-next:hover,
+  .swiper-button-next:active,
+  .swiper-button-next:focus,
+  .swiper-button-prev:hover,
+  .swiper-button-prev:active,
+  .swiper-button-prev:focus
+    color: rgba(0,0,0,0.8)
+    
 
   .swiper-button-next
     right: 0px
@@ -125,9 +125,6 @@ export default {
   .swiper-button-prev
     left:  0px
 
-  .swiper-container
-    padding-bottom: 1.5rem
-    box-sizing: border-box
 
 
   @media screen and (min-width: 768px)
@@ -135,16 +132,11 @@ export default {
     #layers-container
       display: flex
       flex-direction: column
+      width: 15rem
 
     .swiper-button-next,
     .swiper-button-prev,
     .swiper-scrollbar
       display: none
-
-    .swiper-container
-      padding-bottom: 0
-      overflow-y: auto
-
-
 
 </style>

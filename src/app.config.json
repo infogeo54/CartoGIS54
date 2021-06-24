@@ -18,7 +18,7 @@
     }]
   },
   "fileAPI": {
-    "baseUrl": "http://sgeol3.cg54.local:8888",
+    "baseUrl": "http://localhost:8888",
     "typesAccepted": [
       "image/*", ".docx", ".doc", ".pdf"
     ]

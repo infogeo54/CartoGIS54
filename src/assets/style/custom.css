@@ -1,4 +1,8 @@
 /* 0db4f5 */
+* {
+    box-sizing: border-box;    
+}
+
 button,
 input[name="save"],
 input[name="delete"],
@@ -63,6 +67,10 @@ div[title="Segment length"]{
     margin-top: 15%;
 }
 
+.hooper {
+    height: 3.5rem;
+}
+
 @media screen and (min-width: 768px){
     
     button {
@@ -75,5 +83,8 @@ div[title="Segment length"]{
         margin-top: 8.5rem!important;
     }
 
+    .slick-slide {
+        width: 100%!important
+    }
 
 }

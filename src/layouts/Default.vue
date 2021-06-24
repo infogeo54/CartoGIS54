@@ -12,10 +12,8 @@ export default {
 
 <style lang="sass">
 html
-  height: 100vh
+  margin: 0
   body
     margin: 0
-    height: 100%
-  .default-layout
-    height: 100%
+
 </style>

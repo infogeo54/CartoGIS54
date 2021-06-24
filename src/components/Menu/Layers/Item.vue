@@ -1,21 +1,13 @@
 <template>
-<div class="swiper-slide">
-  <div @click="clicked">{{ title }}</div>
+<div @click="clicked" class="slide">
+  <div>{{ title }}</div>
 </div>
 </template>
 
 <script>
-// import { Swiper as SwiperClass } from 'swiper/js/swiper.esm'
-
-// import getAwesomeSwiper from 'vue-awesome-swiper/dist/exporter'
-
-// const { SwiperSlide } = getAwesomeSwiper(SwiperClass)
-
-// import { SwiperSlide } from 'swiper/vue';
 
 export default {
     props: ['layer'],
-    // components: { SwiperSlide },
     computed: {
         name () {
             return this.layer.properties.name
@@ -33,20 +25,23 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-  .swiper-slide
-    justify-content: center
-    background: #e4e4e4
+
+  .slide
+    height: 3.6rem
+    color: black
+    width: 100%
+    background-color: #efefef
+    margin: .5rem
+    margin-bottom: 1rem
     display: flex
     align-items: center
-    height: auto
-    min-height: 3rem
+    justify-content: center
     &>div  
       font-size: 1.2rem
-      box-sizing: border-box
-      &:hover
-        text-decoration: underline
-        cursor: pointer
-      &.active
-        text-decoration: underline
-
+    &:hover
+      cursor: pointer
+      &>div 
+      text-decoration: underline
+    &.active
+      text-decoration: underline
 </style>

@@ -1,6 +1,7 @@
 <template>
     <div id="map-container">
-        <div class="ux-buttons">
+        <div class="ux-right-buttons">
+            <button v-if="feature" @click="cancel" id="btn-cancel">Annuler</button>
             <button id="btn-validate" v-if="isValidate" @click="validateButtonClicked">
                 Voir la fiche
             </button>
@@ -13,7 +14,8 @@
                 <template v-else>Afficher les mesures</template>
             </button>
         </div>
-        <div class="buttons">
+        <div class="ux-left-buttons">
+
             <HelpButton
                 v-for="button in buttons"
                 :key="button.name"
@@ -41,9 +43,8 @@
 <script>
 import Map from "./Map";
 import HelpButton from "./Button";
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { bus } from '@/main.js'
-// import L from 'leaflet'
 
 export default {
     name: "MapContainer",
@@ -61,9 +62,11 @@ export default {
     computed: {
         ...mapGetters({
             feature: 'feature/selected',
-            formVisible: 'form/formVisible',
             ogCoordinates: 'feature/ogCoordinates',
             editable: 'feature/editable',
+            formVisible: 'form/formVisible',
+            layers: 'layer/list',
+            selectedLayer: 'layer/selected',
             quickMeasure: 'quickMeasure/quickMeasure',
             map: 'map',
             isDrawing: 'isDrawing',          
@@ -104,11 +107,18 @@ export default {
 
     methods: {
         ...mapMutations([
-            'form/toggleVisibility', 
+            'layer/setSelected',
+            'form/toggleVisibility',
+            'form/setVisibility',
             'feature/setEditable', 
             'feature/toggleEdit',
+            'feature/setSelected',
             'quickMeasure/setType',
             'quickMeasure/cancel',
+        ]),
+
+        ...mapActions([
+            'feature/cancel'
         ]),
 
         validateButtonClicked (){
@@ -129,6 +139,20 @@ export default {
 
         buttonClicked (button) {
             this.$emit('button-clicked', button)
+        },
+
+        cancel () {
+            this['feature/cancel']()
+            this['feature/setSelected'](null)
+            this['form/setVisibility'](false)
+            this['feature/setEditable'](false)
+            this['feature/toggleEdit'](this.map)
+
+            if (this.selectedLayer) {
+                const layer = this.layers.find(l => l.properties.name === this.selectedLayer.properties.name)
+                bus.$emit('layerItemClicked')
+                this['layer/setSelected'](layer)
+            }
         },
 
         drawPolygon () {
@@ -178,21 +202,23 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-    
 #map-container
-    grid-row: 2/3
-    grid-column: 1/2
     width: 100%
     position: relative
     overflow: hidden
 
-    & > .ux-buttons 
+    & > .ux-right-buttons 
         position: absolute
-        top: 5rem
+        top: .5rem
         right: .5rem
         z-index: 1000
         display: flex
         flex-direction: column
+
+        & > #btn-cancel
+            background-color: #f4f4f4
+            color: #0e0e0e
+            margin-bottom: .5rem
 
         & > #btn-validate
             background-color: #259325
@@ -205,7 +231,7 @@ export default {
         & > #btn-measurements
             background-color: #087519
 
-    & > .buttons
+    & > .ux-left-buttons
         position: absolute
         top: .5rem
         left: 12px
@@ -240,9 +266,7 @@ export default {
 
 
     @media screen and (min-width: 768px)
-        & > .ux-buttons
-            top: .5rem
         
-        & > .buttons
+        & > .ux-left-buttons
             top: 5.5rem
 </style>
