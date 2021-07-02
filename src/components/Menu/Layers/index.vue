@@ -4,7 +4,7 @@
       <h2>1</h2>
       <h3>Mes couches</h3>
     </div>
-    <div class="layers-swiper-container">
+    <div class="layers-swiper-container" :style="cursor">
       <swiper ref="layerSwiper" :options="options">
           <swiper-slide v-for="(layer, index) in layers" :key="index" >
             <Item
@@ -26,6 +26,7 @@
 import Item from './Item';
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
+import { mapGetters } from 'vuex'
 
 
 export default {
@@ -37,14 +38,12 @@ export default {
     data() {
       return {
         options: {
+          disableLayers: false,
           direction: 'horizontal',
-          slidesPerView: '1',
+          slidesPerView: 1,
+          slidesPerGroup: 1,
           spaceBetween: 15,
-          // grabCursor: true,
           mousewheel: true,
-          keyboard: {
-            enabled: true
-          },
           navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev'
@@ -59,40 +58,48 @@ export default {
             320: {
               direction: 'horizontal',
               slidesPerView: 2,
+              slidesPerGroup: 1,
             },            
             576: {
               direction: 'horizontal',
-              slidesPerView: 3
+              slidesPerView: 3,
+              slidesPerGroup: 1,
             },
             768: {
               direction: 'vertical',
               slidesPerView: 'auto',
-
+              slidesPerGroup: 3,
             }
           }
         }
       }
     },
+    computed : {
+      ...mapGetters({
+        isFormVisible: "form/formVisible",
+        isDrawing: "isDrawing",
+      }),
+      cursor(){
+        return (this.isFormVisible || this.isDrawing)? 'cursor: not-allowed': 'cursor: auto'
+      }
+    },
     methods: {
       itemClicked (layerName) {
-          this.$emit('layerItemClicked', layerName)
+        this.$emit('layerItemClicked', layerName)
       },
     },
 }
+
 </script>
+
 
 <style lang="sass" scoped>
   #layers-container
     padding-top: 1.5rem
     position: relative
-    height: auto
     max-width: 95vw
     box-sizing: border-box
     margin: 0 auto
-    
-  .layers-swiper-container
-    height: 100%
-    overflow-y: auto
 
   .swiper-scrollbar
     width: 80%
@@ -101,23 +108,23 @@ export default {
 
   .swiper-button-next,
   .swiper-button-prev
-    top: 47%
+    background-color: rgba(0,0,0,0.1)
     color: rgba(0,0,0,0.5)
+    border-radius: 100%
+    top: 47%
+    text-align: center
+    height: 2.5rem
+    width: 2.5rem
 
   .swiper-button-next::after,
   .swiper-button-prev::after
     font-size: 1.5rem
     font-weight: bold
 
-
-  .swiper-button-next:hover,
-  .swiper-button-next:active,
-  .swiper-button-next:focus,
-  .swiper-button-prev:hover,
-  .swiper-button-prev:active,
-  .swiper-button-prev:focus
+  .swiper-button-next:hover,.swiper-button-next:active,.swiper-button-next:focus,
+  .swiper-button-prev:hover,.swiper-button-prev:active,.swiper-button-prev:focus
+    background-color: rgba(0,0,0,0.3)
     color: rgba(0,0,0,0.8)
-    
 
   .swiper-button-next
     right: 0px
@@ -125,6 +132,8 @@ export default {
   .swiper-button-prev
     left:  0px
 
+  .swiper-button-disabled
+    display: none
 
 
   @media screen and (min-width: 768px)
@@ -132,11 +141,31 @@ export default {
     #layers-container
       display: flex
       flex-direction: column
+      justify-content: space-between
       width: 15rem
+
+    .swiper-container
+      height: calc(100vh - var(--header-size) - 14rem)
+
+    .swiper-wrapper,
+    .swiper-slide
+      height: auto
+
+    .swiper-scrollbar
+      display: none
 
     .swiper-button-next,
     .swiper-button-prev,
-    .swiper-scrollbar
-      display: none
+      left: 50%
+      transform: rotate(90deg)
+      transform-origin: left center
+
+    .swiper-button-prev
+      top: 1rem
+
+    .swiper-button-next
+      top: auto
+      bottom: 1.5rem
+
 
 </style>

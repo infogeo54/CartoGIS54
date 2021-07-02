@@ -18,35 +18,51 @@ export default {
     map: {
         /**
          * Create a Leaflet map instance
-         * @param center : Array<number> - The point where the map will be centered
+         * @param x : number - The longitude of the point where the map will be centered
+         * @param y : number - The latitude of the point where the map will be centered
+         * @param minZoom : number - The minimum zoom of the map
+         * @param isLimited : boolean - If the map is limited by the maxbounds (disable the free roaming)
+         * 
          * @returns Object
          */
-        create (center) {
+        create (x, y, minZoom, isLimited, layers) {
             const map = L.map('map', { editable: true})
-            map.setView(center, 14)
+            const center = L.latLng(y, x);
+            map.setView(center, minZoom)
             map.doubleClickZoom.disable()
-            const baseLayers = {
-                Carte : L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
-                    attribution: 'données © OpenStreetMap/ODbL - rendu OSM France',
-                    minZoom: 14,
-                    maxZoom: 18
-                }),
-                Satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                    attribution: 'données © ESRI.WorldImagery',
-                    minZoom: 14,
-                    maxZoom: 18
+            
+            // set the Layers
+            let baseLayers = {};
+            let defaultLayer=null;
+            if (layers.length) {
+                layers.forEach((layer) => {
+                    baseLayers[layer.name] = L.tileLayer(layer.uri, {
+                        attribution: layer.attribution,
+                        minZoom: minZoom,
+                        maxZoom: 18
+                    })
+                    if(layer.default) defaultLayer = layer.name;
                 })
+            }else {
+                baseLayers = {
+                    Satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                        attribution: 'données © ESRI.WorldImagery',
+                        minZoom: minZoom,
+                        maxZoom: 18
+                    })
+                }
+                defaultLayer = 'Satellite'
             }
-
-            baseLayers.Satellite.addTo(map)
+            if(defaultLayer==null) defaultLayer = Object.keys(baseLayers)[0]
+            baseLayers[defaultLayer].addTo(map)
             
             L.control.layers(baseLayers).addTo(map);
             L.control.scale().addTo(map);
 
-            //Can't go outside the bounds (here the town);
-            map.setMaxBounds(map.getBounds());
+            // Diable the free roaming <=> you can't go outside the town
+            if (isLimited) map.setMaxBounds(map.getBounds());
 
-            map.setZoom(15)
+            map.setZoom(minZoom+1)
 
             return map
         },

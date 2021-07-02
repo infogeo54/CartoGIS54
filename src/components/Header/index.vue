@@ -3,7 +3,6 @@
     <img v-if="brand" :src="brand">
     <h1>{{ title }}</h1>
     <div class="button">
-        <i :class="'far fa-user-circle'"></i>
     </div>
     
   </div>

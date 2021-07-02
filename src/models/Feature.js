@@ -4,6 +4,7 @@ import { bus } from '@/main.js'
 import MapTools from '../tools/MapTools'
 import L from 'leaflet'
 import _ from 'lodash'
+import { form } from '@/app.config.json'
 
 export default class Feature {
     constructor (options = {
@@ -113,8 +114,14 @@ export default class Feature {
         throw  'Feature has no properties'
     }
 
+    _updateByRole(role){
+        const type = form.notEnterable.find((t) => { 
+            return (t.role === role) ? (!t.layer || t.layer === this.parent.description.layer) : null
+        });
+        if (type && this.properties[role]) this.properties[role].value = this[role];
+    }
 
-    get perimeter (){
+    get perimetre (){
         if (this.representation && this.properties.geometry.type == 'gml:MultiPolygonPropertyType') {
             let coordinates = this.representation._latlngs[0];
                 
@@ -139,7 +146,7 @@ export default class Feature {
     }
 
 
-    get totalDistance (){
+    get distance (){
         if (this.representation && this.properties.geometry.type == 'gml:MultiLineStringPropertyType') {
             let totalDistance = L.GeometryUtil.length(this.representation);
     
@@ -150,10 +157,9 @@ export default class Feature {
 
 
     updateMeasurements () {
-        if (this.perimeter != null) this.properties.perimeter.value = this.perimeter;
-        if (this.area != null) this.properties.area.value = this.area;
-        if (this.totalDistance != null) this.properties.longueur.value = this.totalDistance;
-        //  this.properties.photo.value = "https://place-hold.it/250x150"
+        this._updateByRole('area');
+        this._updateByRole('perimetre');
+        this._updateByRole('distance');
     }
 
 }

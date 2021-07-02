@@ -1,10 +1,12 @@
 <template>
-<div @click="clicked" class="slide">
-  <div>{{ title }}</div>
+<div @click="clicked" class="slide" :style="cursor">
+  <div >{{ title }}</div>
 </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 
 export default {
     props: ['layer'],
@@ -14,7 +16,14 @@ export default {
         },
         title () {
             return this.layer.properties.title
-        }
+        },
+        ...mapGetters({
+          isFormVisible: "form/formVisible",
+          isDrawing: "isDrawing",
+      }),
+      cursor(){
+        return (this.isFormVisible || this.isDrawing)? 'cursor: not-allowed': 'cursor: pointer'
+      }
     },
     methods: {
         clicked () {

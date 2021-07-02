@@ -8,6 +8,8 @@ import MapTools from '@/tools/MapTools'
 import _ from 'lodash'
 // import { bus } from '@/main.js'
 import L from 'leaflet'
+import { map as mapConfig } from '@/app.config.json'
+ 
 
 export default {
     name: "Map",
@@ -46,7 +48,9 @@ export default {
                 return f.representation
             })
         },
-
+        mapParams: function () {
+            return this.$route.query
+        },
     },
     methods: {
         ...mapMutations(['setMap',
@@ -72,7 +76,7 @@ export default {
             if (this.quickMeasure.type != null) {
                 this['quickMeasure/addLatlng'](point);
             }else if(this.feature) {
-
+                
                 if (this.feature.parent.shape === 'Point'){
 
                     if (this.feature.representation && this.editable){
@@ -158,11 +162,22 @@ export default {
                 });
             }
 
+        },
+        
+        getMapParam: function (key) {
+            return((this.mapParams[key]) ? this.mapParams[key] : mapConfig.default[key]);
         }
 
     },
     mounted() {
-        const map = MapTools.map.create([49.305, 5.78]).on('click', e => this.mapClicked(e))
+        const map = MapTools.map.create(
+            Number(this.getMapParam('x')),
+            Number(this.getMapParam('y')),
+            Number(this.getMapParam('minZoom')),
+            (this.getMapParam('isLimited') == 'false') ? false : true,
+            mapConfig.baseLayers
+            )
+            .on('click', e => this.mapClicked(e))
 
         map.on('editable:vertex:dragend', e => this.dragVertex(e))
         map.on('editable:vertex:new', e => this.newVertex(e))

@@ -18,6 +18,7 @@ export default {
         title () { return this.property.name[0].toUpperCase() + this.property.name.slice(1) },
         value () {
             if (this.property.name !== 'geometry') return this.property.value
+            else if(this.property.type == "gml:PointPropertyType") return this.property.value.coordinates;
             return this.property.value.coordinates.join(', ')
         }
     },

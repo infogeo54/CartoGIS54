@@ -19,10 +19,6 @@
               @itemClicked="itemClicked"
             />
         </div>
-        <!-- <swiper ref="legendSwiper" :options="options"> -->
-          <!-- <swiper-slide v-for="(style, index) in styles" :key="index"> -->
-          <!-- </swiper-slide> -->
-        <!-- </swiper> -->
       </div>
     </div>
   </div>
@@ -30,8 +26,6 @@
 
 <script>
 import Item from './Item'
-// import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
 
 export default {
     name: "Legend",
@@ -43,7 +37,6 @@ export default {
     },
     components: {
       Item,
-      // Swiper, SwiperSlide
     },
     computed: {
         title () {

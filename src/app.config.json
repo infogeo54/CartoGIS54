@@ -1,295 +1,2479 @@
 {
-  "server": {
-    "host": "sgeol3.cg54.local:8080/cgi-bin/qgis_mapserv.fcgi",
-    "queryParams": [{
-      "key": "map",
-      "value": "/var/www/html/bourg-centre/bourg-centre.qgs"
-    }]
-  },
-  "header": {
-    "hasHeader": false,
-    "brand": "img/cd54.png",
-    "title": "Je localise mon projet",
-    "modals": [{
-      "name": "help",
-      "title": "Bourg Centre",
-      "icon": "far fa-question-circle",
-      "visible": true
-    }]
-  },
-  "fileAPI": {
-    "baseUrl": "http://localhost:8888",
-    "typesAccepted": [
-      "image/*", ".docx", ".doc", ".pdf"
-    ]
-  },
-  "form": {
-    "hidden": [
-      {  "name": "geometry" },
-      { "name": "porteur_pr" }
-    ],
-    "inputText": [
-      {
-        "name": "proprio",
-        "alias": "Propriétaire",
-        "type": "TextEdit",
-        "options": {},
-        "default": ""
+    "server": {
+        "host": "sgeol3.cg54.local:8080/cgi-bin/qgis_mapserv.fcgi",
+        "queryParams": [{
+            "key": "map",
+            "value": "/var/www/html/bourg-centre/bourg-centre.qgs"
+        }]
+    },
+    "header": {
+        "hasHeader": true,
+        "title": "Je localise mon projet",
+        "brand": "img/cd54.png",
+        "modals": [{
+            "name": "Nom",
+            "title": "Titre",
+            "icon": "fab fa-accessible-icon",
+            "visible": true
+        }]
+    },
+    "fileAPI": {
+        "baseUrl": "http://sgeol3.cg54.local:8888",
+        "typesAccepted": [
+          "image/*", ".docx", ".doc", ".pdf"
+        ]
       },
-      {
-        "name": "type_autre",
-        "alias": "Autre type",
-        "type": "TextEdit",
-        "options": {},
-        "default": ""
-      },
-      {
-        "name": "etude_ec",
-        "alias": "Études",
-        "type": "TextEdit",
-        "options": {},
-        "default": ""
-      },
-      {
-        "name": "chenillepro",
-        "alias": "Chenille Pro",
-        "type": "TextEdit",
-        "options": {},
-        "default": ""
-      }
-    ],
-    "inputRangeSpinBox": [
-      {
-      "name": "nb_place",
-      "alias": "Nombre de place",
-      "type": "Range",
-      "options": {
-        "AllowNull": true,
-        "Max": 2147483648,
-        "Min": 0,
-        "Precision": 0,
-        "Step": 1,
-        "Style": "SpinBox"
-      },
-      "default": ""
-    }],
-    "inputDate": [
-      {
-        "name": "date_disponible",
-        "alias": "Date disponible",
-        "type": "DateTime",
-        "options": {
-          "allow_null": true,
-          "calendar_popup": true,
-          "display_format": "yyyy-MM-dd",
-          "field_format": "yyyy-MM-dd",
-          "field_iso_format": false
+    "map": {
+        "default": {
+            "x": 5.78,
+            "y": 49.305,
+            "minZoom": 13,
+            "isLimited": false
         },
-        "default": ""
-      },
-      {
-        "name": "date_maj",
-        "alias": "Date de mise à jour",
-        "type": "DateTime",
-        "options": {
-          "allow_null": true,
-          "calendar_popup": true,
-          "display_format": "yyyy-MM-dd",
-          "field_format": "yyyy-MM-dd",
-          "field_iso_format": false
-        },
-        "default": ""
-      }
-    ],
-    "inputRangeSlider": [
-      {
-      "name": "etat_locaux",
-      "alias": "État des locaux",
-      "type": "Range",
-      "options": {
-        "AllowNull": true,
-        "Max": 10,
-        "Min": 0,
-        "Precision": 0,
-        "Step": 1,
-        "Style": "Slider"
-      },
-      "default": "0"
-    }],
-    "textArea": [
-      {
-      "name": "observations",
-      "alias": "Observations",
-      "type": "TextEdit",
-      "options": {
-        "IsMultiline": true,
-        "UseHtml": false
-      },
-      "default": ""
-    }],
-    "selectBox": [
-      {
-      "name": "covoiturage",
-      "type": "ValueMap",
-      "options": {
-        "map": [{
-            "text": "Oui",
-            "value": true
-          },
-          {
-            "text": "Non",
-            "value": false
-          }
+        "baseLayers": [
+            {
+                "name": "Carte",
+                "uri": "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+                "attribution": "données © OpenStreetMap/ODbL - rendu OSM France"
+            },
+            {
+                "name": "Satellite",
+                "uri": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+                "attribution": "données © OpenStreetMap/ODbL - rendu OSM France",
+                "default": true
+            }
         ]
-      },
-      "default": "Oui"
     },
-    {
-      "name": "type",
-      "type": "ValueMap",
-      "options": {
-        "map": [{
-            "text": "Gratuit",
-            "value": "gratuit"
-          },
-          {
-            "text": "Payant",
-            "value": "payant"
-          }
-        ]
-      },
-      "default": "Gratuit"
+    "form": {
+        "inputText": [{
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "amenagements_voirie",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "nom",
+            "alias": "Nom",
+            "type": "TextEdit",
+            "layer": "amenagements_voirie",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "alias": "Type",
+            "type": "TextEdit",
+            "layer": "amenagements_voirie",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "etat_locaux",
+            "alias": "Etat locaux",
+            "type": "TextEdit",
+            "layer": "amenagements_voirie",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "p_jointe",
+            "alias": "Pi\u00e8ce jointe",
+            "type": "TextEdit",
+            "layer": "amenagements_voirie",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type_autre",
+            "alias": "Type autre",
+            "type": "TextEdit",
+            "layer": "amenagements_voirie",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "xcoord",
+            "type": "TextEdit",
+            "layer": "amenagements_voirie",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "ycoord",
+            "type": "TextEdit",
+            "layer": "amenagements_voirie",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "economie_commerce",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "nom",
+            "alias": "Nom",
+            "type": "TextEdit",
+            "layer": "economie_commerce",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "alias": "Type",
+            "type": "TextEdit",
+            "layer": "economie_commerce",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "etat_locaux",
+            "alias": "Etat locaux",
+            "type": "TextEdit",
+            "layer": "economie_commerce",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "p_jointe",
+            "alias": "Pi\u00e8ce jointe",
+            "type": "TextEdit",
+            "layer": "economie_commerce",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "activit\u00e9",
+            "alias": "Activit\u00e9",
+            "type": "TextEdit",
+            "layer": "economie_commerce",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type_autre",
+            "alias": "Type autre",
+            "type": "TextEdit",
+            "layer": "economie_commerce",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "xcoord",
+            "type": "TextEdit",
+            "layer": "economie_commerce",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "ycoord",
+            "type": "TextEdit",
+            "layer": "economie_commerce",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "education",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "nom",
+            "alias": "Nom",
+            "type": "TextEdit",
+            "layer": "education",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "etat_locaux",
+            "alias": "Etat locaux",
+            "type": "TextEdit",
+            "layer": "education",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "p_jointe",
+            "alias": "Pi\u00e8ce jointe",
+            "type": "TextEdit",
+            "layer": "education",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type_autre",
+            "alias": "Type autre",
+            "type": "TextEdit",
+            "layer": "education",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "xcoord",
+            "type": "TextEdit",
+            "layer": "education",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "ycoord",
+            "type": "TextEdit",
+            "layer": "education",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "alias": "Type",
+            "type": "TextEdit",
+            "layer": "education",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "environnement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "nom",
+            "alias": "Nom",
+            "type": "TextEdit",
+            "layer": "environnement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "alias": "Type",
+            "type": "TextEdit",
+            "layer": "environnement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "etat_locaux",
+            "alias": "Etat locaux",
+            "type": "TextEdit",
+            "layer": "environnement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "p_jointe",
+            "alias": "Pi\u00e8ce jointe",
+            "type": "TextEdit",
+            "layer": "environnement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type_autre",
+            "alias": "Type autre",
+            "type": "TextEdit",
+            "layer": "environnement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "xcoord",
+            "type": "TextEdit",
+            "layer": "environnement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "ycoord",
+            "type": "TextEdit",
+            "layer": "environnement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "equipements_communaux",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "nom",
+            "alias": "Nom",
+            "type": "TextEdit",
+            "layer": "equipements_communaux",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "alias": "Type",
+            "type": "TextEdit",
+            "layer": "equipements_communaux",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "etat_locaux",
+            "alias": "Etat locaux",
+            "type": "TextEdit",
+            "layer": "equipements_communaux",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "p_jointe",
+            "alias": "Pi\u00e8ce jointe",
+            "type": "TextEdit",
+            "layer": "equipements_communaux",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type_autre",
+            "alias": "Type autre",
+            "type": "TextEdit",
+            "layer": "equipements_communaux",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "xcoord",
+            "type": "TextEdit",
+            "layer": "equipements_communaux",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "ycoord",
+            "type": "TextEdit",
+            "layer": "equipements_communaux",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "internet",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "nom",
+            "alias": "Nom",
+            "type": "TextEdit",
+            "layer": "internet",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "alias": "Type",
+            "type": "TextEdit",
+            "layer": "internet",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "etat_locaux",
+            "alias": "Etat locaux",
+            "type": "TextEdit",
+            "layer": "internet",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "p_jointe",
+            "alias": "Pi\u00e8ce jointe",
+            "type": "TextEdit",
+            "layer": "internet",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type_autre",
+            "alias": "Type autre",
+            "type": "TextEdit",
+            "layer": "internet",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "xcoord",
+            "type": "TextEdit",
+            "layer": "internet",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "ycoord",
+            "type": "TextEdit",
+            "layer": "internet",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "lineaires",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "numero",
+            "type": "TextEdit",
+            "layer": "lineaires",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "nom_off",
+            "type": "TextEdit",
+            "layer": "lineaires",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "nom_usage",
+            "type": "TextEdit",
+            "layer": "lineaires",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "depart",
+            "type": "TextEdit",
+            "layer": "lineaires",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "arrivee",
+            "type": "TextEdit",
+            "layer": "lineaires",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "est_inscri",
+            "type": "TextEdit",
+            "layer": "lineaires",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "niv_inscri",
+            "type": "TextEdit",
+            "layer": "lineaires",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "site_web",
+            "type": "TextEdit",
+            "layer": "lineaires",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "type": "TextEdit",
+            "layer": "lineaires",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "logement",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "nom",
+            "type": "TextEdit",
+            "layer": "logement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "type": "TextEdit",
+            "layer": "logement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "etat_locaux",
+            "type": "TextEdit",
+            "layer": "logement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "p_jointe",
+            "type": "TextEdit",
+            "layer": "logement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type_autre",
+            "type": "TextEdit",
+            "layer": "logement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "xcoord",
+            "type": "TextEdit",
+            "layer": "logement",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "ycoord",
+            "type": "TextEdit",
+            "layer": "logement",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "parking",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "nom",
+            "type": "TextEdit",
+            "layer": "parking",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "type": "TextEdit",
+            "layer": "parking",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "nb_place",
+            "type": "TextEdit",
+            "layer": "parking",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "proprio",
+            "type": "TextEdit",
+            "layer": "parking",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "contr_acce",
+            "type": "TextEdit",
+            "layer": "parking",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "porteur_pr",
+            "type": "TextEdit",
+            "layer": "parking",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "p_jointe",
+            "type": "TextEdit",
+            "layer": "parking",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type_autre",
+            "type": "TextEdit",
+            "layer": "parking",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, 
+        {
+            "name": "observations",
+            "type": "TextEdit",
+            "layer": "parking",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "sante",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "nom",
+            "alias": "Nom",
+            "type": "TextEdit",
+            "layer": "sante",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "alias": "Type",
+            "type": "TextEdit",
+            "layer": "sante",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "etat_locaux",
+            "alias": "Etat locaux",
+            "type": "TextEdit",
+            "layer": "sante",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "p_jointe",
+            "alias": "Pi\u00e8ce jointe",
+            "type": "TextEdit",
+            "layer": "sante",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type_autre",
+            "alias": "Type autre",
+            "type": "TextEdit",
+            "layer": "sante",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "xcoord",
+            "type": "TextEdit",
+            "layer": "sante",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "ycoord",
+            "type": "TextEdit",
+            "layer": "sante",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "services_publics",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "nom",
+            "alias": "Nom",
+            "type": "TextEdit",
+            "layer": "services_publics",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "alias": "Type",
+            "type": "TextEdit",
+            "layer": "services_publics",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "etat_locaux",
+            "alias": "Etat locaux",
+            "type": "TextEdit",
+            "layer": "services_publics",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "p_jointe",
+            "alias": "Pi\u00e8ce jointe",
+            "type": "TextEdit",
+            "layer": "services_publics",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type_autre",
+            "alias": "Type autre",
+            "type": "TextEdit",
+            "layer": "services_publics",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "xcoord",
+            "type": "TextEdit",
+            "layer": "services_publics",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "ycoord",
+            "type": "TextEdit",
+            "layer": "services_publics",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "id",
+            "type": "TextEdit",
+            "layer": "tourisme",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": true
+            }
+        }, {
+            "name": "nom",
+            "alias": "Nom",
+            "type": "TextEdit",
+            "layer": "tourisme",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "etat_locaux",
+            "alias": "Etat locaux",
+            "type": "TextEdit",
+            "layer": "tourisme",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "p_jointe",
+            "alias": "Pi\u00e8ce jointe",
+            "type": "TextEdit",
+            "layer": "tourisme",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type_autre",
+            "alias": "Type autre",
+            "type": "TextEdit",
+            "layer": "tourisme",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "xcoord",
+            "type": "TextEdit",
+            "layer": "tourisme",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "ycoord",
+            "type": "TextEdit",
+            "layer": "tourisme",
+            "options": {
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "type",
+            "alias": "Type",
+            "type": "TextEdit",
+            "layer": "tourisme",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }],
+        "textArea": [{
+            "name": "observations",
+            "alias": "Observations",
+            "type": "TextEdit",
+            "layer": "amenagements_voirie",
+            "options": {
+                "IsMultiline": true,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "observations",
+            "type": "TextEdit",
+            "layer": "economie_commerce",
+            "options": {
+                "IsMultiline": true,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "observations",
+            "type": "TextEdit",
+            "layer": "education",
+            "options": {
+                "IsMultiline": true,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "observations",
+            "alias": "Observations",
+            "type": "TextEdit",
+            "layer": "environnement",
+            "options": {
+                "IsMultiline": true,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "observations",
+            "alias": "Observations",
+            "type": "TextEdit",
+            "layer": "equipements_communaux",
+            "options": {
+                "IsMultiline": true,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "observations",
+            "alias": "Observations",
+            "type": "TextEdit",
+            "layer": "internet",
+            "options": {
+                "IsMultiline": true,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "observations",
+            "type": "TextEdit",
+            "layer": "logement",
+            "options": {
+                "IsMultiline": true,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "observations",
+            "type": "TextEdit",
+            "layer": "sante",
+            "options": {
+                "IsMultiline": true,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "observations",
+            "alias": "Observations",
+            "type": "TextEdit",
+            "layer": "services_publics",
+            "options": {
+                "IsMultiline": true,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "observations",
+            "alias": "Observations",
+            "type": "TextEdit",
+            "layer": "tourisme",
+            "options": {
+                "IsMultiline": true,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }],
+        "inputDate": [{
+            "name": "date_disponible",
+            "alias": "Date disponible",
+            "type": "DateTime",
+            "layer": "amenagements_voirie",
+            "options": {
+                "allow_null": true,
+                "calendar_popup": true,
+                "display_format": "yyyy-MM-dd",
+                "field_format": "yyyy-MM-dd",
+                "field_iso_format": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "date_disponible",
+            "alias": "Date disponible",
+            "type": "DateTime",
+            "layer": "economie_commerce",
+            "options": {
+                "allow_null": true,
+                "calendar_popup": true,
+                "display_format": "yyyy-MM-dd",
+                "field_format": "yyyy-MM-dd",
+                "field_iso_format": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "date_disponible",
+            "alias": "Date disponible",
+            "type": "DateTime",
+            "layer": "education",
+            "options": {
+                "allow_null": true,
+                "calendar_popup": true,
+                "display_format": "yyyy-MM-dd",
+                "field_format": "yyyy-MM-dd",
+                "field_iso_format": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "date_disponible",
+            "alias": "Date disponible",
+            "type": "DateTime",
+            "layer": "environnement",
+            "options": {
+                "allow_null": true,
+                "calendar_popup": true,
+                "display_format": "yyyy-MM-dd",
+                "field_format": "yyyy-MM-dd",
+                "field_iso_format": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "date_disponible",
+            "alias": "Date disponible",
+            "type": "DateTime",
+            "layer": "equipements_communaux",
+            "options": {
+                "allow_null": true,
+                "calendar_popup": true,
+                "display_format": "yyyy-MM-dd",
+                "field_format": "yyyy-MM-dd",
+                "field_iso_format": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "date_disponible",
+            "alias": "Date disponible",
+            "type": "DateTime",
+            "layer": "internet",
+            "options": {
+                "allow_null": true,
+                "calendar_popup": true,
+                "display_format": "yyyy-MM-dd",
+                "field_format": "yyyy-MM-dd",
+                "field_iso_format": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "an_ouvert",
+            "type": "DateTime",
+            "layer": "lineaires",
+            "options": {
+                "allow_null": true,
+                "calendar_popup": true,
+                "display_format": "yyyy-MM-dd",
+                "field_format": "yyyy-MM-dd",
+                "field_iso_format": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "date_disponible",
+            "type": "DateTime",
+            "layer": "logement",
+            "options": {
+                "allow_null": true,
+                "calendar_popup": true,
+                "display_format": "yyyy-MM-dd",
+                "field_format": "yyyy-MM-dd",
+                "field_iso_format": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "date_disponible",
+            "alias": "Date disponible",
+            "type": "DateTime",
+            "layer": "sante",
+            "options": {
+                "allow_null": true,
+                "calendar_popup": true,
+                "display_format": "yyyy-MM-dd",
+                "field_format": "yyyy-MM-dd",
+                "field_iso_format": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "date_disponible",
+            "alias": "Date disponible",
+            "type": "DateTime",
+            "layer": "services_publics",
+            "options": {
+                "allow_null": true,
+                "calendar_popup": true,
+                "display_format": "yyyy-MM-dd",
+                "field_format": "yyyy-MM-dd",
+                "field_iso_format": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "date_disponible",
+            "alias": "Date disponible",
+            "type": "DateTime",
+            "layer": "tourisme",
+            "options": {
+                "allow_null": true,
+                "calendar_popup": true,
+                "display_format": "yyyy-MM-dd",
+                "field_format": "yyyy-MM-dd",
+                "field_iso_format": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }],
+        "inputRangeSpinBox": [],
+        "inputRangeSlider": [],
+        "selectBox": [{
+            "name": "porteur_pr",
+            "alias": "Porteur projet",
+            "type": "ValueMap",
+            "layer": "amenagements_voirie",
+            "options": {
+                "map": [{
+                    "text": "Commune",
+                    "value": "commune"
+                }, {
+                    "text": "Intercommunalit\u00e9",
+                    "value": "intercommunlite"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "commune"
+        }, {
+            "name": "etude_ec",
+            "alias": "Etude en cours",
+            "type": "ValueMap",
+            "layer": "amenagements_voirie",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "disponible",
+            "alias": "Disponible",
+            "type": "ValueMap",
+            "layer": "amenagements_voirie",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "projet",
+            "alias": "Projet",
+            "type": "ValueMap",
+            "layer": "amenagements_voirie",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "porteur_pr",
+            "alias": "Porteur projet",
+            "type": "ValueMap",
+            "layer": "economie_commerce",
+            "options": {
+                "map": [{
+                    "text": "Commune",
+                    "value": "commune"
+                }, {
+                    "text": "Intercommunalit\u00e9",
+                    "value": "intercommunalite"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "commune"
+        }, {
+            "name": "etude_ec",
+            "alias": "Etude en cours",
+            "type": "ValueMap",
+            "layer": "economie_commerce",
+            "options": {
+                "map": [{
+                    "text": "False",
+                    "value": "false"
+                }, {
+                    "text": "True",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "statut",
+            "alias": "Statut",
+            "type": "ValueMap",
+            "layer": "economie_commerce",
+            "options": {
+                "map": [{
+                    "text": "Public",
+                    "value": "public"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "public"
+        }, {
+            "name": "projet",
+            "alias": "Projet",
+            "type": "ValueMap",
+            "layer": "economie_commerce",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "disponible",
+            "alias": "Disponible",
+            "type": "ValueMap",
+            "layer": "economie_commerce",
+            "options": {
+                "map": [{
+                    "text": "Oui",
+                    "value": "true"
+                }, {
+                    "text": "Non",
+                    "value": "false"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "true"
+        }, {
+            "name": "porteur_pr",
+            "alias": "Porteur projet",
+            "type": "ValueMap",
+            "layer": "education",
+            "options": {
+                "map": [{
+                    "text": "Commune",
+                    "value": "commune"
+                }, {
+                    "text": "Intercommunalit\u00e9",
+                    "value": "intercommunalite"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "etude_ec",
+            "alias": "Etude en cours",
+            "type": "ValueMap",
+            "layer": "education",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "statut",
+            "alias": "Statut",
+            "type": "ValueMap",
+            "layer": "education",
+            "options": {
+                "map": [{
+                    "text": "Public",
+                    "value": "public"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "public"
+        }, {
+            "name": "vacances",
+            "alias": "Vacances",
+            "type": "ValueMap",
+            "layer": "education",
+            "options": {
+                "map": [{
+                    "text": "False",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "projet",
+            "alias": "Projet",
+            "type": "ValueMap",
+            "layer": "education",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "disponible",
+            "alias": "Disponible",
+            "type": "ValueMap",
+            "layer": "education",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "porteur_pr",
+            "alias": "Porteur projet",
+            "type": "ValueMap",
+            "layer": "environnement",
+            "options": {
+                "map": [{
+                    "text": "Commune",
+                    "value": "commune"
+                }, {
+                    "text": "Intercommunalit\u00e9",
+                    "value": "intercommunalite"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "commune"
+        }, {
+            "name": "etude_ec",
+            "alias": "Etude en cours",
+            "type": "ValueMap",
+            "layer": "environnement",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "projet",
+            "alias": "Projet",
+            "type": "ValueMap",
+            "layer": "environnement",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "disponible",
+            "alias": "Disponible",
+            "type": "ValueMap",
+            "layer": "environnement",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "porteur_pr",
+            "alias": "Porteur projet",
+            "type": "ValueMap",
+            "layer": "equipements_communaux",
+            "options": {
+                "map": [{
+                    "text": "Comune",
+                    "value": "commune"
+                }, {
+                    "text": "Intercommunalit\u00e9",
+                    "value": "intercommunalite"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "commune"
+        }, {
+            "name": "etude_ec",
+            "alias": "Etude en cours",
+            "type": "ValueMap",
+            "layer": "equipements_communaux",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "projet",
+            "alias": "Projet",
+            "type": "ValueMap",
+            "layer": "equipements_communaux",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "disponible",
+            "alias": "Disponible",
+            "type": "ValueMap",
+            "layer": "equipements_communaux",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "porteur_pr",
+            "alias": "Porteur projet",
+            "type": "ValueMap",
+            "layer": "internet",
+            "options": {
+                "map": [{
+                    "text": "Commune",
+                    "value": "commune"
+                }, {
+                    "text": "Intercommunalit\u00e9",
+                    "value": "intercommunalite"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "commune"
+        }, {
+            "name": "etude_ec",
+            "alias": "Etude en cours",
+            "type": "ValueMap",
+            "layer": "internet",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "projet",
+            "alias": "Projet",
+            "type": "ValueMap",
+            "layer": "internet",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "disponible",
+            "alias": "Disponible",
+            "type": "ValueMap",
+            "layer": "internet",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "porteur_pr",
+            "type": "ValueMap",
+            "layer": "logement",
+            "options": {
+                "map": [{
+                    "text": "Commune",
+                    "value": "commune"
+                }, {
+                    "text": "Intercommunalit\u00e9",
+                    "value": "intercommunalite"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "commune"
+        }, {
+            "name": "etude_ec",
+            "type": "ValueMap",
+            "layer": "logement",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "bailleur",
+            "type": "ValueMap",
+            "layer": "logement",
+            "options": {
+                "map": [{
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }, {
+                    "text": "Public",
+                    "value": "public"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "public"
+        }, {
+            "name": "projet",
+            "type": "ValueMap",
+            "layer": "logement",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "disponible",
+            "type": "ValueMap",
+            "layer": "logement",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "social",
+            "type": "ValueMap",
+            "layer": "logement",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "porteur_pr",
+            "alias": "Porteur projet",
+            "type": "ValueMap",
+            "layer": "sante",
+            "options": {
+                "map": [{
+                    "text": "Commune",
+                    "value": "commune"
+                }, {
+                    "text": "Intercommunalit\u00e9",
+                    "value": "intercommuncalite"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "commune"
+        }, {
+            "name": "etude_ec",
+            "alias": "Etude en cours",
+            "type": "ValueMap",
+            "layer": "sante",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "projet",
+            "alias": "Projet",
+            "type": "ValueMap",
+            "layer": "sante",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "disponible",
+            "alias": "Disponible",
+            "type": "ValueMap",
+            "layer": "sante",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "porteur_pr",
+            "alias": "Porteur projet",
+            "type": "ValueMap",
+            "layer": "services_publics",
+            "options": {
+                "map": [{
+                    "text": "Commune",
+                    "value": "commune"
+                }, {
+                    "text": "Intercommunalit\u00e9",
+                    "value": "intercommunalite"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "commune"
+        }, {
+            "name": "etude_ec",
+            "alias": "Etude en cours",
+            "type": "ValueMap",
+            "layer": "services_publics",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "projet",
+            "alias": "Projet",
+            "type": "ValueMap",
+            "layer": "services_publics",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "True",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "disponible",
+            "alias": "Disponible",
+            "type": "ValueMap",
+            "layer": "services_publics",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "porteur_pr",
+            "alias": "Porteur projet",
+            "type": "ValueMap",
+            "layer": "tourisme",
+            "options": {
+                "map": [{
+                    "text": "Commune",
+                    "value": "commune"
+                }, {
+                    "text": "Intercommunalit\u00e9",
+                    "value": "intercommunalite"
+                }, {
+                    "text": "Priv\u00e9",
+                    "value": "prive"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "commune"
+        }, {
+            "name": "etude_ec",
+            "alias": "Etude en cours",
+            "type": "ValueMap",
+            "layer": "tourisme",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }, {
+            "name": "disponible",
+            "alias": "Disponible",
+            "type": "ValueMap",
+            "layer": "tourisme",
+            "options": {
+                "map": [{
+                    "text": "Non",
+                    "value": "false"
+                }, {
+                    "text": "Oui",
+                    "value": "true"
+                }],
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            },
+            "default": "false"
+        }],
+        "checkBox": [{
+            "name": "projet",
+            "type": "CheckBox",
+            "layer": "parking",
+            "options": {
+                "CheckedState": "",
+                "UncheckedState": "",
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "covoiturage",
+            "type": "CheckBox",
+            "layer": "parking",
+            "options": {
+                "CheckedState": "",
+                "UncheckedState": "",
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "projet",
+            "alias": "Projet",
+            "type": "CheckBox",
+            "layer": "tourisme",
+            "options": {
+                "CheckedState": "",
+                "UncheckedState": "",
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }],
+        "notEnterable": [
+            {
+                "name": "perimeter",
+                "alias": "Périmètre",
+                "type": "TextEdit",
+                "default": 0,
+                "role": "perimetre",
+                "unit": "metre",
+                "options": {
+                  "order": 2
+                } 
+              },{
+                "name": "area",
+                "alias": "Aire",
+                "type": "TextEdit",
+                "default": 0,
+                "unit": "squareMetre",
+                "role": "area",
+                "options": {
+                  "order": 2
+                } 
+              },{
+                "name": "longueur",
+                "alias": "Longueur totale",
+                "type": "TextEdit",
+                "role": "distance",
+                "default": 0,
+                "unit": "metre",
+                "options": {
+                  "order": 2
+                }
+              }
+        ],
+        "thumbnail": [{
+            "name": "photo",
+            "alias": "Photo",
+            "type": "TextEdit",
+            "layer": "amenagements_voirie",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "photo",
+            "alias": "Photo",
+            "type": "TextEdit",
+            "layer": "economie_commerce",
+            "options": {
+                "order": 1,
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "photo",
+            "alias": "Photo",
+            "type": "ExternalResource",
+            "layer": "education",
+            "options": {
+                "order": 1,
+                "DocumentViewer": 1,
+                "DocumentViewerHeight": 0,
+                "DocumentViewerWidth": 0,
+                "FileWidget": true,
+                "FileWidgetButton": true,
+                "FileWidgetFilter": "",
+                "PropertyCollection": {
+                    "name": "",
+                    "properties": null,
+                    "type": "collection"
+                },
+                "RelativeStorage": 0,
+                "StorageMode": 0,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "photo",
+            "alias": "Photo",
+            "type": "TextEdit",
+            "layer": "environnement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "photo",
+            "alias": "Photo",
+            "type": "TextEdit",
+            "layer": "equipements_communaux",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "photo",
+            "alias": "Photo",
+            "type": "TextEdit",
+            "layer": "internet",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "photo",
+            "type": "TextEdit",
+            "layer": "logement",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "photo",
+            "type": "TextEdit",
+            "layer": "parking",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "photo",
+            "alias": "Photo",
+            "type": "TextEdit",
+            "layer": "sante",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "photo",
+            "alias": "Photo",
+            "type": "TextEdit",
+            "layer": "services_publics",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }, {
+            "name": "photo",
+            "alias": "Photo",
+            "type": "TextEdit",
+            "layer": "tourisme",
+            "options": {
+                "IsMultiline": false,
+                "UseHtml": false,
+                "disabled": false,
+                "hidden": false,
+                "required": false
+            }
+        }],
+        "fileInput": [],
+        "hidden": []
     }
-  ],
-    "radio": [
-      {
-      "name": "statut",
-      "type": "ValueMap",
-      "options": {
-        "map": [{
-            "text": "Ouvert",
-            "value": "open"
-          },
-          {
-            "text": "Fermé",
-            "value": "close"
-          }
-        ]
-      },
-      "default": "Oui"
-    },
-    {
-      "name": "visible_ext",
-      "alias": "Visible depuis l'extérieur",
-      "type": "ValueMap",
-      "options": {
-        "map": [{
-            "text": "Oui",
-            "value": true
-          },
-          {
-            "text": "Non",
-            "value": false
-          }
-        ]
-      },
-      "default": "Oui"
-    },
-    {
-      "name": "partage_int",
-      "alias": "Partage Internet",
-      "type": "ValueMap",
-      "options": {
-        "map": [{
-            "text": "Oui",
-            "value": true
-          },
-          {
-            "text": "Non",
-            "value": false
-          }
-        ]
-      },
-      "default": "Oui"
-    }
-  ],
-    "checkBox": [{
-      "name": "contr_acce",
-      "alias": "Contrôle d'accés",
-      "type": "ValueMap",
-      "options": {
-        "map": [{
-            "text": "Aucun",
-            "value": "none"
-          },
-          {
-            "text": "Badge",
-            "value": "badge"
-          },
-          {
-            "text": "Digicode",
-            "value": "code"
-          }
-        ]
-      },
-      "default": "Oui"
-    }],
-    "notEnterable": [
-      {
-      "name": "perimeter",
-      "alias": "Périmètre",
-      "type": "TextEdit",
-      "default": 0,
-      "unit": "metre",
-      "options": {
-        "order": 2
-      } 
-    },{
-      "name": "area",
-      "alias": "Aire",
-      "type": "TextEdit",
-      "default": 0,
-      "unit": "squareMetre",
-      "options": {
-        "order": 2
-      } 
-    },{
-      "name": "longueur",
-      "alias": "Longueur totale",
-      "type": "TextEdit",
-      "default": 0,
-      "unit": "metre",
-      "options": {
-        "order": 2
-      }
-    },
-    {
-      "name": "id",
-      "alias": "",
-      "type": "TextEdit",
-      "unit": null,
-      "options": {
-      },
-      "default": ""
-    }
-  ],
-  "thumbnail": [
-    {
-    "name": "photo",
-    "alias": "",
-    "type": "Image",
-    "default": "",
-    "options": {
-      "order": 1
-    } 
-  }],
-  "fileInput": [
-    {
-    "name": "p_jointe",
-    "alias": "Pièce jointe",
-    "type": "TextEdit",
-    "default": "",
-    "options": {} 
-  }]
-  }
 }

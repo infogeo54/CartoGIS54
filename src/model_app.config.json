@@ -1,142 +1,319 @@
 {
   "server": {
-    "host": "127.0.0.1",
-    "queryParams": [
+    "host": "sgeol3.cg54.local:8080/cgi-bin/qgis_mapserv.fcgi",
+    "queryParams": [{
+      "key": "map",
+      "value": "/var/www/html/bourg-centre/bourg-centre.qgs"
+    }]
+  },
+  "header": {
+    "hasHeader": false,
+    "brand": "img/cd54.png",
+    "title": "Je localise mon projet",
+    "modals": [{
+      "name": "help",
+      "title": "Bourg Centre",
+      "icon": "far fa-question-circle",
+      "visible": true
+    }]
+  },
+  "fileAPI": {
+    "baseUrl": "http://localhost:8888",
+    "typesAccepted": [
+      "image/*", ".docx", ".doc", ".pdf"
+    ]
+  },
+  "map": {
+    "default": {
+        "x": 5.78,
+        "y": 49.305,
+        "minZoom": 12,
+        "isLimited": false
+    },
+    "baseLayers": [
       {
-        "key": "MAP",
-        "value": "/path/to/my/project.qgs"
+          "name": "Carte",
+          "uri": "https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+          "attribution": "données © OpenStreetMap/ODbL - rendu OSM France"
+      },
+      {
+          "name": "Satellite",
+          "uri": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          "attribution": "données © OpenStreetMap/ODbL - rendu OSM France",
+          "default": true
       }
     ]
   },
   "form": {
+    "hidden": [
+      {  "name": "geometry" },
+      { "name": "porteur_pr" }
+    ],
     "inputText": [
       {
-        "name": "id",
-        "alias": "",
+        "name": "proprio",
+        "alias": "Propriétaire",
         "type": "TextEdit",
-        "options": {
-          "IsMultiline": false,
-          "UseHtml": false,
-          "disabled": true,
-          "hidden": true,
-          "required": false
-        },
+        "options": {},
         "default": ""
-      }
-    ],
-    "inputNumber": [
+      },
       {
-        "name": "test_float",
-        "alias": "Mon d\u00e9cimal",
-        "type": "Range",
-        "options": {
-          "AllowNull": true,
-          "Max": 2147483647,
-          "Min": -2147483648,
-          "Precision": 0,
-          "Step": 1,
-          "Style": "SpinBox",
-          "disabled": false,
-          "hidden": false,
-          "required": false
-        },
+        "name": "type_autre",
+        "alias": "Autre type",
+        "type": "TextEdit",
+        "options": {},
+        "default": ""
+      },
+      {
+        "name": "etude_ec",
+        "alias": "Études",
+        "type": "TextEdit",
+        "options": {},
+        "default": ""
+      },
+      {
+        "name": "chenillepro",
+        "alias": "Chenille Pro",
+        "type": "TextEdit",
+        "options": {},
         "default": ""
       }
     ],
+    "inputRangeSpinBox": [
+      {
+      "name": "nb_place",
+      "alias": "Nombre de place",
+      "type": "Range",
+      "options": {
+        "AllowNull": true,
+        "Max": 2147483648,
+        "Min": 0,
+        "Precision": 0,
+        "Step": 1,
+        "Style": "SpinBox"
+      },
+      "default": ""
+    }],
     "inputDate": [
       {
-        "name": "test_date",
-        "alias": "Ma date",
+        "name": "date_disponible",
+        "alias": "Date disponible",
         "type": "DateTime",
         "options": {
           "allow_null": true,
           "calendar_popup": true,
           "display_format": "yyyy-MM-dd",
           "field_format": "yyyy-MM-dd",
-          "field_iso_format": false,
-          "disabled": false,
-          "hidden": false,
-          "required": false
+          "field_iso_format": false
+        },
+        "default": ""
+      },
+      {
+        "name": "date_maj",
+        "alias": "Date de mise à jour",
+        "type": "DateTime",
+        "options": {
+          "allow_null": true,
+          "calendar_popup": true,
+          "display_format": "yyyy-MM-dd",
+          "field_format": "yyyy-MM-dd",
+          "field_iso_format": false
         },
         "default": ""
       }
     ],
-    "inputRange": [
+    "inputRangeSlider": [
       {
-        "name": "test_int",
-        "alias": "Mon entier",
-        "type": "Range",
-        "options": {
-          "AllowNull": true,
-          "Max": 100,
-          "Min": -100,
-          "Precision": 0,
-          "Step": 1,
-          "Style": "Slider",
-          "disabled": true,
-          "hidden": false,
-          "required": false
-        },
-        "default": "0"
-      }
-    ],
+      "name": "etat_locaux",
+      "alias": "État des locaux",
+      "type": "Range",
+      "options": {
+        "AllowNull": true,
+        "Max": 10,
+        "Min": 0,
+        "Precision": 0,
+        "Step": 1,
+        "Style": "Slider"
+      },
+      "default": "0"
+    }],
     "textArea": [
       {
-        "name": "test_texte",
-        "alias": "Mon texte",
-        "type": "TextEdit",
-        "options": {
-          "IsMultiline": true,
-          "UseHtml": false,
-          "disabled": false,
-          "hidden": false,
-          "required": true
-        },
-        "default": ""
-      }
-    ],
+      "name": "observations",
+      "alias": "Observations",
+      "type": "TextEdit",
+      "options": {
+        "IsMultiline": true,
+        "UseHtml": false
+      },
+      "default": ""
+    }],
     "selectBox": [
       {
-        "name": "test_list",
-        "alias": "Ma liste",
-        "type": "ValueMap",
-        "options": {
-          "map": [
-            {
-              "text": "Un",
-              "value": "1"
-            },
-            {
-              "text": "Deux",
-              "value": "2"
-            },
-            {
-              "text": "Trois",
-              "value": "3"
-            },
-            {
-              "text": "Quatre",
-              "value": "4"
-            },
-            {
-              "text": "Cinq",
-              "value": "5"
-            }
-          ],
-          "disabled": false,
-          "hidden": false,
-          "required": false
-        },
-        "default": "un"
-      }
-    ]
-  },
-  "modals": [
+      "name": "covoiturage",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Oui",
+            "value": true
+          },
+          {
+            "text": "Non",
+            "value": false
+          }
+        ]
+      },
+      "default": "Oui"
+    },
     {
-      "name": "help",
-      "title": "Help",
-      "icon": "fas fa-question-circle",
-      "visible": false
+      "name": "type",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Gratuit",
+            "value": "gratuit"
+          },
+          {
+            "text": "Payant",
+            "value": "payant"
+          }
+        ]
+      },
+      "default": "Gratuit"
     }
-  ]
+  ],
+    "radio": [
+      {
+      "name": "statut",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Ouvert",
+            "value": "open"
+          },
+          {
+            "text": "Fermé",
+            "value": "close"
+          }
+        ]
+      },
+      "default": "Oui"
+    },
+    {
+      "name": "visible_ext",
+      "alias": "Visible depuis l'extérieur",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Oui",
+            "value": true
+          },
+          {
+            "text": "Non",
+            "value": false
+          }
+        ]
+      },
+      "default": "Oui"
+    },
+    {
+      "name": "partage_int",
+      "alias": "Partage Internet",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Oui",
+            "value": true
+          },
+          {
+            "text": "Non",
+            "value": false
+          }
+        ]
+      },
+      "default": "Oui"
+    }
+  ],
+    "checkBox": [{
+      "name": "contr_acce",
+      "alias": "Contrôle d'accés",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Aucun",
+            "value": "none"
+          },
+          {
+            "text": "Badge",
+            "value": "badge"
+          },
+          {
+            "text": "Digicode",
+            "value": "code"
+          }
+        ]
+      },
+      "default": "Oui"
+    }],
+    "notEnterable": [
+      {
+      "name": "perimeter",
+      "alias": "Périmètre",
+      "type": "TextEdit",
+      "default": 0,
+      "role": "perimetre",
+      "unit": "metre",
+      "options": {
+        "order": 2
+      } 
+    },{
+      "name": "area",
+      "alias": "Aire",
+      "type": "TextEdit",
+      "default": 0,
+      "role": "area",
+      "unit": "squareMetre",
+      "options": {
+        "order": 2
+      } 
+    },{
+      "name": "longueur",
+      "alias": "Longueur totale",
+      "type": "TextEdit",
+      "default": 0,
+      "role": "distance",
+      "unit": "metre",
+      "options": {
+        "order": 2
+      }
+    },
+    {
+      "name": "id",
+      "alias": "",
+      "type": "TextEdit",
+      "unit": null,
+      "options": {
+      },
+      "default": ""
+    }
+  ],
+  "thumbnail": [
+    {
+    "name": "photo",
+    "alias": "",
+    "type": "Image",
+    "default": "",
+    "options": {
+      "order": 1
+    } 
+  }],
+  "fileInput": [
+    {
+    "name": "p_jointe",
+    "alias": "Pièce jointe",
+    "type": "TextEdit",
+    "default": "",
+    "options": {} 
+  }]
+  }
 }
