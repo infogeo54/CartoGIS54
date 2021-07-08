@@ -5,6 +5,7 @@
 import L from 'leaflet'
 import proj4 from 'proj4'
 import 'leaflet-editable'
+import path from "path"
 import 'leaflet-measure-path/leaflet-measure-path'
 require('leaflet-measure-path/leaflet-measure-path.css')
 import 'leaflet-draw'
@@ -124,15 +125,49 @@ export default {
          * @returns Leaflet Layer
          */
         polygon (f) {
-            return L.polygon(f.coordinates, {fillOpacity: 0.5})
+            let color = 'blue'
+            let fillColor = 'blue'
+            let strokeWidth = 2
+            let lineJoin = 'bevel'
+
+            if(f.style){
+                color = f.style.polygonSymbolizer.stroke.color
+                fillColor = f.style.polygonSymbolizer.fill.svgParameter[0]
+                strokeWidth = f.style.polygonSymbolizer.stroke.width * 2
+                lineJoin = f.style.polygonSymbolizer.stroke.join
+            }
+            return L.polygon(f.coordinates, {
+                fillColor,
+                color,
+                lineJoin,
+                fillOpacity: 0.5,
+                weight: strokeWidth,
+
+            })
         },
         /**
          * Create a Leaflet polyline representation
          * @param f : Feature
          * @returns Leaflet Layer
          */
-        polyline (f) {
-            return L.polyline(f.coordinates, {fillOpacity: 0.5})
+        polyline (f) { 
+            let color = 'blue'
+            let strokeWidth = 2
+            let lineJoin = 'round'
+            let lineCap = 'round'
+            
+            if(f.style){
+                color = f.style.lineSymbolizer.stroke.color
+                strokeWidth = f.style.lineSymbolizer.stroke.width * 2
+                lineJoin = f.style.lineSymbolizer.stroke.join
+                lineCap = f.style.lineSymbolizer.stroke.lineCap
+            }
+            return L.polyline(f.coordinates, {
+                color,
+                lineJoin,
+                lineCap,
+                weight: strokeWidth
+            })
         },
         /**
          * Create a Leaflet marker custom icon
@@ -141,8 +176,16 @@ export default {
          */
         icon (f) {
             let icon
-            try { icon = require(`@/assets/icons/${f.properties.type.value}.svg`) }
-            catch { icon = require('@/assets/icons/poi.svg') }
+            if(f.style && f.style.pointSymbolizer.graphic.externalGraphic){
+                const url = f.style.pointSymbolizer.graphic.externalGraphic[1].onlineResource.href
+                const basename = path.basename(url)
+                icon = require(`../../public/img/icons/${basename}`)
+            }
+
+            if(!icon){
+                try { icon = require(`@/assets/icons/${f.properties.type.value}.svg`) }
+                catch { icon = require('@/assets/icons/poi.svg') }
+            } 
             return L.icon({
                 iconUrl: icon,
                 iconSize: [50, 50],

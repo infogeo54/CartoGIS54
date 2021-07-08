@@ -92,19 +92,7 @@
                 "hidden": false,
                 "required": false
             }
-        }, {
-            "name": "p_jointe",
-            "alias": "Pi\u00e8ce jointe",
-            "type": "TextEdit",
-            "layer": "amenagements_voirie",
-            "options": {
-                "IsMultiline": false,
-                "UseHtml": false,
-                "disabled": false,
-                "hidden": false,
-                "required": false
-            }
-        }, {
+        },{
             "name": "type_autre",
             "alias": "Type autre",
             "type": "TextEdit",
@@ -183,19 +171,7 @@
                 "hidden": false,
                 "required": false
             }
-        }, {
-            "name": "p_jointe",
-            "alias": "Pi\u00e8ce jointe",
-            "type": "TextEdit",
-            "layer": "economie_commerce",
-            "options": {
-                "IsMultiline": false,
-                "UseHtml": false,
-                "disabled": false,
-                "hidden": false,
-                "required": false
-            }
-        }, {
+        },  {
             "name": "activit\u00e9",
             "alias": "Activit\u00e9",
             "type": "TextEdit",
@@ -273,18 +249,6 @@
                 "required": false
             }
         }, {
-            "name": "p_jointe",
-            "alias": "Pi\u00e8ce jointe",
-            "type": "TextEdit",
-            "layer": "education",
-            "options": {
-                "IsMultiline": false,
-                "UseHtml": false,
-                "disabled": false,
-                "hidden": false,
-                "required": false
-            }
-        }, {
             "name": "type_autre",
             "alias": "Type autre",
             "type": "TextEdit",
@@ -364,18 +328,6 @@
         }, {
             "name": "etat_locaux",
             "alias": "Etat locaux",
-            "type": "TextEdit",
-            "layer": "environnement",
-            "options": {
-                "IsMultiline": false,
-                "UseHtml": false,
-                "disabled": false,
-                "hidden": false,
-                "required": false
-            }
-        }, {
-            "name": "p_jointe",
-            "alias": "Pi\u00e8ce jointe",
             "type": "TextEdit",
             "layer": "environnement",
             "options": {
@@ -467,18 +419,6 @@
                 "required": false
             }
         }, {
-            "name": "p_jointe",
-            "alias": "Pi\u00e8ce jointe",
-            "type": "TextEdit",
-            "layer": "equipements_communaux",
-            "options": {
-                "IsMultiline": false,
-                "UseHtml": false,
-                "disabled": false,
-                "hidden": false,
-                "required": false
-            }
-        }, {
             "name": "type_autre",
             "alias": "Type autre",
             "type": "TextEdit",
@@ -550,18 +490,6 @@
         }, {
             "name": "etat_locaux",
             "alias": "Etat locaux",
-            "type": "TextEdit",
-            "layer": "internet",
-            "options": {
-                "IsMultiline": false,
-                "UseHtml": false,
-                "disabled": false,
-                "hidden": false,
-                "required": false
-            }
-        }, {
-            "name": "p_jointe",
-            "alias": "Pi\u00e8ce jointe",
             "type": "TextEdit",
             "layer": "internet",
             "options": {
@@ -756,17 +684,6 @@
                 "required": false
             }
         }, {
-            "name": "p_jointe",
-            "type": "TextEdit",
-            "layer": "logement",
-            "options": {
-                "IsMultiline": false,
-                "UseHtml": false,
-                "disabled": false,
-                "hidden": false,
-                "required": false
-            }
-        }, {
             "name": "type_autre",
             "type": "TextEdit",
             "layer": "logement",
@@ -867,17 +784,6 @@
                 "required": false
             }
         }, {
-            "name": "p_jointe",
-            "type": "TextEdit",
-            "layer": "parking",
-            "options": {
-                "IsMultiline": false,
-                "UseHtml": false,
-                "disabled": false,
-                "hidden": false,
-                "required": false
-            }
-        }, {
             "name": "type_autre",
             "type": "TextEdit",
             "layer": "parking",
@@ -945,19 +851,7 @@
                 "hidden": false,
                 "required": false
             }
-        }, {
-            "name": "p_jointe",
-            "alias": "Pi\u00e8ce jointe",
-            "type": "TextEdit",
-            "layer": "sante",
-            "options": {
-                "IsMultiline": false,
-                "UseHtml": false,
-                "disabled": false,
-                "hidden": false,
-                "required": false
-            }
-        }, {
+        },{
             "name": "type_autre",
             "alias": "Type autre",
             "type": "TextEdit",
@@ -1033,18 +927,6 @@
                 "required": false
             }
         }, {
-            "name": "p_jointe",
-            "alias": "Pi\u00e8ce jointe",
-            "type": "TextEdit",
-            "layer": "services_publics",
-            "options": {
-                "IsMultiline": false,
-                "UseHtml": false,
-                "disabled": false,
-                "hidden": false,
-                "required": false
-            }
-        }, {
             "name": "type_autre",
             "alias": "Type autre",
             "type": "TextEdit",
@@ -1098,18 +980,6 @@
         }, {
             "name": "etat_locaux",
             "alias": "Etat locaux",
-            "type": "TextEdit",
-            "layer": "tourisme",
-            "options": {
-                "IsMultiline": false,
-                "UseHtml": false,
-                "disabled": false,
-                "hidden": false,
-                "required": false
-            }
-        }, {
-            "name": "p_jointe",
-            "alias": "Pi\u00e8ce jointe",
             "type": "TextEdit",
             "layer": "tourisme",
             "options": {
@@ -2473,7 +2343,139 @@
                 "required": false
             }
         }],
-        "fileInput": [],
+        "fileInput": [
+            {
+                "name": "p_jointe",
+                "alias": "Pi\u00e8ce jointe",
+                "type": "TextEdit",
+                "layer": "amenagements_voirie",
+                "options": {
+                    "IsMultiline": false,
+                    "UseHtml": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "required": false
+                }
+            }, {
+                "name": "p_jointe",
+                "alias": "Pi\u00e8ce jointe",
+                "type": "TextEdit",
+                "layer": "economie_commerce",
+                "options": {
+                    "IsMultiline": false,
+                    "UseHtml": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "required": false
+                }
+            },{
+                "name": "p_jointe",
+                "alias": "Pi\u00e8ce jointe",
+                "type": "TextEdit",
+                "layer": "education",
+                "options": {
+                    "IsMultiline": false,
+                    "UseHtml": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "required": false
+                }
+            }, {
+                "name": "p_jointe",
+                "alias": "Pi\u00e8ce jointe",
+                "type": "TextEdit",
+                "layer": "environnement",
+                "options": {
+                    "IsMultiline": false,
+                    "UseHtml": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "required": false
+                }
+            }, {
+                "name": "p_jointe",
+                "alias": "Pi\u00e8ce jointe",
+                "type": "TextEdit",
+                "layer": "equipements_communaux",
+                "options": {
+                    "IsMultiline": false,
+                    "UseHtml": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "required": false
+                }
+            }, {
+                "name": "p_jointe",
+                "alias": "Pi\u00e8ce jointe",
+                "type": "TextEdit",
+                "layer": "internet",
+                "options": {
+                    "IsMultiline": false,
+                    "UseHtml": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "required": false
+                }
+            }, {
+                "name": "p_jointe",
+                "type": "TextEdit",
+                "layer": "logement",
+                "options": {
+                    "IsMultiline": false,
+                    "UseHtml": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "required": false
+                }
+            }, {
+                "name": "p_jointe",
+                "type": "TextEdit",
+                "layer": "parking",
+                "options": {
+                    "IsMultiline": false,
+                    "UseHtml": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "required": false
+                }
+            },  {
+                "name": "p_jointe",
+                "alias": "Pi\u00e8ce jointe",
+                "type": "TextEdit",
+                "layer": "sante",
+                "options": {
+                    "IsMultiline": false,
+                    "UseHtml": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "required": false
+                }
+            }, {
+                "name": "p_jointe",
+                "alias": "Pi\u00e8ce jointe",
+                "type": "TextEdit",
+                "layer": "services_publics",
+                "options": {
+                    "IsMultiline": false,
+                    "UseHtml": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "required": false
+                }
+            }, {
+                "name": "p_jointe",
+                "alias": "Pi\u00e8ce jointe",
+                "type": "TextEdit",
+                "layer": "tourisme",
+                "options": {
+                    "IsMultiline": false,
+                    "UseHtml": false,
+                    "disabled": false,
+                    "hidden": false,
+                    "required": false
+                }
+            }
+        ],
         "hidden": []
     }
 }

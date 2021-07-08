@@ -1,13 +1,70 @@
 import axios from 'axios'
-import * as convert from 'xml-js'
+import XMLConverter from 'xml2js' 
+import XMLExtract from 'xml-extract'
 import { server } from '@/app.config.json'
 
 const defaultQueryParams = server.queryParams.map(param => `${param.key}=${param.value}`).join('&')
 const baseUrl = `http://${server.host}?${defaultQueryParams}&SERVICE=WMS&VERSION=1.1.0`
 
+// let i=0;
+
+const tagNameProcessors = [
+    function (name) { return name.replace('se:', '') },
+    function (name) { return name.replace('ogc:', '') },
+    function (name) {
+        let firstLetter = name.charAt(0).toLowerCase()
+        let restOfWord = name.slice(1)
+        let camelCaseName = firstLetter.concat('', restOfWord)
+        return camelCaseName
+    }
+]
+
+const attrNameProcessors = [ function (name) { return name.replace('xlink:', '') }, ]
+
+const renameSVGParameter = parameter => {
+    let newParameter = {
+        color: parameter[0]._,
+        width: parameter[1]._,
+        join: parameter[2]._
+    }
+    if(parameter.length == 4) { newParameter.lineCap = parameter[3]._ }
+    return newParameter
+}
+
 const extractStyles = stylesXML => {
-    const stylesJS = convert.xml2js(stylesXML, {compact: true, spaces: 4})
-    return stylesJS['StyledLayerDescriptor']['NamedLayer']['UserStyle']['se:FeatureTypeStyle']['se:Rule']
+    let styles = []
+    XMLExtract(stylesXML, 'se:Rule', true, (error, style) => {
+        if(error) console.error(error);
+        else {
+            XMLConverter.parseString(style, {
+                trim: true,
+                explicitArray: false,
+                tagNameProcessors,
+            },(err, res) => {
+                if(err) console.log(err);
+                else {
+                    // Extract the marker styles for Points
+                    XMLExtract(style, 'se:PointSymbolizer', false, (err, style) => {
+                        if(err) return;
+                        else XMLConverter.parseString(style, {
+                            trim: true,
+                            explicitArray: false,
+                            mergeAttrs: true,
+                            tagNameProcessors,
+                            attrNameProcessors,
+                        }, (err, resPointSymbolizer) => {
+                            if(err) console.error(err);
+                            res.rule.pointSymbolizer.graphic = resPointSymbolizer.graphic 
+                        })
+                    })
+                    if(res.rule.polygonSymbolizer) res.rule.polygonSymbolizer.stroke = renameSVGParameter(res.rule.polygonSymbolizer.stroke.svgParameter);
+                    if(res.rule.lineSymbolizer) res.rule.lineSymbolizer.stroke = renameSVGParameter(res.rule.lineSymbolizer.stroke.svgParameter);
+                    styles.push(res.rule);
+                } 
+            }); 
+        }
+    })
+    return styles
 }
 
 const fetchStyles = async layerName => {

@@ -7,7 +7,7 @@ const baseUrl = `http://${server.host}?${defaultQueryParams}&SERVICE=WFS&VERSION
 
 /**
  * Make a GetCapabilities AJAX request and return a stringified XML document from the response
- * @returns String
+ * @return String
  */
 const fetchLayers = async () => {
     const url = `${baseUrl}&REQUEST=GetCapabilities`
@@ -63,11 +63,14 @@ const fetchFeatures = async layer => {
 const fetchAllFeatureDescriptions = async () => {
     const url = `${baseUrl}&REQUEST=DescribeFeatureType`
     const res = await axios.get(url)
+    // console.log(res.data);
     return extractAllDescriptions(res.data)
 }
 
+
 const extractDescription = complexType => {
     const layer = complexType['_attributes']['name'].replace('Type', '')
+    // console.log(complexType);
     const attributes = extractAttributes(complexType['complexContent']['extension']['sequence'])
     const shape = extractShape(complexType['complexContent']['extension']['sequence'])
     return { layer: layer, attributes: attributes, shape: shape }
@@ -88,7 +91,8 @@ const extractAttributes = sequence => {
     const attributes = sequence.element.map(e => {
         const name = e['_attributes']['name']
         const type = e['_attributes']['type']
-        return [name, {type: type, value: null}]
+        const alias = (e['_attributes']['alias']) ? e['_attributes']['alias'] : null
+        return [name, {type: type, value: null, alias: alias}]
     })
     return Object.fromEntries(attributes)
 }

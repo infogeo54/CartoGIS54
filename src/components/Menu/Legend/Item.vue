@@ -6,6 +6,7 @@
 </template>
 
 <script>
+
 export default {
     name: "LegendItem",
     props: {
@@ -16,13 +17,14 @@ export default {
     },
     computed: {
         title: function() {
-            return this.featureStyle['se:Name']['_text']
+            return this.featureStyle['name']
         },
         literal: function () {
-            return this.featureStyle['ogc:Filter']['ogc:PropertyIsEqualTo']['ogc:Literal']['_text']
+            return this.featureStyle['filter']['propertyIsEqualTo']['literal']
         },
         icon: function () {
             let icon
+            // console.log(server.markerIconFolder);
             try {
                 icon = require(`@/assets/icons/${this.literal}.svg`)
             } catch (e) {
@@ -35,6 +37,9 @@ export default {
         clicked: function () {
             this.$emit('itemClicked', this.literal)
         }
+    },
+    mounted(){
+        // console.log(this.featureStyle);
     }
 }
 </script>

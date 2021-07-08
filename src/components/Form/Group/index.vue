@@ -5,6 +5,7 @@
         @changed="changed"
         class="form-group"
         :style="{ order: order }"
+        :themeAnalysisAttr="themeAnalysisAttr"
     />
     <Default
         v-else
@@ -13,6 +14,7 @@
         class="form-group"
         :style="{ order: order }"
     />
+
 </template>
 
 <script>
@@ -20,7 +22,6 @@ import { form as config } from '@/app.config.json'
 import _ from 'lodash'
 import Default from './Default'
 import Custom from './Custom'
-
 
 export default {
     components: { Default, Custom },
@@ -30,12 +31,14 @@ export default {
         }
     },
     props: {
-        property: { type: Object, default: null }
+        property: { type: Object, default: null },
+        themeAnalysisAttr: { type: String, default: 'type'},
     },
     computed: {
         isConfigFileConfigured () { return (!!config && !_.isEmpty(config)) },
         isCustom () {
-            if (!this.isConfigFileConfigured) { return false }
+            if (this.property.name == this.themeAnalysisAttr) return true
+            if (!this.isConfigFileConfigured) return false
             let matchingField = null
             const categories = Object.keys(config)
             categories.forEach(c => {
@@ -63,6 +66,9 @@ export default {
                 this.order = f.options.order
             }
         },
+    },
+    mounted(){
+        // console.log(this.property);
     }
 }
 </script>

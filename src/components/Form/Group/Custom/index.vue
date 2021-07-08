@@ -6,8 +6,14 @@
     <label>
       {{ title }}
     </label>
+    <NotEnterable 
+        v-if="category === 'notEnterable' || property.name == themeAnalysisAttr" 
+        :value="value"
+        :field="field"
+        @change="changed"
+    />
     <textarea
-        v-if="category === 'textArea'"
+        v-else-if="category === 'textArea'"
         :disabled="options.disabled"
         :required="options.required"
         :value="value"
@@ -32,12 +38,6 @@
         :value="value"
         :field="field"
         :type="'radio'"
-        @change="changed"
-    />
-    <NotEnterable 
-        v-else-if="category === 'notEnterable'"
-        :value="value"
-        :field="field"
         @change="changed"
     />
     <Thumbnail 
@@ -75,7 +75,8 @@
     export default {
         components: { Select, Input, NotEnterable, Thumbnail, CheckBox, File },
         props: {
-            property: { type: Object, default: null }
+            property: { type: Object, default: null },
+            themeAnalysisAttr: { type: String, default: 'type'},
         },
         computed: {
             category () {
@@ -89,7 +90,8 @@
             field () { return config[this.category].find(field => field.name === this.property.name) || null },
             options () { return this.field ? this.field.options : {} },
             hidden () { if( this.options && this.options.hidden) { return this.options.hidden } else return false },
-            title () { return this.field.alias ? this.field.alias : this.field.name.toUpperCase()[0] + this.field.name.slice(1) },
+            // title () { return this.field.alias ? this.field.alias : this.field.name.toUpperCase()[0] + this.field.name.slice(1) },
+            title () { return this.property.alias ? this.property.alias : this.field.name.toUpperCase()[0] + this.field.name.slice(1) },
             value: function () {
                 if (this.property.name !== 'geometry') { return this.property.value }
                 return this.property.value.coordinates.join(', ')
@@ -99,6 +101,9 @@
             changed (e) {
                 this.$emit('changed', e)
             }
+        },
+        mounted() {
+            // console.log(this.property.alias);
         }
     }
 </script>

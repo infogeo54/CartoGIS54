@@ -53,7 +53,7 @@ export default {
         close () {
             this.$emit('legendCloseClicked')
         }
-    }
+    },
 }
 </script>
 

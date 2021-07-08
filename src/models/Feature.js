@@ -20,9 +20,11 @@ export default class Feature {
 
     set _properties (params) {
         const attributes = params.parent.description.attributes
+        // console.log(attributes);
         let properties = {}
         for (let attr in attributes) {
             const type = attributes[attr].type
+            const alias = attributes[attr].alias
             let value = params.props ? params.props[attr] : null
             if (!value) {
                 switch (type) {
@@ -33,13 +35,25 @@ export default class Feature {
                         break
                 }
             }
-            properties[attr] = {type: type, value: value}
+            properties[attr] = {type, value, alias}
         }
         this.properties = properties
     }
 
     set coordinates (coordinates) {
         this.properties.geometry.value = {coordinates: coordinates}
+    }
+
+    get themeAnalysisAttr (){
+        return this.parent.styles[0].filter.propertyIsEqualTo.propertyName
+    }
+
+    get style () {
+        if (this.parent.styles.length) {
+            let value = this.properties[this.themeAnalysisAttr].value;
+            return this.parent.styles.find(style => style.filter.propertyIsEqualTo.literal == value);
+        }
+        return null
     }
 
     get coordinates () {

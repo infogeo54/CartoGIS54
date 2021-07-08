@@ -12,6 +12,7 @@
           <Group v-for="property in properties"
                 :key="property"
                 :property="{name: property, ...feature.properties[property]}"
+                :themeAnalysisAttr="themeAnalysisAttr"
                 @changed="onChange"
           />
       </div>
@@ -38,6 +39,7 @@ export default {
         properties: function () {
             return Object.keys(this.feature.properties).sort((a, b) => this.sortProperties(a, b))
         },
+        themeAnalysisAttr: function() { return this.feature.themeAnalysisAttr } 
     },
     /**
      * Call store's reset action before destroying the component
@@ -71,7 +73,6 @@ export default {
          */
         onSaveClick: async function () {
             await this['feature/save']()
-            // console.log('gml:prop');
             if (this.feature.properties.geometry.type != 'gml:PointPropertyType') this.feature.representation.hideMeasurements(); 
             this.setEditable(false)
             this.toggleEdit()
@@ -93,6 +94,9 @@ export default {
             this['feature/cancel']()
             this.$destroy()
         },
+    },
+    mounted(){
+      // console.log(this.feature.properties);
     }
 }
 </script>
