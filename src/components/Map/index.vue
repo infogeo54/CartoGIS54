@@ -1,40 +1,74 @@
 <template>
     <div id="map-container">
-        <div class="ux-right-buttons">
-            <button v-if="feature" @click="cancel" id="btn-cancel">Annuler</button>
+        <div class="ux-buttons">
+            <button v-if="feature" @click="cancel" id="btn-cancel">
+                <i class="fas fa-undo-alt"></i>
+                Annuler
+            </button>
             <button id="btn-validate" v-if="isValidate" @click="validateButtonClicked">
+                <i class="fas fa-file-invoice"></i>
                 Voir la fiche
             </button>
             <button id="btn-edit" v-if="isEditable" @click="editableButtonClicked" >
-                <template v-if="editable">Enlever la modification</template>
-                <template v-else>Modifier l'objet</template>
+                <template v-if="editable">
+                    <img src="/img/icon_editable_hide.png" />
+                    Enlever la modification
+                </template>
+                <template v-else>
+                    <img src="/img/icon_editable_show.png" />
+                    Modifier l'objet
+                </template>
             </button>
             <button id="btn-measurements" v-if="isMeasurable" @click="measurementsButtonClicked" >
-                <template v-if="isMeasuring">Retirer les mesures</template>
-                <template v-else>Afficher les mesures</template>
+                <template v-if="isMeasuring">
+                    <img src="/img/icon_measure_hide.png" />
+                    Retirer <br> Mesures
+                </template>
+                <template v-else>
+                    <img src="/img/icon_measure_show.png" />
+                    Afficher Mesures
+                </template>
             </button>
-        </div>
-        <div class="ux-left-buttons">
+            
+            <!-- Quick Measure-->
+            <div v-if="isQuickMeasuring" class="quick-measure">
+                <button @click="quickMeasuringCancel" class="quick-draw-cancel">
+                    <img src="/img/icon_quick_measure_hide.png" />
+                    Annuler
+                </button>
+            </div>
+            <div v-else class="quick-measure">
 
+                <div v-if="showDrawIcon" @mouseout="showDrawIcon=false" class="quick-measure-choice">
+                    <button @click="drawPolygon">
+                        <img class="draw-icon" src="/img/icon_measure_polygon.png">
+                        surface    
+                    </button>
+                    <button @click="drawPolyline">
+                        <img class="draw-icon" src="/img/icon_measure_polyline.png">
+                        distance
+                    </button>
+                </div>
+                <button v-else class="quick-measure-label" @mouseover="showDrawIcon=true" @click="showDrawIcon=true">
+                    <img src="/img/icon_quick_measure_show.png" />
+                    Mesurer
+                </button>
+
+            </div>
             <HelpButton
                 v-for="button in buttons"
                 :key="button.name"
                 :button="button"
                 @clicked="buttonClicked"
             />
-            <div v-if="isQuickMeasuring" class="quick-measure">
-                <button @click="quickMeasuringCancel" class="quick-draw-cancel">Annuler</button>
-            </div>
-            <div v-else class="quick-measure">
-                <button v-if="!showDrawIcon" class="quick-measure-label" @mouseover="showDrawIcon=true" @click="showDrawIcon=true">Mesure rapide</button>
-
-                <div v-if="showDrawIcon" @mouseout="showDrawIcon=false">
-                    <button @click="drawPolygon"><img class="draw-icon" src="/img/icon_polygon.png"></button>
-                    <button @click="drawPolyline"><img class="draw-icon" src="/img/icon_polyline.png"></button>
-                </div>
-
-            </div>
-
+        </div>
+        <div class="step-2-header">           
+            <h2>2</h2>
+                <h3>Je localise <br/>mon objet</h3>
+        </div>
+        <div class="step-3-header">
+            <h2>3</h2>
+            <h3>Je remplis <br/>la fiche</h3>
         </div>
         <Map />
     </div>
@@ -196,7 +230,14 @@ export default {
     mounted() {
         bus.$on('resetIsMeasuring', () => { this.isMeasuring=false })
         bus.$on('centerOnFeature', (f) => { this.centerOnFeature(f) });
+        let el = document.querySelector('.leaflet-control-layers')
+        let label = document.createElement('div')
+        let t = document.createTextNode('Fonds')
+        label.appendChild(t)
+        label.classList.add('leaflet-control-label')
+        el.appendChild(label)
     }
+
 
 }
 </script>
@@ -207,66 +248,94 @@ export default {
     position: relative
     overflow: hidden
 
-    & > .ux-right-buttons 
+    & > .ux-buttons 
         position: absolute
-        top: .5rem
+        top: 18rem
         right: .5rem
         z-index: 1000
         display: flex
         flex-direction: column
 
-        & > #btn-cancel
-            background-color: #f4f4f4
-            color: #0e0e0e
+        button 
+            display: flex
+            flex-direction: column
+            align-items: center            
+            background-color: var(--button-color)
+            color: white
+            border-radius: .5rem
+            border: none
             margin-bottom: .5rem
+            padding-bottom: .5rem
+            width: 5.5rem
+            
+            svg, img 
+                margin: .5rem auto
+                height: auto
+            img 
+                width: 50%
+            
+            svg    
+                width: 40%
 
-        & > #btn-validate
-            background-color: #259325
-            margin-bottom: .5rem
-
-        & > #btn-edit
-            background-color: #ff8000
-            margin-bottom: .5rem
-
-        & > #btn-measurements
-            background-color: #087519
-
-    & > .ux-left-buttons
-        position: absolute
-        top: .5rem
-        left: 12px
-        z-index: 1000
+            &:hover,&:active,&:focus
+                opacity: .9
+            
 
     .quick-measure
-        margin-top: 6rem
 
         .quick-measure-label,
         .quick-draw-cancel
-            max-width: 5rem
-            max-height: 2.5rem
             font-size: 0.8rem
             font-weight: normal
-            color: black
+
+        .quick-measure-choice
+            // justify-content: space-between
+
+            button
+                flex-direction: row
+                padding-bottom: 0
+                font-size: .6rem
+                border-radius: .5rem
+
+                img
+                    padding-right: .3rem
 
         button
-            max-width: 2.5rem
-            max-height: 2.5rem
 
-            .draw-icon
-                max-width: 100%
-                max-height: 100%
+            // .draw-icon
+            //     max-width: 100%
+            //     max-height: 100%
 
         button:hover,
         button:focus,
         button:active
             background-color: #9e9e9e
-                
 
-            
+    & > .step-2-header,
+    & > .step-3-header
+        display: flex
+        flex-direction: column
+        align-items: center
+        position: absolute
+        z-index: 1000
+        background-color: white
+        padding: 1rem 
+        text-align: center
+        & > h2 
+            margin: .5rem auto
+            font-size: 2.7rem
+            font-weight: bold
+        & > h3 
+            margin: 0 auto .5rem auto
+
+    & > .step-3-header
+        right: 0
 
 
     @media screen and (min-width: 768px)
         
-        & > .ux-left-buttons
-            top: 5.5rem
+        & > .step-2-header,
+        & > .step-3-header
+            z-index: 2500
+            top: 3.5rem
 </style>

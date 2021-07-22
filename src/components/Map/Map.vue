@@ -186,9 +186,14 @@ export default {
         this.setMap(map)
         MapTools.map.representations(this.map, this.representations)
 
-        let tool = document.querySelector('.leaflet-right');
-        tool.classList.remove('leaflet-top');
-        tool.classList.add('leaflet-bottom'); 
+        // let scaleTool = document.querySelector('.leaflet-top.leaflet-right');
+        // scaleTool.classList.replace('leaflet-top', 'leaflet-bottom')
+
+        let zoomTool = document.querySelector('.leaflet-top.leaflet-left')
+        // zoomTool.classList.replace('leaflet-top', 'leaflet-bottom')
+        zoomTool.classList.replace('leaflet-left', 'leaflet-right')
+
+
     },
 }
 

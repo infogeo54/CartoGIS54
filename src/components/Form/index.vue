@@ -1,13 +1,10 @@
 <template>
   <div class="form-container">
     <form id="form" @submit.prevent="onSaveClick">
-      <div class="form-title component-title">
+      <!-- <div class="form-title component-title">
         <h2>3</h2>
         <h3>La fiche</h3>
-      </div>
-      <div class="groups">
-
-      </div>
+      </div> -->
       <div class="groups">
           <Group v-for="property in properties"
                 :key="property"
@@ -19,7 +16,6 @@
       <div class="buttons">
         <input type="submit" name="save" value="Enregistrer">
         <input type="button" name="delete" @click="onDeleteClick" value="Supprimer" :disabled="!feature.id">
-        <input type="button" name="cancel" @click="onCancelClick" value="Annuler">
       </div>
     </form>
   </div>
@@ -90,10 +86,10 @@ export default {
         /**
          * Call store's cancel action
          */
-        onCancelClick: function () {
-            this['feature/cancel']()
-            this.$destroy()
-        },
+        // onCancelClick: function () {
+        //     this['feature/cancel']()
+        //     this.$destroy()
+        // },
     },
     mounted(){
       // console.log(this.feature.properties);
@@ -103,7 +99,10 @@ export default {
 
 <style lang="sass" scoped>
 .form-container
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5), 0 0 0 rgba(0, 0, 0, 0.1)
   min-width: 20rem
+  position: relative
+  z-index: 2000
   #form
     z-index: 1000
     display: flex
@@ -112,16 +111,23 @@ export default {
     background-color: white
     box-sizing: border-box
     position: relative
+    padding-bottom: 7rem
     .groups
       display: flex
       flex-direction: column
       & > *
         margin: 1rem 0
     .buttons
+      background-color: white
+
+      position: fixed
+      bottom: 0
       display: flex
       flex-wrap: wrap
-      justify-content: space-evenly
-      padding-bottom: 1rem
+      max-width: calc(19rem + 2px)
+      width: 100%
+      justify-content: space-between
+      padding: 1rem
       input
         padding: 1.2rem .5rem
         color: #EFEFEF
@@ -138,8 +144,7 @@ export default {
           background-color: green
         &[name="delete"]
           background-color: red
-        &[name="cancel"]
-          color: initial
+
 
 @media screen and (min-width: 768px)
   .form-container

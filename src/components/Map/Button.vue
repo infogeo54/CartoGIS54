@@ -1,7 +1,8 @@
 <template>
-  <div @click="clicked">
+  <button @click="clicked">
     <i :class="button.icon"></i>
-  </div>
+    Aide
+  </button>
 </template>
 
 <script>
@@ -17,12 +18,12 @@ export default {
 
 <style lang="sass" scoped>
 svg
-  height: 2.5rem
-  width: 2.5rem !important
-  color: #0e0e0e
+  color: white
+  width: 40% !important
+  height: auto
+  margin: .5rem auto
 
 
   &:hover
    cursor: pointer
-   color: #333333
 </style>

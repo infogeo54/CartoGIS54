@@ -117,6 +117,7 @@ export default {
       height: calc(100vh - var(--header-size));
       grid-column: 3/4;
       grid-row: 1;
+
     } 
   }
 

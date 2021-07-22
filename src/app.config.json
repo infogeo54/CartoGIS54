@@ -7,13 +7,13 @@
         }]
     },
     "header": {
-        "hasHeader": true,
+        "hasHeader": false,
         "title": "Je localise mon projet",
         "brand": "img/cd54.png",
         "modals": [{
             "name": "Nom",
             "title": "Titre",
-            "icon": "fab fa-accessible-icon",
+            "icon": "far fa-question-circle",
             "visible": true
         }]
     },

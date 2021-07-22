@@ -1,22 +1,21 @@
 <template>
   <div id="layers-container">
     <div class="layers-title component-title">
-      <h2>1</h2>
-      <h3>Mes couches</h3>
+      <h3>Ma couche</h3>
     </div>
     <div class="layers-swiper-container" :style="cursor">
-      <swiper ref="layerSwiper" :options="options">
-          <swiper-slide v-for="(layer, index) in layers" :key="index" >
+      <Swiper ref="layerSwiper" :options="options">
+          <SwiperSlide v-for="(layer, index) in layers" :key="index" >
             <Item
                 :layer="layer"
                 :class="layer === selectedLayer ? 'active' : ''"
                 @itemClicked="itemClicked"
               />
-          </swiper-slide>
+          </SwiperSlide>
           <div class="swiper-scrollbar" slot="scrollbar"></div>
           <div class="swiper-button-prev" slot="button-prev"></div>
           <div class="swiper-button-next" slot="button-next"></div>
-      </swiper>
+      </Swiper>
     </div>
   </div>
 </template>
@@ -42,7 +41,7 @@ export default {
           direction: 'horizontal',
           slidesPerView: 1,
           slidesPerGroup: 1,
-          spaceBetween: 15,
+          spaceBetween: 5,
           mousewheel: true,
           navigation: {
             nextEl: '.swiper-button-next',
@@ -108,8 +107,8 @@ export default {
 
   .swiper-button-next,
   .swiper-button-prev
-    background-color: rgba(0,0,0,0.1)
-    color: rgba(0,0,0,0.5)
+    background-color: rgba(220,220,220,.9)
+    color: rgba(100,100,100, .9)
     border-radius: 100%
     top: 47%
     text-align: center
@@ -123,8 +122,8 @@ export default {
 
   .swiper-button-next:hover,.swiper-button-next:active,.swiper-button-next:focus,
   .swiper-button-prev:hover,.swiper-button-prev:active,.swiper-button-prev:focus
-    background-color: rgba(0,0,0,0.3)
-    color: rgba(0,0,0,0.8)
+    background-color: rgba(180,180,180,.9)
+    color: rgba(50,50,50, .9)
 
   .swiper-button-next
     right: 0px
@@ -134,6 +133,9 @@ export default {
 
   .swiper-button-disabled
     display: none
+
+  .layers-swiper-container
+    position: relative
 
 
   @media screen and (min-width: 768px)
@@ -145,7 +147,7 @@ export default {
       width: 15rem
 
     .swiper-container
-      height: calc(100vh - var(--header-size) - 14rem)
+      height: calc(100vh - var(--header-size) - 17rem)
 
     .swiper-wrapper,
     .swiper-slide

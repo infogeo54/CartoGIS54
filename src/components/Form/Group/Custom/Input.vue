@@ -80,7 +80,7 @@ export default {
 <style lang="sass" scoped>
 input
   cursor: pointer
-  background-color: #E6E6E6
+  background-color: var(--color-grey)
   border-radius: 4px
   padding: 4px 0
   text-align: center

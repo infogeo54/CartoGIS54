@@ -38,10 +38,10 @@ export default {
   .slide
     height: 3.6rem
     color: black
-    width: 100%
-    background-color: #efefef
-    margin: .5rem
-    margin-bottom: 1rem
+    width: 90%
+    background-color: var(--color-grey)
+    margin: .5rem 5% 1rem 5%
+    // margin-bottom: 1rem
     display: flex
     align-items: center
     justify-content: center

@@ -80,22 +80,22 @@ export default {
   text-align: center
   margin: 6px 0
   & > *
-    width: 90%
-    max-width: 300px
+    width: 92%
+    max-width: 20rem
     text-align: center
     margin: auto
     border: none
   & > input
-    width: 90%
-    max-width: 300px
-    background-color: #E6E6E6
+    // width: 90%
+    // max-width: 300px
+    background-color: var(--color-grey)
     border-radius: 4px
     padding: 4px 0
     text-align: center
     &[disabled]
       cursor: not-allowed
   textarea
-    background-color: #E6E6E6
+    background-color: var(--color-grey)
     border-radius: 4px
     min-height: 80px
     resize: vertical

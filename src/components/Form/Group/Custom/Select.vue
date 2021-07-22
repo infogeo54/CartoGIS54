@@ -40,16 +40,14 @@ export default {
     methods: {
         change (e) { this.$emit('change', e) }
     },
-    mounted() {
-      // console.log(this.value);
-    }
+
 }
 </script>
 
 <style lang="sass" scoped>
 select
   cursor: pointer
-  background-color: #E6E6E6
+  background-color: var(--color-grey)
   border-radius: 4px
   padding: 4px 0
   text-align: center
