@@ -9,51 +9,59 @@
                 <i class="fas fa-file-invoice"></i>
                 Voir la fiche
             </button>
-            <button id="btn-edit" v-if="isEditable" @click="editableButtonClicked" >
-                <template v-if="editable">
-                    <img src="/img/icon_editable_hide.png" />
-                    Enlever la modification
-                </template>
-                <template v-else>
-                    <img src="/img/icon_editable_show.png" />
-                    Modifier l'objet
-                </template>
-            </button>
-            <button id="btn-measurements" v-if="isMeasurable" @click="measurementsButtonClicked" >
-                <template v-if="isMeasuring">
-                    <img src="/img/icon_measure_hide.png" />
-                    Retirer <br> Mesures
-                </template>
-                <template v-else>
-                    <img src="/img/icon_measure_show.png" />
-                    Afficher Mesures
-                </template>
-            </button>
-            
-            <!-- Quick Measure-->
-            <div v-if="isQuickMeasuring" class="quick-measure">
-                <button @click="quickMeasuringCancel" class="quick-draw-cancel">
-                    <img src="/img/icon_quick_measure_hide.png" />
-                    Annuler
+            <div class="buttonsBar" @mouseleave="buttonsBarIsVisible=true" >
+                <button class="burgerButton" @mouseenter="buttonsBarIsVisible=false" :class="[ buttonsBarIsVisible ? 'isNotActive' : 'isActive']">
+                    <i class="fas fa-bars"></i>
+                    Outils
                 </button>
-            </div>
-            <div v-else class="quick-measure">
-
-                <div v-if="showDrawIcon" @mouseout="showDrawIcon=false" class="quick-measure-choice">
-                    <button @click="drawPolygon">
-                        <img class="draw-icon" src="/img/icon_measure_polygon.png">
-                        surface    
+                <template v-if="isButtonsBarVisible" >
+                    <button id="btn-edit" v-if="isEditable" @click="editableButtonClicked" >
+                        <template v-if="editable">
+                            <img src="/img/icon_editable_hide.png" />
+                            Enlever la modification
+                        </template>
+                        <template v-else>
+                            <img src="/img/icon_editable_show.png" />
+                            Modifier l'objet
+                        </template>
                     </button>
-                    <button @click="drawPolyline">
-                        <img class="draw-icon" src="/img/icon_measure_polyline.png">
-                        distance
+                    <button id="btn-measurements" v-if="isMeasurable" @click="measurementsButtonClicked" >
+                        <template v-if="isMeasuring">
+                            <img src="/img/icon_measure_hide.png" />
+                            Retirer <br> Mesures
+                        </template>
+                        <template v-else>
+                            <img src="/img/icon_measure_show.png" />
+                            Afficher Mesures
+                        </template>
                     </button>
-                </div>
-                <button v-else class="quick-measure-label" @mouseover="showDrawIcon=true" @click="showDrawIcon=true">
-                    <img src="/img/icon_quick_measure_show.png" />
-                    Mesurer
-                </button>
+                    
+                    <!-- Quick Measure-->
+                    <div v-if="isQuickMeasuring" class="quick-measure">
+                        <button @click="quickMeasuringCancel" class="quick-draw-cancel">
+                            <img src="/img/icon_quick_measure_hide.png" />
+                            Annuler
+                        </button>
+                    </div>
+                    <div v-else class="quick-measure">
 
+                        <div v-if="showDrawIcon" @mouseout="showDrawIcon=false" class="quick-measure-choice">
+                            <button @click="drawPolygon">
+                                <img class="draw-icon" src="/img/icon_measure_polygon.png">
+                                surface    
+                            </button>
+                            <button @click="drawPolyline">
+                                <img class="draw-icon" src="/img/icon_measure_polyline.png">
+                                distance
+                            </button>
+                        </div>
+                        <button v-else class="quick-measure-label" @mouseover="showDrawIcon=true" @click="showDrawIcon=true">
+                            <img src="/img/icon_quick_measure_show.png" />
+                            Mesurer
+                        </button>
+
+                    </div>
+                </template>
             </div>
             <HelpButton
                 v-for="button in buttons"
@@ -90,7 +98,9 @@ export default {
         return {
             isMeasuring: false,
             showDrawIcon: false,
+            buttonsBarIsVisible: true,    
             isQuickMeasuring: false,
+            windowWidth: window.innerWidth,
         }
     },
     computed: {
@@ -103,7 +113,7 @@ export default {
             selectedLayer: 'layer/selected',
             quickMeasure: 'quickMeasure/quickMeasure',
             map: 'map',
-            isDrawing: 'isDrawing',          
+            isDrawing: 'isDrawing',   
         }),
         isValidate(){
             if (this.feature && !this.formVisible){
@@ -122,7 +132,7 @@ export default {
         isEditable(){
             
             if (this.feature) {
-                if (window.innerWidth < 768 && this.formVisible) return false;
+                if (this.smallScreen && this.formVisible) return false;
                 return !!this.feature.representation
             }
             return false
@@ -136,6 +146,10 @@ export default {
             }
             return false
         },
+        isButtonsBarVisible(){
+            return !(this.smallScreen && this.buttonsBarIsVisible)
+        },
+        smallScreen(){ return(this.windowWidth < 768); }
 
     },
 
@@ -224,7 +238,7 @@ export default {
                 this.feature.representation.hideMeasurements()
                 if (this.isMeasuring && this.feature.representation) this.feature.representation.showMeasurements()
             }
-        },        
+        },  
     },
 
     mounted() {
@@ -236,6 +250,10 @@ export default {
         label.appendChild(t)
         label.classList.add('leaflet-control-label')
         el.appendChild(label)
+
+        window.addEventListener('resize', () => {
+            this.windowWidth = window.innerWidth
+        })
     }
 
 
@@ -250,11 +268,27 @@ export default {
 
     & > .ux-buttons 
         position: absolute
-        top: 18rem
+        top: 15rem
         right: .5rem
         z-index: 1000
         display: flex
         flex-direction: column
+        align-items: flex-end
+
+        & > .buttonsBar
+ 
+            display: flex
+            flex-direction: row-reverse
+            align-items: center
+
+            & > .burgerButton svg
+                transition: transform 330ms cubic-bezier(.65,.05,.36,1)
+
+            .isActive svg
+                transform: rotate(90deg)
+
+            button
+                margin-left: .5rem
 
         button 
             display: flex
@@ -289,8 +323,6 @@ export default {
             font-weight: normal
 
         .quick-measure-choice
-            // justify-content: space-between
-
             button
                 flex-direction: row
                 padding-bottom: 0
@@ -299,12 +331,6 @@ export default {
 
                 img
                     padding-right: .3rem
-
-        button
-
-            // .draw-icon
-            //     max-width: 100%
-            //     max-height: 100%
 
         button:hover,
         button:focus,
@@ -331,11 +357,21 @@ export default {
     & > .step-3-header
         right: 0
 
-
     @media screen and (min-width: 768px)
+
+        
+        & > .ux-buttons 
+            top: 18rem
+
+            .burgerButton
+                display: none
+            
+            .buttonsBar
+                flex-direction: column
         
         & > .step-2-header,
         & > .step-3-header
             z-index: 2500
             top: 3.5rem
+        
 </style>

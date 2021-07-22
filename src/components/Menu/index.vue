@@ -79,7 +79,6 @@ export default {
     position: relative
     z-index: 500
     text-align: center
-    background-color: #fafafa
     
     .step-1-header
         h2

@@ -148,7 +148,8 @@ export default {
 
 #legend
   color: #0e0e0e
-  width: 100%
+  width: 95vw
+  margin: 0 auto
   display: flex
   flex-direction: column
 
@@ -173,12 +174,6 @@ export default {
       // row-gap: 2rem
 
 @media screen and (min-width: 768px)
-  #layers-container
-    display: flex
-    flex-direction: column
-    justify-content: space-between
-    width: 15rem
-
   .swiper-container
     height: calc(100vh - var(--header-size) - 19rem)
 
@@ -211,6 +206,8 @@ export default {
 
     &>#legend
       border-left: solid 1px #0e0e0e
+      width: 100%
+      margin: 0
 
       .legends-swiper-container
         // height: 100%

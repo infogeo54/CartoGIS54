@@ -4,7 +4,7 @@
             <input type="file" id="imageInput" @change="changeFiles" :accept="typeAccepted">
             <div class="form-buttons">
                 <div v-if="files.length" @click="saveClick" class="save-button">Enregistrer</div>
-                <div v-if="fileName" @click="cancel">Annuler</div>
+                <div v-if="fileName" @click="cancel" class="cancel-button">Annuler</div>
             </div>
         </div>
         <div v-else>
@@ -14,7 +14,7 @@
             <p v-else >Image loading ...</p>
             <div class="form-buttons">
                 <div @click="deleteClick" class="delete-button">Supprimer</div>
-                <div @click="modifying=true" >Modifier</div>
+                <div @click="modifying=true" class="modify-button">Modifier</div>
             </div>
         </div>
     </div>
@@ -136,6 +136,11 @@ export default {
     mounted() {
         if (this.apiWorking) this.getImage()
     },
+    watch:{
+      feature: function(){
+       this.getImage()
+      }
+    }
 }
 </script>
 
@@ -153,10 +158,8 @@ div
     justify-content: space-between
     margin-top: .5rem
     & > div
-        font-size: .75rem
-        font-weight: 500 
-        padding: .5rem
-        border: 1px solid #333333
+        font-size: .85rem
+        padding: .75rem .5rem
         border-radius: .5rem
 
         &:hover,&:focus,&:active
@@ -167,12 +170,4 @@ div
                 color: #333333
                 background-color: #f0f0f0
                 
-
-    .delete-button
-        background-color: red
-        color: white
-
-    .save-button
-        background-color: green
-        color: white
 </style>

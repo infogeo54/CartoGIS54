@@ -14,8 +14,9 @@
           />
       </div>
       <div class="buttons">
-        <input type="submit" name="save" value="Enregistrer">
-        <input type="button" name="delete" @click="onDeleteClick" value="Supprimer" :disabled="!feature.id">
+        <input type="submit" name="save" value="Enregistrer" class="save-button">
+        <input type="button" name="cancel" @click="onCancelClick" value="Annuler" class="cancel-button">
+        <input type="button" name="delete" @click="onDeleteClick" value="Supprimer" :disabled="!feature.id" class="delete-button">
       </div>
     </form>
   </div>
@@ -86,14 +87,14 @@ export default {
         /**
          * Call store's cancel action
          */
-        // onCancelClick: function () {
-        //     this['feature/cancel']()
-        //     this.$destroy()
-        // },
+        onCancelClick: function () {
+            this['feature/cancel']()
+            this.$destroy()
+        },
     },
     mounted(){
       // console.log(this.feature.properties);
-    }
+    },
 }
 </script>
 
@@ -124,13 +125,11 @@ export default {
       bottom: 0
       display: flex
       flex-wrap: wrap
-      max-width: calc(19rem + 2px)
       width: 100%
-      justify-content: space-between
-      padding: 1rem
+      justify-content: space-evenly
+      padding: 1rem 0
       input
-        padding: 1.2rem .5rem
-        color: #EFEFEF
+        padding: 1rem .5rem
         &:hover, 
         &:focus,
         &:active
@@ -140,14 +139,17 @@ export default {
           cursor: pointer
           &[disabled]
             cursor: not-allowed
-        &[name="save"]
-          background-color: green
-        &[name="delete"]
-          background-color: red
+
+
 
 
 @media screen and (min-width: 768px)
   .form-container
     overflow-y: auto
+
+
+    .buttons
+      max-width: calc(19rem + 2px)
+      justify-content: space-between
 
 </style>
