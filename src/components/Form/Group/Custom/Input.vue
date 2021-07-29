@@ -38,7 +38,7 @@ export default {
     props: {
         category: { type: String, default: '' },
         field: { type: Object, default: () => {} },
-        value: { type: [String, Number, Boolean, Date], default: () => null },
+        value: { type: [String, Number, Boolean, Date, Object], default: () => null },
     },
     computed: {
         options () { return this.field.options },

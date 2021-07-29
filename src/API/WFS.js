@@ -31,16 +31,24 @@ const extractLayers = capabilitiesXML => {
  */
 const reverseCoordinates = geometry => {
 
-    if (geometry.type === 'Point') {
-        return geometry.coordinates.reverse()
-    } else if(geometry.type === 'MultiPolygon'){
-        const polygon = geometry.coordinates[0][0]
-        return polygon.map(p => p.reverse())
-    } else if(geometry.type === 'MultiLineString'){
-        const polyline = geometry.coordinates[0]
-        return polyline.map(p => p.reverse())
+    switch (geometry.type) {
+        case "Point": return geometry.coordinates.reverse()
+
+        case "MultiPoint": return geometry.coordinates[0].reverse()
+
+        case "LineString": return geometry.coordinates.map(p => p.reverse())
+
+        case "Polygon": 
+        case "MultiLineString":
+            return geometry.coordinates[0].map(p => p.reverse())
+        
+        case "MultiPolygon": return geometry.coordinates[0][0].map(p => p.reverse())
+
+        default: break;
     }
 }
+
+
 
 /**
  * Make a GetFeature AJAX request and return the data from the response
@@ -100,9 +108,9 @@ const extractAttributes = sequence => {
 const extractShape = sequence => {
     const geometryElement = sequence.element.find(e => e['_attributes']['name'] === 'geometry')
     const geometryType = geometryElement['_attributes']['type']
-    if (geometryType === 'gml:PointPropertyType') return 'Point'
-    else if(geometryType === 'gml:MultiPolygonPropertyType') return 'Polygon'
-    else if(geometryType === 'gml:MultiLineStringPropertyType') return 'Polyline('
+    if (geometryType === 'gml:PointPropertyType' || geometryType === 'gml:MultiPointPropertyType') return 'point'
+    else if(geometryType === 'gml:PolygonPropertyType' || geometryType === 'gml:MultiPolygonPropertyType') return 'polygon'
+    else if(geometryType === 'gml:LineStringPropertyType' || geometryType === 'gml:MultiLineStringPropertyType') return 'polyline'
 }
 
 const sendTransaction = async transaction => {

@@ -22,7 +22,7 @@
 <script>
 export default {
     props: {
-        value: { type: [String, Number, Boolean], default: () => '' },
+        value: { type: [String, Number, Boolean, Object], default: () => '' },
         field: { type: Object, default: () => {} },
         type: {type: String }
     },

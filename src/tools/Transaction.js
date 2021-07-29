@@ -8,6 +8,7 @@
  */
 import * as converter from 'xml-js'
 import MapTools from './MapTools'
+import Shape from './Shape';
 
 export default class Transaction {
 
@@ -39,134 +40,21 @@ export default class Transaction {
     }
 
     /**
-     * Create a formatted Point geomerty tag
-     * @param coordinates : Object - The point's coordinates
+     * Create a formatted geometry tag for Transactions
+     * @param geometry : Object - The geometry attribute object with coordinates and type
      * @returns Object
      */
-    static point (coordinates) {
-        const x = coordinates.x
-        const y = coordinates.y
-        const pos = `${x} ${y}`
-        return {
-            'gml:Point': {
-                '_attributes': {
-                    'srsName': "EPSG:2154"
-                },
-                'gml:pos': {
-                    '_attributes': {
-                        'srsDimension': 2
-                    },
-                    '_text': pos
-                }
-            }
-        }
-    }
-
-    /**
-     * Create a formatted MultiPolygon tag
-     * @param coordinates : Array<Array> - The polygon's coordinates
-     * @returns Object
-     */
-    static polygon (coordinates) {
-
-        let coord = coordinates.concat(coordinates[0]) // Closing polygon
-        const coordinatesList = coord.map(c => [c.x, c.y])
-        return {
-            'gml:MultiPolygon': {
-                '_attributes': {
-                    'srsName': "EPSG:2154"
-                },
-                'gml:polygonMember': {
-                    'gml:Polygon': {
-                        '_attributes': {
-                            'srsName': "EPSG:2154"
-                        },
-                        'gml:exterior': {
-                            'gml:LinearRing': {
-                                '_attributes': {
-                                    'srsName': "EPSG:2154"
-                                },
-                                'gml:posList': {
-                                    '_attributes': {
-                                        'srsDimension': 2
-                                    },
-                                    '_text': coordinatesList.flat().join(' ')
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Create a formatted MultiLineString tag
-     * @param coordinates : Array<Array> - The polyline's coordinates
-     * @returns Object
-     */
-    static polyline (coordinates) {
-
-        const coordinatesList = coordinates.map(c => [c.x, c.y])
-        return {
-            'gml:MultiLineString': {
-                '_attributes': {
-                    'srsName': "EPSG:2154"
-                },
-                'gml:lineStringMember': {
-                    'gml:LineString': {
-                        '_attributes': {
-                            'srsName': "EPSG:2154"
-                        },
-                        'gml:exterior': {
-                            'gml:LinearRing': {
-                                '_attributes': {
-                                    'srsName': "EPSG:2154"
-                                },
-                                'gml:posList': {
-                                    '_attributes': {
-                                        'srsDimension': 2
-                                    },
-                                    '_text': coordinatesList.flat().join(' ')
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Create a formatted geometry tag for Insert Transactions
-     * @param geometry
-     * @returns Object
-     */
-    static formattedGeometryInsert (geometry) {
-        const coordinates = MapTools.projection.project(geometry.value.coordinates)
+    static formattedGeometry (geometry) {
+        const coordinates = MapTools.projection.project(geometry)
         switch (geometry.type) {
-            case 'gml:PointPropertyType': return Transaction.point(coordinates);
-            case 'gml:MultiPolygonPropertyType' : return Transaction.polygon(coordinates)
-            case 'gml:MultiLineStringPropertyType' : return Transaction.polyline(coordinates)
+            case 'gml:PointPropertyType': return (new Shape(coordinates, Shape.POINT)).create;
+            case 'gml:MultiPointPropertyType': return (new Shape(coordinates, Shape.MULTIPOINT)).create;
+            case 'gml:PolygonPropertyType' : return (new Shape(coordinates, Shape.POLYGON)).create;
+            case 'gml:MultiPolygonPropertyType' : return (new Shape(coordinates, Shape.MULTIPOLYGON)).create;
+            case 'gml:LineStringPropertyType' : return (new Shape(coordinates, Shape.POLYLINE)).create;
+            case 'gml:MultiLineStringPropertyType' : return (new Shape(coordinates, Shape.MULTIPOLYLINE)).create;
             default: break;
         }
-    }
-
-    /**
-     * Create a formatted geometry tag for Update Transactions
-     * @param geometry
-     * @returns Object
-     */
-    static formattedGeometryUpdate (geometry) {
-        const coordinates = MapTools.projection.project(geometry.coordinates)
-        if (Array.isArray(coordinates)) {
-            switch (geometry.type) {
-                case 'MultiPolygon': return Transaction.polygon(coordinates);
-                case 'MultiLineString' : return Transaction.polyline(coordinates);            
-                default: break;
-            }
-        }else return Transaction.point(coordinates)
-        return null
     }
 
     /**
@@ -178,12 +66,9 @@ export default class Transaction {
         let res = {}
         for (let key in props) {
             if (props[key].value) {
-                if (key === 'geometry') {
-                    res.geometry = Transaction.formattedGeometryInsert(props.geometry)
-                } else {
-                    console.log(props[key].value);
-                    res[key] = props[key].value
-                }
+                (key === 'geometry') 
+                    ? res.geometry = Transaction.formattedGeometry(props.geometry) 
+                    : res[key] = props[key].value
             }
         }
         return res
@@ -192,14 +77,31 @@ export default class Transaction {
     /**
      * Create a formatted Property tag for an Update Transaction
      * @param key : String - The property name
-     * @param value : String,Number,Boolean,Object
+     * @param value : String,Number,Boolean
      * @returns Object
      */
     static toUpdateProperty (key, value) {
-        let wfsValue = key === 'geometry' ? Transaction.formattedGeometryUpdate(value) : { '_text' : value }
         return {
             'wfs:Name': {
                 '_text': key
+            },
+            'wfs:Value': { 
+                '_text' : value 
+            }
+        }
+    }
+
+    /**
+     * Create a formatted Geometry tag for an Update Transaction
+     * @param key : String - The property name
+     * @param geometry : Object
+     * @returns Object
+     */
+    static toUpdateGeometry (geometry) {
+        const wfsValue = Transaction.formattedGeometry(geometry);
+        return {
+            'wfs:Name': {
+                '_text': 'geometry'
             },
             'wfs:Value': wfsValue
         }
@@ -214,12 +116,15 @@ export default class Transaction {
         let props = []
         for (let key in properties) {
            if (properties[key].value !== null && properties[key].value !== undefined) {
-               props.push(Transaction.toUpdateProperty(key, properties[key].value))
+                (key == 'geometry') 
+                    ? props.push(Transaction.toUpdateGeometry(properties.geometry))
+                    : props.push(Transaction.toUpdateProperty(key, properties[key].value));
            }
         }
         return props
     }
 
+    
     static properties (feature) {
         if (feature.id) return Transaction.toUpdateProperties(feature.properties)
         return Transaction.toInsertProperties(feature.properties)

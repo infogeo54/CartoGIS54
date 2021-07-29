@@ -20,21 +20,11 @@ export default class Feature {
 
     set _properties (params) {
         const attributes = params.parent.description.attributes
-        // console.log(attributes);
         let properties = {}
         for (let attr in attributes) {
             const type = attributes[attr].type
             const alias = attributes[attr].alias
             let value = params.props ? params.props[attr] : null
-            if (!value) {
-                switch (type) {
-                    case 'gml:PointPropertyType':
-                    case 'gml:MultiPolygonPropertyType':
-                    case 'gml:MultiLineStringPropertyType':
-                        value = { coordinates: [] } // New Feature's geometry is init at empty coordinates
-                        break
-                }
-            }
             properties[attr] = {type, value, alias}
         }
         this.properties = properties
@@ -60,7 +50,7 @@ export default class Feature {
 
         let g = this.properties.geometry;
         if(g.value){
-            if ((g.type=='gml:MultiPolygonPropertyType') && (g.value.coordinates.length >= 3)) {
+            if ((this.type=='polygon') && (g.value.coordinates.length >= 3)) {
                 
                 /* 
                     Dans le cas où le premier point a été duppliquer pour fermer le polygone, 
@@ -71,18 +61,7 @@ export default class Feature {
                 if (firstCoord[0] == lastCoord[0] && firstCoord[1] == lastCoord[1]) {
                     g.value.coordinates.pop();
                 }
-
-                /* 
-                    Ici pour tous les doublons
-                */
-                // g.value.coordinates.forEach(function(coord, index){
-                //     g.value.coordinates.forEach(function(testC, testI){
-                //         if (testC[0] == coord[0] && testC[1] == coord[1] && testI != index ) {
-                //             g.value.coordinates.splice(testI, 1);
-                //         }
-                //     });
-                // });
-
+                
             }
             return g.value.coordinates
 
@@ -93,6 +72,29 @@ export default class Feature {
 
     get layer () {
         return this.parent.description.layer;
+    }
+
+    get type () {
+        let t = this.properties.geometry.type
+        switch (this.properties.geometry.type) {
+            case 'gml:MultiPolygonPropertyType':
+            case 'gml:PolygonPropertyType':
+                t='polygon';
+                break;
+            
+            case 'gml:MultiLineStringPropertyType':
+            case 'gml:LineStringPropertyType':
+                t='polyline';
+                break;
+
+            case 'gml:MultiPointPropertyType':
+            case 'gml:PointPropertyType':
+                t='point';
+                break;          
+        }
+
+        return t
+        
     }
 
     createRepresentation () {
@@ -136,7 +138,7 @@ export default class Feature {
     }
 
     get perimetre (){
-        if (this.representation && this.properties.geometry.type == 'gml:MultiPolygonPropertyType') {
+        if (this.representation && this.type == 'polygon') {
             let coordinates = this.representation._latlngs[0];
                 
             let allSides =  L.GeometryUtil.accumulatedLengths(coordinates);
@@ -150,7 +152,7 @@ export default class Feature {
 
 
     get area (){
-        if (this.representation && this.properties.geometry.type == 'gml:MultiPolygonPropertyType') {
+        if (this.representation && this.type == 'polygon') {
             let area = L.GeometryUtil.geodesicArea(this.representation._latlngs[0]);
     
             return Math.round(area);
@@ -161,7 +163,7 @@ export default class Feature {
 
 
     get distance (){
-        if (this.representation && this.properties.geometry.type == 'gml:MultiLineStringPropertyType') {
+        if (this.representation && this.type == 'polyline') {
             let totalDistance = L.GeometryUtil.length(this.representation);
     
             return Math.round(totalDistance);

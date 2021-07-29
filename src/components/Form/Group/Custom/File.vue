@@ -42,7 +42,7 @@ export default {
     props: {
         category: { type: String, default: '' },
         field: { type: Object, default: () => {} },
-        value: { type: [String, Number, Boolean, Date], default: () => null },
+        value: { type: [String, Number, Boolean, Date, Object], default: () => null },
     },
     computed: {
         typeAccepted: function(){
@@ -114,7 +114,6 @@ export default {
                 if (confirm("Êtes-vous sûr de vouloir supprimer le fichier ?")) {        
                     try {
                         let resDelete = await fileAPI.deleteAFile(this.fileName, this.feature.layer);
-                        console.log(resDelete);
                         if (resDelete) {
                             this.$emit('change', { target : { value: "" }})
                             this.url = null

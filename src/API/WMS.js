@@ -57,13 +57,16 @@ const extractStyles = stylesXML => {
                             res.rule.pointSymbolizer.graphic = resPointSymbolizer.graphic 
                         })
                     })
-                    if(res.rule.polygonSymbolizer) res.rule.polygonSymbolizer.stroke = renameSVGParameter(res.rule.polygonSymbolizer.stroke.svgParameter);
-                    if(res.rule.lineSymbolizer) res.rule.lineSymbolizer.stroke = renameSVGParameter(res.rule.lineSymbolizer.stroke.svgParameter);
-                    styles.push(res.rule);
+                    if (!res.rule.textSymbolizer) {
+                        if(res.rule.polygonSymbolizer) res.rule.polygonSymbolizer.stroke = renameSVGParameter(res.rule.polygonSymbolizer.stroke.svgParameter);
+                        if(res.rule.lineSymbolizer) res.rule.lineSymbolizer.stroke = renameSVGParameter(res.rule.lineSymbolizer.stroke.svgParameter);
+                        styles.push(res.rule);
+                    }
                 } 
             }); 
         }
     })
+    // console.log(styles);
     return styles
 }
 

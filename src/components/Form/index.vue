@@ -70,7 +70,7 @@ export default {
          */
         onSaveClick: async function () {
             await this['feature/save']()
-            if (this.feature.properties.geometry.type != 'gml:PointPropertyType') this.feature.representation.hideMeasurements(); 
+            if (this.feature.type != 'point') this.feature.representation.hideMeasurements(); 
             this.setEditable(false)
             this.toggleEdit()
             this.$destroy()

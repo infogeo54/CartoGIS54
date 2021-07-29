@@ -6,8 +6,6 @@
 import {mapActions, mapGetters, mapMutations} from 'vuex'
 import MapTools from '@/tools/MapTools'
 import _ from 'lodash'
-// import { bus } from '@/main.js'
-import L from 'leaflet'
 import { map as mapConfig } from '@/app.config.json'
  
 
@@ -16,9 +14,7 @@ export default {
     computed: {
         ...mapGetters({
             map: 'map',
-            layerList: 'layer/list',
             featureList: 'layer/features',
-            layer: 'layer/selected',
             feature: 'feature/selected',
             ogCoordinates: 'feature/ogCoordinates',
             editable: 'feature/editable',
@@ -28,15 +24,15 @@ export default {
         cursor: function (){
             if (this.feature && this.feature.id == undefined) {
                 switch (this.feature.parent.shape ) {
-                    case 'Point': return "url('/img/cursor_marker.svg') 11.5 17, crosshair";
-                    case 'Polygon': return "url('/img/cursor_polygon.svg') 11.5 17, crosshair";
-                    case 'Polyline(': return "url('/img/cursor_line.svg') 11.5 17, crosshair";
+                    case 'point': return "url('/img/cursor_marker.svg') 11.5 17, crosshair";
+                    case 'polygon': return "url('/img/cursor_polygon.svg') 11.5 17, crosshair";
+                    case 'polyline': return "url('/img/cursor_line.svg') 11.5 17, crosshair";
                     default: return 'crosshair'
                 }
             }else if (this.quickMeasure.type) {
                 switch (this.quickMeasure.type) {
                     case 'polygon': return "url('/img/cursor_polygon.svg') 11.5 17, crosshair";
-                    case 'polyline(': return "url('/img/cursor_line.svg') 11.5 17, crosshair"; 
+                    case 'polyline': return "url('/img/cursor_line.svg') 11.5 17, crosshair"; 
                     default: return 'crosshair'
                 }
             }
@@ -70,22 +66,20 @@ export default {
 
         mapClicked: async function (e) {
                         
-            const point = L.latLng(e.latlng.lat, e.latlng.lng);
-            const p = [e.latlng.lat, e.latlng.lng];
+            const point = [e.latlng.lat, e.latlng.lng];
 
             if (this.quickMeasure.type != null) {
                 this['quickMeasure/addLatlng'](point);
             }else if(this.feature) {
-                
-                if (this.feature.parent.shape === 'Point'){
-
+                if (this.feature.type == 'point'){
+                    
                     if (this.feature.representation && this.editable){
                         this.feature.deleteRepresentation()
                         this.feature.coordinates = point
                         this.addRepresentation()
                     }
 
-                    if (!this.feature.representation) {
+                    if (!this.feature.representation) {                        
                         this.feature.coordinates = point
                         this.addRepresentation()
                     }
@@ -98,10 +92,9 @@ export default {
                         if (this.feature.coordinates) {
                             if (_.isEqual(this.feature.coordinates, this.ogCoordinates)) this.feature.coordinates = [point]
                             else {
-                                this.feature.coordinates.push(p);
+                                this.feature.coordinates.push(point);
                                 }
                         }else this.feature.coordinates = [point]
-                        // console.log(this.feature.coordinates);
                         this.addRepresentation()
                         this.feature.updateMeasurements()
 

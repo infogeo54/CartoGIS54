@@ -85,22 +85,15 @@ export default {
          */
         create (f, cb) {
             let rep = null
-
-            switch (f.properties.geometry.type) {
-                case 'gml:PointPropertyType':
-                    rep = this.marker(f)
+            switch (f.type) {
+                case 'point': rep = this.marker(f)
                     break;
 
-                case 'gml:MultiPolygonPropertyType':
-                    rep = this.polygon(f)
+                case 'polygon': rep = this.polygon(f)
                     break;
             
-                case 'gml:MultiLineStringPropertyType':
-                    rep = this.polyline(f)
-                    break;
-                    
-                default:
-                    break;
+                case 'polyline': rep = this.polyline(f)
+                    break;                    
             }
 
             rep.on('click', (e) => {
@@ -145,6 +138,7 @@ export default {
 
             })
         },
+
         /**
          * Create a Leaflet polyline representation
          * @param f : Feature
@@ -169,6 +163,7 @@ export default {
                 weight: strokeWidth
             })
         },
+
         /**
          * Create a Leaflet marker custom icon
          * @param f : Feature - The feature to represent
@@ -204,26 +199,24 @@ export default {
             const latlng = L.latLng(coordinates)
             const projection = L.Projection.SphericalMercator.project(latlng)
             return proj4('EPSG:900913', 'EPSG:2154', projection)
-
         },
         /**
          * Project a Polygon or a Polyline's coordinates from EPSG:900913 to EPSG:2154
-         * @param coordinates : Array - Polygon/Polyline's list of points
+         * @param coordinates : Array - list of points
          * @returns Array - A list of proj4 Point instance
          */
-        polygonPolyline (coordinates) {
+        multiplePoints (coordinates) {
             return coordinates.map(c => this.point(c))
         },
-        
-
         /**
          * Project coordinates from EPSG:900913 to EPSG:2154
          * @param coordinates : Array - Feature's coordinates
          * @returns Array | Object - A list or an instance of proj4 Point
          */
-        project (coordinates) {
+        project (geometry) {
+            const coordinates = (geometry.coordinates) ? geometry.coordinates : geometry.value.coordinates
             if (Array.isArray(coordinates[0])) {
-                return this.polygonPolyline(coordinates)
+                return this.multiplePoints(coordinates)
             }
             return this.point(coordinates)
         }

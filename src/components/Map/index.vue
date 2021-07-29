@@ -116,16 +116,10 @@ export default {
             isDrawing: 'isDrawing',   
         }),
         isValidate(){
-            if (this.feature && !this.formVisible){
-
-                if (this.feature.properties.geometry.type=="gml:MultiPolygonPropertyType") {
-                    if (this.feature.coordinates.length < 3) return false;
-                }
-                if (this.feature.properties.geometry.type=="gml:MultiLineStringPropertyType") {
-                    if (this.feature.coordinates.length < 2) return false;
-                }
+            if (this.feature && !this.formVisible && this.feature.coordinates){
+                if (this.feature.type=="polygon") return(this.feature.coordinates.length >= 3);
+                if (this.feature.type=="polyline") return(this.feature.coordinates.length >= 2);
                 return !!this.feature.representation
-
             } 
             return false
         },
@@ -141,7 +135,7 @@ export default {
         isMeasurable(){
             if (this.feature){
                 if(this.feature.representation && this.feature.representation._latlngs) return !!this.feature.representation
-                else if (this.feature.properties.geometry.type != 'gml:PointPropertyType') return true 
+                else if (this.feature.type != 'point') return true 
                 
             }
             return false
