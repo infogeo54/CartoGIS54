@@ -4,7 +4,7 @@ import XMLExtract from 'xml-extract'
 import { server } from '@/app.config.json'
 
 const defaultQueryParams = server.queryParams.map(param => `${param.key}=${param.value}`).join('&')
-const baseUrl = `http://${server.host}?${defaultQueryParams}&SERVICE=WMS&VERSION=1.1.0`
+const baseUrl = `${server.host}?${defaultQueryParams}&SERVICE=WMS&VERSION=1.1.0`
 
 // let i=0;
 

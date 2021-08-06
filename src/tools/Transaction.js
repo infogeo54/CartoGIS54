@@ -11,7 +11,6 @@ import MapTools from './MapTools'
 import Shape from './Shape';
 
 export default class Transaction {
-
     constructor() {
         this['_declaration'] = {
             '_attributes': {
@@ -33,7 +32,8 @@ export default class Transaction {
 
     /**
      * Return an XML converted Transaction
-     * @returns String
+     * 
+     * @returns { string } - XML converted Transaction
      */
     toXML () {
         return converter.js2xml(this, {compact: true, spaces: 4})
@@ -41,26 +41,31 @@ export default class Transaction {
 
     /**
      * Create a formatted geometry tag for Transactions
-     * @param geometry : Object - The geometry attribute object with coordinates and type
-     * @returns Object
+     * 
+     * @param { object } geometry - The geometry attribute object
+     * @param { string } geometry.type - The geometry attribute type
+     * 
+     * @returns { object } The formatted Geometry
      */
     static formattedGeometry (geometry) {
         const coordinates = MapTools.projection.project(geometry)
         switch (geometry.type) {
-            case 'gml:PointPropertyType': return (new Shape(coordinates, Shape.POINT)).create;
-            case 'gml:MultiPointPropertyType': return (new Shape(coordinates, Shape.MULTIPOINT)).create;
-            case 'gml:PolygonPropertyType' : return (new Shape(coordinates, Shape.POLYGON)).create;
-            case 'gml:MultiPolygonPropertyType' : return (new Shape(coordinates, Shape.MULTIPOLYGON)).create;
-            case 'gml:LineStringPropertyType' : return (new Shape(coordinates, Shape.POLYLINE)).create;
-            case 'gml:MultiLineStringPropertyType' : return (new Shape(coordinates, Shape.MULTIPOLYLINE)).create;
+            case 'gml:PointPropertyType': return (new Shape(coordinates, "POINT")).create;
+            case 'gml:MultiPointPropertyType': return (new Shape(coordinates, "MULTIPOINT")).create;
+            case 'gml:PolygonPropertyType' : return (new Shape(coordinates, "POLYGON")).create;
+            case 'gml:MultiPolygonPropertyType' : return (new Shape(coordinates, "MULTIPOLYGON")).create;
+            case 'gml:LineStringPropertyType' : return (new Shape(coordinates, "POLYLINE")).create;
+            case 'gml:MultiLineStringPropertyType' : return (new Shape(coordinates, "MULTIPOLYLINE")).create;
             default: break;
         }
     }
 
     /**
      * Create formatted Properties tags for an Insert Transaction
-     * @param props : Object - The properties of the Feature to insert
-     * @returns Object
+     * 
+     * @param { object } props - The properties of the Feature to insert
+     * 
+     * @returns { object } A formatted Properties tags
      */
     static toInsertProperties (props) {
         let res = {}
@@ -76,9 +81,11 @@ export default class Transaction {
 
     /**
      * Create a formatted Property tag for an Update Transaction
-     * @param key : String - The property name
-     * @param value : String,Number,Boolean
-     * @returns Object
+     * 
+     * @param { string } key - The property name
+     * @param { * } value - The value of the property
+     * 
+     * @returns { object } A formatted Property tag
      */
     static toUpdateProperty (key, value) {
         return {
@@ -93,12 +100,13 @@ export default class Transaction {
 
     /**
      * Create a formatted Geometry tag for an Update Transaction
-     * @param key : String - The property name
-     * @param geometry : Object
-     * @returns Object
+     * 
+     * @param { object } geometry - The geometry property
+     * 
+     * @returns { object } A formatted Property tag
      */
     static toUpdateGeometry (geometry) {
-        const wfsValue = Transaction.formattedGeometry(geometry);
+        const wfsValue = Transaction.formattedGeometry(geometry)
         return {
             'wfs:Name': {
                 '_text': 'geometry'
@@ -109,8 +117,10 @@ export default class Transaction {
 
     /**
      * Create a list of formatted Property tags for an Update Transaction
-     * @param properties : Object - The feature's properties
-     * @returns Object
+     * 
+     * @param { object } properties - The feature's properties
+     * 
+     * @returns { Array<object> } A list of formatted Property tags
      */
     static toUpdateProperties (properties) {
         let props = []
@@ -124,7 +134,15 @@ export default class Transaction {
         return props
     }
 
-    
+    /**
+     * Call the proper function depending on 
+     * if the feature was already in the database
+     * by checking if an ID as been assigned or not
+     * 
+     * @param { object } feature - The feature for the Transaction 
+     * 
+     * @returns { object } A formatted Properties tags
+     */
     static properties (feature) {
         if (feature.id) return Transaction.toUpdateProperties(feature.properties)
         return Transaction.toInsertProperties(feature.properties)
@@ -132,8 +150,12 @@ export default class Transaction {
 
     /**
      * Create an Insert Transaction
-     * @param feature - The feature to insert
-     * @return String - A stringified XML Transaction
+     * 
+     * @class
+     * 
+     * @param { object } feature - The feature to insert
+     * 
+     * @returns { string } A stringified XML Transaction
      */
     static insert (feature) {
         let t = new Transaction()
@@ -144,8 +166,12 @@ export default class Transaction {
 
     /**
      * Create an Update Transaction
-     * @param feature - The feature to insert
-     * @return String - A stringified XML Transaction
+     * 
+     * @class
+     * 
+     * @param { object } feature - The feature to update
+     * 
+     * @returns { string } A stringified XML Transaction
      */
     static update (feature) {
         let t = new Transaction()
@@ -169,8 +195,12 @@ export default class Transaction {
 
     /**
      * Create a Delete Transaction
-     * @param feature - The feature to insert
-     * @return String - A stringified XML Transaction
+     * 
+     * @class
+     * 
+     * @param { object } feature - The feature to delete
+     * 
+     * @returns { string } A stringified XML Transaction
      */
     static delete (feature) {
         let t = new Transaction()

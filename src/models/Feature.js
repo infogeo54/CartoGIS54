@@ -1,5 +1,4 @@
 import feature from '@/store/modules/feature'
-// import store from '@/store'
 import { bus } from '@/main.js' 
 import MapTools from '../tools/MapTools'
 import L from 'leaflet'
@@ -123,11 +122,19 @@ export default class Feature {
 
     /**
      * Return a deep copy (not referenced) of the Feature's properties
-     * @returns Object
+     * 
+     * @returns { object } The deep copy of the properties
      */
     copyProperties () {
         if (this.properties) return _.cloneDeep(this.properties)
         throw  'Feature has no properties'
+    }
+
+
+    updateMeasurements () {
+        this._updateByRole('area');
+        this._updateByRole('perimetre');
+        this._updateByRole('distance');
     }
 
     _updateByRole(role){
@@ -169,13 +176,6 @@ export default class Feature {
             return Math.round(totalDistance);
         }
         return null;
-    }
-
-
-    updateMeasurements () {
-        this._updateByRole('area');
-        this._updateByRole('perimetre');
-        this._updateByRole('distance');
     }
 
 }

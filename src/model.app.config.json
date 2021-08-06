@@ -1,0 +1,270 @@
+/* 
+  Voici le modèle de app.config.json, le fichier de configuration de l'application de CartoGIS54.
+  Ce fichier est du json, format de données basé sur JavaScript.
+  Bien que la synthaxe est proche du JavaScript, il y a des restriction :
+    - Après le dernier attribut d'un objet ou le dernier élémnet d'un tableau/liste, il ne faut pas mettre de virgule ","
+    - Les clés ("keys") et noms d'attribut doivent être entre double guillemets comme ceci "nom de l'attribut"
+    - Les annotations/commentaires sont interdites
+
+  À cause de ce dernier point, veuillez ne pas utiliser directement ce fichier, mais plutôt à compléter celui généré par le plugin par exemple.
+  Afin de correctement modifier le fichier de configuration, veuillez utiliser un éditeur de texte 
+  comme Visual Studio Code qui offre des outils comme indiquer les errreurs dans le json 
+  ou bien une extension type Beautify pour indenter de manière plus compréhensible le json
+
+*/
+{
+  "server": {
+    "host": "url/vers/le/host/du/server.fcgi",
+    "queryParams": [{
+      "key": "map",
+      "value": "/chemin/absolu/vers/le/projet.qgs"
+    }]
+  },
+  "header": {
+    "hasHeader": false, // permet d'afficher ou non le header
+    "brand": "chemin/relatif/vers/image", // chemin depuis le dossier public 
+    "title": "Titre de mon projet",
+    "modals": [{
+      "name": "nom _de_ma_modal",
+      "title": "Titre de ma modal",
+      "icon": "classes de l'icône fontawesome", // sous la forme "fas fa-question-circle"
+      "visible": true // permet de rendre cette modal visible ou non
+    }]
+  },
+  "fileAPI": {
+    "baseUrl": "http://url/vers/fileAPI", // url de l'API de fichiers pour la gestion dans les fiches descriptives des images et des pièces jointes 
+    "typesAccepted": [ 
+      // liste des types acceptés par l'API : 
+      // ces types correspondent aux valeurs pouvant être mises dans l'attribut "accept" d'un input file. 
+      // Exemple :
+      "image/*", ".docx", ".doc", ".pdf"
+    ]
+  },
+  "map": {
+    "default": { // les valeurs par défaut pour l'emprise de la carte
+        "x": 5.78, // la latitude du centre de l'emprise
+        "y": 49.305, // la longitude du centre de l'emprise
+        "minZoom": 12, // le zoom Minimum sur la carte ( == la valeur à laquelle on ne peut plus dézoomer)
+        "isLimited": false // permet de bloquer/limiter ou non le déplacement au-delà de l'emprise définie par les valeurs précédentes 
+                           // (false = déplacement libre sur la carte)
+    },
+    "baseLayers": [ // liste des fonds de carte
+      {
+          "name": "Nom de mon fond de carte 1",
+          "uri": "https://uri/vers/le/fond/de/carte1", // uri vers le fond de carte (Open Street Map) 
+                                                      // voir exemples ici :https://www.creazo.fr/listing-des-fonds-de-cartes-dopen-street-map/
+          "attribution": "attribution du fond de carte 1", // décrit les informations de la carte et cite l'auteur et propriétaire de la carte (souvent obligatoire légalement)
+          "default": true // optionnel, si true, ce fond sera le fond de carte par défaut de l'application
+
+      },
+      {
+          "name": "Nom de mon fond de carte 2",
+          "uri": "https://uri/vers/le/fond/de/carte2",
+          "attribution": "attribution du fond de carte 2"
+      }
+    ]
+  },
+  "form": {
+    /* 
+      Pour chaque type de champ du formulaire, la structure est similaire  
+    */
+    "nom_du_type": [ // La base suivante s'applique à tous les types (sauf hidden)
+      {
+        "name": "nom_de_l_attribut", // nom de l'attribut dans qgis
+        "alias": "Un alias", // optionnel, nom de l'attribut affiché dans la fiche à la place du champ "name"
+        "type": "TypeQGIS", // type du champ dans QGIS
+        "layer": "nom_de_la_couche", // optionnel, nom de la couche dans qgis
+        "options": {
+          "order": "10" // optionnel, ordre dans la fiche qui est trié par défaut par ordre alphabétique, par défaut à 10
+        },
+        "default": "Valeur par défaut" // valeur par défaut dans le formulaire, par défaut à ""
+      },
+      {
+        "name": "nom_de_l_attribut_2",
+        "type": "TypeQGIS", 
+        "layer": "nom_de_la_couche", 
+        "options": {
+          "order": "1"
+        },
+        "default": ""
+      }
+    ],
+    "hidden": [ // pour les champs qui ne seront pas affichés dans la fiche
+      {  "name": "nom_de_la_couche" }, // seulement besoin du nom de la couche
+    ],
+    "inputText": [ // pour les input HTML de type text = saisie de texte simple
+      {
+        "name": "attribut",
+        "alias": "Un alias",
+        "type": "TextEdit",
+        "options": {},
+        "default": ""
+      }
+    ],
+    "inputRangeSpinBox": [ // pour les input HTML de type number = saisie de nombre
+      {
+      "name": "attribut",
+      "alias": "Un alias",
+      "type": "Range",
+      "options": {
+        "AllowNull": true, // booléan, est-ce que la valeur peut-être nulle 
+        "Max": 2147483648, // nombre, valeur maximale de l'input
+        "Min": 0, // nombre, valeur minimale de l'input
+        "Precision": 0, // entier, la précision du nombre (nombre de décimal) --> n'est pas implémentable avec HTML5 
+        "Step": 1, // nombre pas = valeur par laquelle l'input s'incrémente/décrémente
+        "Style": "SpinBox" // Style pour les input number classiques
+      },
+      "default": ""
+    }],
+    "inputDate": [ // pour les input HTML de type date 
+      {
+        "name": "attribut",
+        "alias": "Un alias",
+        "type": "DateTime",
+        "options": {
+          "allow_null": true, // booléen, est-ce que la date peut-être nulle
+          "calendar_popup": true, //  booléen, est-ce qu'un calendrier apparaît lors de la saisie
+          "display_format": "yyyy-MM-dd", // format d'affichage
+          "field_format": "yyyy-MM-dd", // format du champ dans la base
+          "field_iso_format": false //  booléen, est-ce que la date est respecte le standard ISO 8601
+        },
+        "default": ""
+      }
+    ],
+    "inputRangeSlider": [ // pour les input HTML de type range (curseur sur une ligne)
+      {
+      "name": "attribut",
+      "alias": "Un alias",
+      "type": "Range",
+      "options": {
+        "AllowNull": true, // booléen, est-ce que le nombre est peut-être nul
+        "Max": 10, // nombre, valeur maximale de l'input
+        "Min": 0, // nombre, valeur minimale de l'input
+        "Precision": 0, // entier, la précision du nombre (nombre de décimal) --> n'est pas implémentable avec HTML5 
+        "Step": 1, // nombre pas = valeur par laquelle l'input s'incrémente/décrémente
+        "Style": "Slider" // Style pour les input range
+      },
+      "default": "0"
+    }],
+    "textArea": [ // pour les textarea
+      {
+      "name": "attribut",
+      "alias": "Un alias",
+      "type": "TextEdit",
+      "options": {
+        "IsMultiline": true, // booléen, est-ce que la textarea est sur plusieurs lignes
+        "UseHtml": false // ??
+      },
+      "default": ""
+    }],
+    "selectBox": [ // pour les input de type select (liste déroulante)
+      {
+      "name": "attribut",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Choix 1", // texte affiché dans la fiche
+            "value": "choix_1" // valeur (Nombre, booléen, texte) dans QGIS
+          },
+          {
+            "text": "Choix 2",
+            "value": "choix_2"
+          }
+        ]
+      },
+      "default": "Choix 1"
+    }
+  ],
+    "radio": [ // pour les input de type radio (cases à cacher à choix unique)
+      {
+      "name": "attribut",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Choix 1", // texte affiché dans la fiche
+            "value": "choix_1" // valeur (Nombre, booléen, texte) dans QGIS
+          },
+          {
+          "text": "Choix 2",
+          "value": "choix_2"
+          }
+        ]
+      },
+      "default": "Choix 1"
+    }
+  ],
+    "checkBox": [ // pour les input de type checkBox (cases à cacher à choix multiples)
+      { 
+      "name": "attribut",
+      "type": "ValueMap",
+      "options": {
+        "map": [{
+            "text": "Choix 1", // texte affiché dans la fiche
+            "value": "choix_1" // valeur (Nombre, booléen, texte) dans QGIS
+          },
+          {
+            "text": "Choix 2",
+            "value": "choix_2"
+          }
+        ]
+      },
+      "default": "Choix_1"
+    }],
+    "notEnterable": [ // pour les attributs affichés mais qui ne doivent pas être modifiable directement par l'utilisateur (identifiant, mesures, etc )
+      {
+        // par exemple on voudrait afficher l'identifiant de l'objet 
+        // mais l'utilisateur ne doit en aucun cas pouvoir le modifier
+        "name": "id", 
+        "alias": "",
+        "type": "TextEdit",
+        "unit": null, // optionnel, l'unité de la valeur. Pour le moment implémentés : metre pour les mètres et squareMetre pour les mètres carré
+        "default": ""
+      },
+      // pour les mesures il faut rajouter un champ supplémentaire "role" qui indique à quelle type de mesure correspond l'attribut
+      { 
+      "name": "perimeter", // ici pour les calculs du périmètre
+      "alias": "Périmètre",
+      "type": "TextEdit",
+      "default": 0,
+      "role": "perimetre", // le role est "perimetre"
+      "unit": "metre" // et l'unité est ainsi "metre"
+    },{
+      "name": "area", // ici pour les calculs d'aire et de surface
+      "alias": "Aire",
+      "type": "TextEdit",
+      "default": 0,
+      "role": "area", // le role est "area"
+      "unit": "squareMetre" // et l'unité est ainsi "squareMetre"
+    },{
+      "name": "longueur", // ici pour les calculs de disrances et de longueurs
+      "alias": "Longueur totale",
+      "type": "TextEdit",
+      "default": 0,
+      "role": "distance", // le role est "distance"
+      "unit": "metre" // et l'unité est ainsi "metre"
+    }
+  ],
+  "thumbnail": [ 
+    // pour les champs d'images : 
+    // un input file s'il n'y pas d'image 
+    // ou affichage de cette image (avec possibilité de la supprimer ou modifier)
+    // Intéragit avec l'API de fichiers
+    {
+    "name": "photo",
+    "alias": "",
+    "type": "Image",
+    "default": ""
+  }],
+  "fileInput": [ 
+    // pour les champs de fichiers et pièces jointes : 
+    // un input file s'il n'y pas de fichier 
+    // ou créer un lien de téléchargement du fichier (avec possibilité de la supprimer ou modifier)
+    // Intéragit avec l'API de fichiers
+    {
+    "name": "p_jointe",
+    "alias": "Pièce jointe",
+    "type": "TextEdit",
+    "default": ""
+  }]
+  }
+}

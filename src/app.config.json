@@ -1,6 +1,6 @@
 {
     "server": {
-        "host": "sgeol3.cg54.local:8080/cgi-bin/qgis_mapserv.fcgi",
+        "host": "https://sgeol3.cg54.local:8443/cgi-bin/qgis_mapserv.fcgi",
         "queryParams": [{
             "key": "map",
             "value": "/var/www/html/bourg-centre/bourg-centre.qgs"
@@ -18,7 +18,7 @@
         }]
     },
     "fileAPI": {
-        "baseUrl": "http://sgeol3.cg54.local:8888",
+        "baseUrl": "https://sgeol3.cg54.local:8888",
         "typesAccepted": [
           "image/*", ".docx", ".doc", ".pdf"
         ]

@@ -1,35 +1,41 @@
+/*
+    Build the geometry part of a WFS Transaction request body
+ */
 export default class Shape {
-
-    static POINT = 0;
-    static POLYGON = 1;
-    static POLYLINE = 2;
-    static MULTIPOINT = 3;
-    static MULTIPOLYGON = 4;
-    static MULTIPOLYLINE = 5;
 
     _attributes = {
         'srsName': "EPSG:2154"
-    }
-        
+    }      
 
+    /**
+     * Create an Shape Instance
+     * 
+     * @param { Array|Array<Array>|object } coordinates The coordinate(s) of the shape
+     * @param { ('POINT'|'POLYGON'|'POLYLINE'|'MULTIPOINT'|'MULTIPOLYGON'|'MULTIPOLYLINE') } type The type of shape - You can use the static attributes
+     */
     constructor(coordinates, type){
         this.coordinates = coordinates
         this.type = type
     }
 
+    /**
+     * Return A WFS geometry tag as on object depending on the Shape type
+     * 
+     * @returns { object } A WFS geometry tag
+     */
     get create() {
         switch (this.type) {
-            case Shape.POINT: return this.point()
-            case Shape.MULTIPOINT: return this.multiPoint()
-            case Shape.POLYGON: return this.polygon()
-            case Shape.MULTIPOLYGON: return this.multiPolygon()    
-            case Shape.POLYLINE: return this.polyline()
-            case Shape.MULTIPOLYLINE: return this.multiPolyline()        
+            case 'POINT': return this._point()
+            case 'MULTIPOINT': return this._multiPoint()
+            case 'POLYGON': return this._polygon()
+            case 'MULTIPOLYGON': return this._multiPolygon()    
+            case 'POLYLINE': return this._polyline()
+            case 'MULTIPOLYLINE': return this._multiPolyline()   
+            default : return new Error('Type not accepted');  
         }
-        return this.type
     }
 
-    point () {
+    _point () {
         const x = this.coordinates.x
         const y = this.coordinates.y
         const pos = `${x} ${y}`
@@ -46,8 +52,8 @@ export default class Shape {
         }
     }
 
-    multiPoint () {
-        const point = this.point()
+    _multiPoint () {
+        const point = this._point()
         return {
             'gml:MultiPoint': {
                 '_attributes': this._attributes,
@@ -60,7 +66,7 @@ export default class Shape {
 
 
 
-    polygon () {
+    _polygon () {
         const closedPolygon = this.coordinates.concat(this.coordinates[0]) // Closing multiPolygon
         const coordinatesList = closedPolygon.map(c => [c.x, c.y]).flat().join(' ')
         return {
@@ -81,8 +87,8 @@ export default class Shape {
         }
     }
 
-    multiPolygon () {
-        const polygon = this.polygon()
+    _multiPolygon () {
+        const polygon = this._polygon()
         return {
             'gml:MultiPolygon': {
                 '_attributes': this._attributes,
@@ -93,7 +99,7 @@ export default class Shape {
         }
     }
 
-    polyline () {
+    _polyline () {
         const coordinatesList = this.coordinates.map(c => [c.x, c.y])
         return {
             'gml:LineString': {
@@ -111,10 +117,12 @@ export default class Shape {
                 }
             }
         }
+
+
     }
 
-    multiPolyline () {
-        const polyline = this.polyline()
+    _multiPolyline () {
+        const polyline = this._polyline()
         return {
             'gml:MultiLineString': {
                 '_attributes': this._attributes,

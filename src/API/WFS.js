@@ -1,13 +1,14 @@
+/* eslint-disable */
 import axios from 'axios'
 import * as convert from 'xml-js'
 import { server } from '@/app.config.json'
 
 const defaultQueryParams = server.queryParams.map(param => `${param.key}=${param.value}`).join('&')
-const baseUrl = `http://${server.host}?${defaultQueryParams}&SERVICE=WFS&VERSION=1.1.0`
+const baseUrl = `${server.host}?${defaultQueryParams}&SERVICE=WFS&VERSION=1.1.0`
 
 /**
  * Make a GetCapabilities AJAX request and return a stringified XML document from the response
- * @return String
+ * @returns String
  */
 const fetchLayers = async () => {
     const url = `${baseUrl}&REQUEST=GetCapabilities`

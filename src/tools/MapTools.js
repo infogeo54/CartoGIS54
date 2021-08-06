@@ -2,7 +2,8 @@
     Tools to help managing the map
  */
 
-import L from 'leaflet'
+import L, { Map, Icon, Marker, Polygon, Polyline} from 'leaflet'
+import { bus } from '@/main.js' 
 import proj4 from 'proj4'
 import 'leaflet-editable'
 import path from "path"
@@ -10,21 +11,23 @@ import 'leaflet-measure-path/leaflet-measure-path'
 require('leaflet-measure-path/leaflet-measure-path.css')
 import 'leaflet-draw'
 import 'leaflet-geometryutil/src/leaflet.geometryutil'
+import Feature from '@/models/Feature'
 
 // Adding EPSG:2154 to proj4 projections
 proj4.defs("EPSG:2154", "+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs")
-
 
 export default {
     map: {
         /**
          * Create a Leaflet map instance
-         * @param x : number - The longitude of the point where the map will be centered
-         * @param y : number - The latitude of the point where the map will be centered
-         * @param minZoom : number - The minimum zoom of the map
-         * @param isLimited : boolean - If the map is limited by the maxbounds (disable the free roaming)
          * 
-         * @returns Object
+         * @param { number } x - The longitude of the point where the map will be centered
+         * @param { number } y - The latitude of the point where the map will be centered
+         * @param { number } minZoom - The minimum zoom on the map
+         * @param { boolean } isLimited - Is the map limited by the maxbounds (it disables the free roaming)
+         * @param { Array<object> } layers - The layers for the selection of the background map
+         * 
+         * @returns { Map } The leaflet Map instance
          */
         create (x, y, minZoom, isLimited, layers) {
             const map = L.map('map', { editable: true})
@@ -67,21 +70,28 @@ export default {
 
             return map
         },
+
         /**
          * Add representations to a map
-         * @param map : L.map - A Leaflet map instance
-         * @param representations : Array<Object>
+         * 
+         * @param { Map } map - A Leaflet map instance
+         * @param { Array<object> } representations : A list of representations
          */
         representations (map, representations) {
             representations.forEach(r => r.addTo(map))
         },
     },
     representation: {
+
         /**
-         * Build a feature's representation (marker or polygon)
-         * @param f : Feature - The feature to represent
-         * @param cb : Function - The function to trigger when the representation is clicked
-         * @returns Leaflet Layer
+         * Build a feature's representation (marker, polygon or polyline)
+         *
+         * 
+         * @param { Feature } f - The feature to represent
+         * @param { Function } cb - The callback that handles click
+         * 
+         * 
+         * @returns { (Marker|Polygon|Polyline) } A Leaflet Vector Layer
          */
         create (f, cb) {
             let rep = null
@@ -100,12 +110,20 @@ export default {
                 L.DomEvent.stopPropagation(e) // Avoid map clicked event when a feature is clicked
                 cb()
             })
-                return rep
+
+            rep.on('dragend', function(e){
+                bus.$emit('draggedMarker', e.target._latlng);
+            })
+            return rep
         },
+
+
         /**
          * Create a Leaflet marker representation
-         * @param f : Feature - The feature to represent
-         * @returns Leaflet Layer
+         * 
+         * @param { Feature } f - The feature to represent
+         * 
+         * @returns { Marker } A Leaflet Marker
          */
         marker (f) {
             const icon = this.icon(f)
@@ -114,8 +132,11 @@ export default {
         },
         /**
          * Create a Leaflet polygon representation
-         * @param f : Feature
-         * @returns Leaflet Layer
+         * 
+         * @param { Feature } f - The feature to represent
+         * 
+         * @returns { Polygon } A Leaflet Polygon
+         * 
          */
         polygon (f) {
             let color = 'blue'
@@ -141,8 +162,10 @@ export default {
 
         /**
          * Create a Leaflet polyline representation
-         * @param f : Feature
-         * @returns Leaflet Layer
+         * 
+         * @param { Feature } f - The feature to represent
+         * 
+         * @returns { Polyline } A Leaflet Polyline
          */
         polyline (f) { 
             let color = 'blue'
@@ -166,8 +189,10 @@ export default {
 
         /**
          * Create a Leaflet marker custom icon
-         * @param f : Feature - The feature to represent
-         * @returns layers: 'layer/list',
+         * 
+         * @param { Feature } f - The feature to represent
+         * 
+         * @returns { Icon }: A Leaflet Icon
          */
         icon (f) {
             let icon
@@ -192,8 +217,10 @@ export default {
     projection: {
         /**
          * Project a Point's coordinates from EPSG:900913 to EPSG:2154
-         * @param coordinates : Array - Point's coordinates
-         * @returns Object - A proj4 Point instance
+         * 
+         * @param { Array<number> } coordinates - The point's coordinates
+         * 
+         * @returns { Array<number> } The point's coordinates projected
          */
         point (coordinates) {
             const latlng = L.latLng(coordinates)
@@ -201,17 +228,24 @@ export default {
             return proj4('EPSG:900913', 'EPSG:2154', projection)
         },
         /**
-         * Project a Polygon or a Polyline's coordinates from EPSG:900913 to EPSG:2154
-         * @param coordinates : Array - list of points
-         * @returns Array - A list of proj4 Point instance
+         * Project a multi-vertexes shape's coordinates from EPSG:900913 to EPSG:2154
+         * 
+         * @param { Array<Array<number>> } coordinates - The shape's coordinates, as a list
+         * 
+         * @returns { Array<number> } The shape's coordinates projected, as a list
          */
         multiplePoints (coordinates) {
             return coordinates.map(c => this.point(c))
         },
         /**
          * Project coordinates from EPSG:900913 to EPSG:2154
-         * @param coordinates : Array - Feature's coordinates
-         * @returns Array | Object - A list or an instance of proj4 Point
+         * 
+         * @param { object } geometry - The geometry attribute object
+         * @param { (Array<number> | Array<Array<number>>) } [geometry.coordinates] - The shape's coordinates
+         * @param { object } [geometry.value] - Contains the coordinates
+         * @param { (Array<number> | Array<Array<number>>) } geometry.value.coordinates - The shape's coordinates
+         * 
+         * @returns { (Array<number> | Array<Array<number>>) } The shape's coordinates projected, as a list
          */
         project (geometry) {
             const coordinates = (geometry.coordinates) ? geometry.coordinates : geometry.value.coordinates

@@ -1,7 +1,13 @@
 import { form as config, fileAPI as confAPI } from '@/app.config.json'
+import Feature from '@/models/Feature'
 import axios from "axios";
 const baseUrl = confAPI.baseUrl
 
+/**
+ * Send a Delete request for each Thumbnail field of a feature to the FileAPI
+ * 
+ * @param { Feature } f - The current Feature 
+ */
 const deleteImages = async (f) => {
     const layer = f.parent.layer;
     for await (const i of config["thumbnail"]) {
@@ -22,6 +28,11 @@ const deleteImages = async (f) => {
         
 }
 
+/**
+ * Send a Delete request for each fileInput field of a feature to the FileAPI
+ * 
+ * @param { Feature } f - The current Feature 
+ */
 const deleteFiles = async (f) => {
     const layer = f.parent.layer;
     for await (const i of config['fileInput']){
@@ -41,7 +52,15 @@ const deleteFiles = async (f) => {
     }
 }
 
-
+/**
+ * Send a Delete request for a file to the FileAPI 
+ * 
+ * @param { string } fileName - The name of the file
+ * @param { string } layer  - the name of the layer of the feature
+ * @param { boolean } [isImage=false] - is the file for the Thumbnail type or not
+ * 
+ * @returns { object } Response data object
+ */
 const deleteAFile = async (fileName, layer, isImage = false) => {
     
     let uri = `${baseUrl}/${layer}/${isImage?'images':'files'}/${fileName}`

@@ -5,6 +5,7 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from 'vuex'
 import MapTools from '@/tools/MapTools'
+import { bus } from '@/main.js'
 import _ from 'lodash'
 import { map as mapConfig } from '@/app.config.json'
  
@@ -157,9 +158,7 @@ export default {
 
         },
         
-        getMapParam: function (key) {
-            return((this.mapParams[key]) ? this.mapParams[key] : mapConfig.default[key]);
-        }
+        getMapParam: function (key) { return((this.mapParams[key]) ? this.mapParams[key] : mapConfig.default[key]); },
 
     },
     mounted() {
@@ -170,21 +169,18 @@ export default {
             (this.getMapParam('isLimited') == 'false') ? false : true,
             mapConfig.baseLayers
             )
-            .on('click', e => this.mapClicked(e))
+            .on('click', e => this.mapClicked(e));
 
-        map.on('editable:vertex:dragend', e => this.dragVertex(e))
-        map.on('editable:vertex:new', e => this.newVertex(e))
-        map.on('editable:vertex:deleted', e => this.deleteVertex(e))
+        map.on('editable:vertex:dragend', e => this.dragVertex(e));
+        map.on('editable:vertex:new', e => this.newVertex(e));
+        map.on('editable:vertex:deleted', e => this.deleteVertex(e));
 
         this.setMap(map)
-        MapTools.map.representations(this.map, this.representations)
+        MapTools.map.representations(this.map, this.representations);
+        let zoomTool = document.querySelector('.leaflet-top.leaflet-left');
+        zoomTool.classList.replace('leaflet-left', 'leaflet-right');
 
-        // let scaleTool = document.querySelector('.leaflet-top.leaflet-right');
-        // scaleTool.classList.replace('leaflet-top', 'leaflet-bottom')
-
-        let zoomTool = document.querySelector('.leaflet-top.leaflet-left')
-        // zoomTool.classList.replace('leaflet-top', 'leaflet-bottom')
-        zoomTool.classList.replace('leaflet-left', 'leaflet-right')
+        bus.$on('draggedMarker', (latlng) => { this.feature.coordinates = [latlng.lat, latlng.lng] });
 
 
     },
