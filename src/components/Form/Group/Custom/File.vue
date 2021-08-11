@@ -1,7 +1,7 @@
 <template>
     <div v-if="apiWorking">
         <div v-if="modifying || !fileName">
-            <input type="file" id="fileInput" @change="changeFiles" :accept="typeAccepted">
+            <input type="file" id="fileInput" @change="changeFiles" :accept="acceptedTypes">
             <div class="form-buttons">
                 <div v-if="files.length" @click="saveClick" class="save-button">Enregistrer</div>
                 <div v-if="fileName" @click="cancel" class="cancel-button">Annuler</div>
@@ -45,8 +45,18 @@ export default {
         value: { type: [String, Number, Boolean, Date, Object], default: () => null },
     },
     computed: {
-        typeAccepted: function(){
-            return confAPI.typesAccepted.join();
+        acceptedTypes: function(){
+            let acceptedTypes = []
+            console.log(confAPI.acceptedTypes);
+            Object.entries(confAPI.acceptedTypes).forEach(types => {
+                if (Array.isArray(types[1])) { 
+                    types[1].forEach(subtype => {
+                        acceptedTypes.push(`${types[0]}/${subtype}`);
+                    });
+                }
+                else acceptedTypes.push(`${types[0]}/*`);
+            });
+            return(acceptedTypes.join(','));
         },
         ...mapGetters({
             feature: 'feature/selected',

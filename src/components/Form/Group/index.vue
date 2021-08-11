@@ -62,7 +62,7 @@ export default {
             this.$emit('changed', { name: this.property.name, value })
         },
         orderField (f){
-            if (f.options && f.options.order) {
+            if (f.options && (f.options.order || f.options.order == 0)) {
                 this.order = f.options.order
             }
         },

@@ -1,3 +1,4 @@
+
 import { deleteFiles, deleteImages, deleteAFile } from './delete'
 import { fileAPI as confAPI } from '@/app.config.json'
 const baseUrl = confAPI.baseUrl
@@ -16,6 +17,14 @@ const deleteAllFiles = async (f) => {
     }
 }
 
+/**
+ * Create a GET request for a file
+ * 
+ * @param { string } fileName - The name of the file to get
+ * @param { string } layer - The name of the layer of the feature 
+ * @param { boolean } [isImage=false] - Is the file for Thumbnail (image)  
+ * @returns { string } The file Url 
+ */
 const getFile = async (fileName, layer, isImage = false) => {
     
     let uri = `${baseUrl}/${layer}/${isImage?'images':'files'}/${fileName}`
@@ -38,6 +47,14 @@ const getFile = async (fileName, layer, isImage = false) => {
     return fileUrl;
 }
 
+/**
+ * Create a POST request for a file
+ * 
+ * @param { File } file - The file to post
+ * @param { string } layer - The name of the layer of the feature 
+ * @param { boolean } [isImage=false] - Is the file for Thumbnail (image)  
+ * @returns { string } The new name of the file 
+ */
 const postFile = async (file, layer, isImage = false) => {
     let uri = `${baseUrl}/${layer}/${isImage?'images':'files'}`
 
@@ -58,6 +75,15 @@ const postFile = async (file, layer, isImage = false) => {
     return name;
 }
 
+/**
+ * Create a PUT request for a file
+ * 
+ * @param { File } file - The new file to put
+ * @param { string } fileName - The name of the old file 
+ * @param { string } layer - The layer name of the feature 
+ * @param { boolean } [isImage=false] - Is the file for Thumbnail (image)  
+ * @returns { string } The new name of the file 
+ */
 const putFile = async (file, fileName, layer, isImage=false) => {
     let uri = `${baseUrl}/${layer}/${isImage?'images':'files'}/${fileName}`
 
@@ -78,6 +104,11 @@ const putFile = async (file, fileName, layer, isImage=false) => {
 
 }
 
+/**
+ * Test if the FileAPI responds
+ * 
+ * @returns { boolean } do the FileAPI responds
+ */
 const ping = async() => {
     let uri = `${baseUrl}/ping`
     let resp = false;
@@ -90,5 +121,14 @@ const ping = async() => {
     return resp;
 }
 
+
 export { deleteAllFiles, deleteAFile, getFile, postFile, putFile, ping }
-export default { deleteAllFiles, deleteAFile, getFile, postFile, putFile, ping }
+
+export default { 
+    deleteAllFiles,
+    deleteAFile,
+    getFile,
+    postFile,
+    putFile,
+    ping,
+} 

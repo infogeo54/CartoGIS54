@@ -166,7 +166,7 @@ export default {
             Number(this.getMapParam('x')),
             Number(this.getMapParam('y')),
             Number(this.getMapParam('minZoom')),
-            (this.getMapParam('isLimited') == 'false') ? false : true,
+            (this.getMapParam('isLimited') == false || this.getMapParam('isLimited') == "false") ? false : true,
             mapConfig.baseLayers
             )
             .on('click', e => this.mapClicked(e));

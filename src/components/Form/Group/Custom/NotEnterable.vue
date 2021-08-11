@@ -1,5 +1,5 @@
 <template>
-  <div @change="change">
+  <div @change="change" :class="{ 'form-title': order0 }">
       {{ computedValue.value }}
       <span v-if="computedValue.unit !== null">
           &nbsp;
@@ -52,14 +52,22 @@ export default {
             }
             return a;
         },
+        order0: function(){
+            return (this.field.options.order == 0)
+        }
     },
     methods: {
         change (e) { this.$emit('change', e) },
     },
+
 }
 </script>
 
 <style lang="sass" scoped>
+.form-title
+    font-size: 1.3rem
+    font-weight: bold
+
 div
   cursor: pointer
   padding: 4px 0

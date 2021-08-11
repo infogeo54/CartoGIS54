@@ -10,8 +10,8 @@ export default class Shape {
     /**
      * Create an Shape Instance
      * 
-     * @param { Array|Array<Array>|object } coordinates The coordinate(s) of the shape
-     * @param { ('POINT'|'POLYGON'|'POLYLINE'|'MULTIPOINT'|'MULTIPOLYGON'|'MULTIPOLYLINE') } type The type of shape - You can use the static attributes
+     * @param { Array|Array<Array>|object } coordinates - The coordinate(s) of the shape
+     * @param { ('POINT'|'POLYGON'|'POLYLINE'|'MULTIPOINT'|'MULTIPOLYGON'|'MULTIPOLYLINE') } type - The type of shape, you can use the static attributes
      */
     constructor(coordinates, type){
         this.coordinates = coordinates

@@ -58,10 +58,6 @@ export default {
           return a < b ? -1 : a > b ? 1 : 0;
         },
 
-        /**
-         * Saves changes in the Store
-         * @param attribute
-         */
         onChange: function (attribute) {
             this.updateAttribute(attribute)
         },

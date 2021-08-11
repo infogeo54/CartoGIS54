@@ -33,12 +33,19 @@
   },
   "fileAPI": {
     "baseUrl": "http://url/vers/fileAPI", // url de l'API de fichiers pour la gestion dans les fiches descriptives des images et des pièces jointes 
-    "typesAccepted": [ 
-      // liste des types acceptés par l'API : 
-      // ces types correspondent aux valeurs pouvant être mises dans l'attribut "accept" d'un input file. 
-      // Exemple :
-      "image/*", ".docx", ".doc", ".pdf"
-    ]
+    "typesAccepted": { 
+        // liste des types acceptés par l'API : 
+        /*  sous la forme de type MIME 
+            cf: https://developer.mozilla.org/fr/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+            les types sont les clés et les sous-types sont sous la forme d'une liste.
+            Pour mettre tous les sous-types d'un type, ajoutez "*"
+            Voir les exemples si dessous
+        */
+        "image": "*", // ici correspond à image/* == toutes les images
+        "text": [
+            "plain", "html" // ici correspond à text/plain et text/html
+        ]
+      }
   },
   "map": {
     "default": { // les valeurs par défaut pour l'emprise de la carte

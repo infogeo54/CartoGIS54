@@ -27,6 +27,7 @@
         :value="value"
         :min="options.Min"
         :max="options.Max"
+        :class="{ 'form-title': order0 }"
         :step="options.Step"
         @change="change"
     >
@@ -67,6 +68,9 @@ export default {
             return {
                 '--list-length': this.datalist.length
             }
+        },
+        order0: function(){
+            return (this.field.options.order == 0)
         }
 
     },
@@ -74,10 +78,15 @@ export default {
         change (e) { this.$emit('change', e) }
     },
 
+
 }
 </script>
 
 <style lang="sass" scoped>
+.form-title[type=text]
+    font-size: 1.3rem
+    font-weight: bold
+
 input
   cursor: pointer
   background-color: var(--color-grey)

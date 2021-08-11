@@ -19,9 +19,18 @@
     },
     "fileAPI": {
         "baseUrl": "https://sgeol3.cg54.local:8888",
-        "typesAccepted": [
-          "image/*", ".docx", ".doc", ".pdf"
-        ]
+        "acceptedTypes": {
+            "image": "*",
+            "text": [
+                "plain"
+            ],
+            "application" : [
+                "pdf",
+                "msword", "vnd.openxmlformats-officedocument.wordprocessingml.document", "vnd.oasis.opendocument.text", "rtf",
+                "vnd.ms-powerpoint", "vnd.openxmlformats-officedocument.presentationml.presentation", "vnd.oasis.opendocument.presentation",
+                "vnd.ms-excel", "vnd.openxmlformats-officedocument.spreadsheetml.sheet", "vnd.oasis.opendocument.spreadsheet"
+            ]
+        }
       },
     "map": {
         "default": {
@@ -62,6 +71,7 @@
             "type": "TextEdit",
             "layer": "amenagements_voirie",
             "options": {
+                "order": 0,
                 "IsMultiline": false,
                 "UseHtml": false,
                 "disabled": false,
@@ -141,6 +151,7 @@
             "type": "TextEdit",
             "layer": "economie_commerce",
             "options": {
+                "order": 0,
                 "IsMultiline": false,
                 "UseHtml": false,
                 "disabled": false,
@@ -230,6 +241,7 @@
             "type": "TextEdit",
             "layer": "education",
             "options": {
+                "order": 0,
                 "IsMultiline": false,
                 "UseHtml": false,
                 "disabled": false,
@@ -307,6 +319,7 @@
             "type": "TextEdit",
             "layer": "environnement",
             "options": {
+                "order": 0,
                 "IsMultiline": false,
                 "UseHtml": false,
                 "disabled": false,
@@ -388,6 +401,7 @@
             "type": "TextEdit",
             "layer": "equipements_communaux",
             "options": {
+                "order": 0,
                 "IsMultiline": false,
                 "UseHtml": false,
                 "disabled": false,
@@ -469,6 +483,7 @@
             "type": "TextEdit",
             "layer": "internet",
             "options": {
+                "order": 0,
                 "IsMultiline": false,
                 "UseHtml": false,
                 "disabled": false,
@@ -655,6 +670,7 @@
             "type": "TextEdit",
             "layer": "logement",
             "options": {
+                "order": 0,
                 "IsMultiline": false,
                 "UseHtml": false,
                 "disabled": false,
@@ -726,6 +742,7 @@
             "type": "TextEdit",
             "layer": "parking",
             "options": {
+                "order": 0,
                 "disabled": false,
                 "hidden": false,
                 "required": false
@@ -821,6 +838,7 @@
             "type": "TextEdit",
             "layer": "sante",
             "options": {
+                "order": 0,
                 "IsMultiline": false,
                 "UseHtml": false,
                 "disabled": false,
@@ -896,6 +914,7 @@
             "type": "TextEdit",
             "layer": "services_publics",
             "options": {
+                "order": 0,
                 "IsMultiline": false,
                 "UseHtml": false,
                 "disabled": false,
@@ -971,6 +990,7 @@
             "type": "TextEdit",
             "layer": "tourisme",
             "options": {
+                "order": 0,
                 "IsMultiline": false,
                 "UseHtml": false,
                 "disabled": false,

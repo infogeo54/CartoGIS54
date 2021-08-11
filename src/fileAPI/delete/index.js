@@ -4,7 +4,7 @@ import axios from "axios";
 const baseUrl = confAPI.baseUrl
 
 /**
- * Send a Delete request for each Thumbnail field of a feature to the FileAPI
+ * Create a DELETE request for each Thumbnail field of a feature to the FileAPI
  * 
  * @param { Feature } f - The current Feature 
  */
@@ -29,7 +29,7 @@ const deleteImages = async (f) => {
 }
 
 /**
- * Send a Delete request for each fileInput field of a feature to the FileAPI
+ * Create a DELETE request for each fileInput field of a feature to the FileAPI
  * 
  * @param { Feature } f - The current Feature 
  */
@@ -53,12 +53,11 @@ const deleteFiles = async (f) => {
 }
 
 /**
- * Send a Delete request for a file to the FileAPI 
+ * Create a DELETE request for a file
  * 
- * @param { string } fileName - The name of the file
- * @param { string } layer  - the name of the layer of the feature
- * @param { boolean } [isImage=false] - is the file for the Thumbnail type or not
- * 
+ * @param { string } fileName - The name of the file to get
+ * @param { string } layer - The name of the layer of the feature 
+ * @param { boolean } [isImage=false] - Is the file for Thumbnail (image)  
  * @returns { object } Response data object
  */
 const deleteAFile = async (fileName, layer, isImage = false) => {

@@ -218,7 +218,8 @@ export default {
                     ? f.representation.getBounds().getCenter() 
                     : c = f.coordinates;
             this.map.panTo(c)
-        }
+        },
+
 
     },
 

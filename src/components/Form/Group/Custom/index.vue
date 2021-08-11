@@ -102,9 +102,6 @@
                 this.$emit('changed', e)
             }
         },
-        mounted() {
-            // console.log(this.property.alias);
-        }
     }
 </script>
 
