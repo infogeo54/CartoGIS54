@@ -27,9 +27,6 @@ export default {
             this.$emit('changed', e)
         }
     },
-    mounted() {
-        // console.log(this.property);
-    }
 }
 </script>
 

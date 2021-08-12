@@ -135,7 +135,6 @@ export default {
     },
     mounted() {
         if (this.apiWorking) this.getImage()
-        // console.log(this.value);
     },
     watch:{
       feature: function(){

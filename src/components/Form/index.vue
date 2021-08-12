@@ -88,9 +88,6 @@ export default {
             this.$destroy()
         },
     },
-    mounted(){
-      // console.log(this.feature.properties);
-    },
 }
 </script>
 

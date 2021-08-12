@@ -24,7 +24,6 @@ export default {
         },
         icon: function () {
             let icon
-            // console.log(server.markerIconFolder);
             try {
                 icon = require(`@/assets/icons/${this.literal}.svg`)
             } catch (e) {
@@ -38,9 +37,7 @@ export default {
             this.$emit('itemClicked', this.literal)
         }
     },
-    mounted(){
-        // console.log(this.featureStyle);
-    }
+
 }
 </script>
 

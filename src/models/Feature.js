@@ -141,7 +141,9 @@ export default class Feature {
         const type = form.notEnterable.find((t) => { 
             return (t.role === role) ? (!t.layer || t.layer === this.parent.description.layer) : null
         });
-        if (type && this.properties[role]) this.properties[role].value = this[role];
+        if (type && this.properties[type.name]) {
+            this.properties[type.name].value = this[role]
+        }
     }
 
     get perimetre (){

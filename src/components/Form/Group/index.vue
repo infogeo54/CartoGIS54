@@ -67,9 +67,6 @@ export default {
             }
         },
     },
-    mounted(){
-        // console.log(this.property);
-    }
 }
 </script>
 

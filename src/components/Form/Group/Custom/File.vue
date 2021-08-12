@@ -47,7 +47,6 @@ export default {
     computed: {
         acceptedTypes: function(){
             let acceptedTypes = []
-            console.log(confAPI.acceptedTypes);
             Object.entries(confAPI.acceptedTypes).forEach(types => {
                 if (Array.isArray(types[1])) { 
                     types[1].forEach(subtype => {
