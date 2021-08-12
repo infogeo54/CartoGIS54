@@ -6,7 +6,7 @@ This directory contains the source code of the **CartoGIS54** Web app.
 
 The `app.config.json` file contains the app configuration.
 
-To fill it correctly please follow the [`model.app.config.json`](model.app.config.json).
+To fill it correctly please follow the [`model.app.config.json`](https://raw.githubusercontent.com/infogeo54/CartoGIS54/master/src/model.app.config.json).
 
 ## QGIS Plugin
 
