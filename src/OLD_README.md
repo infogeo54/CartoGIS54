@@ -1,3 +1,4 @@
+# :rotating_light: This is the old README, some of the information might not work with the current app :rotating_light:
 # Sources
 
 This directory contains the source code of the **CartoGIS54** Web app.
