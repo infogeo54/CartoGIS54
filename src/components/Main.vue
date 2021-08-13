@@ -55,7 +55,6 @@ export default {
     }
   },
   methods: {
-
     ...mapActions([
         'pingApi',
         'layer/getLayers',
@@ -67,10 +66,12 @@ export default {
   },
   async mounted () {
     this['layer/getLayers']()
+    /* Ping the API to see of it works */
     await this['pingApi']()
-    // setInterval(async () => {
-    //   await this['pingApi']()
-    // }, 6000);
+    /* Ping at intervals the API to see if it still working */
+    setInterval(async () => {
+      await this['pingApi']()
+    }, 6000);
   },
 }
 </script>

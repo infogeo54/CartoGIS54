@@ -6,8 +6,7 @@ import { server } from '@/app.config.json'
 const defaultQueryParams = server.queryParams.map(param => `${param.key}=${param.value}`).join('&')
 const baseUrl = `${server.host}?${defaultQueryParams}&SERVICE=WMS&VERSION=1.1.0`
 
-// let i=0;
-
+// Modify tags name with the following rules
 const tagNameProcessors = [
     function (name) { return name.replace('se:', '') },
     function (name) { return name.replace('ogc:', '') },
@@ -18,9 +17,10 @@ const tagNameProcessors = [
         return camelCaseName
     }
 ]
-
+// Modify the attributes name with the following rules
 const attrNameProcessors = [ function (name) { return name.replace('xlink:', '') }, ]
 
+// Overwrite SVGparameter with a new on, simpler/clearer/more readable
 const renameSVGParameter = parameter => {
     let newParameter = {
         color: parameter[0]._,
@@ -66,7 +66,6 @@ const extractStyles = stylesXML => {
             }); 
         }
     })
-    // console.log(styles);
     return styles
 }
 

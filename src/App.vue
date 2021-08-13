@@ -37,6 +37,7 @@ export default {
     isEditing () {
       return !!this.feature
     },
+    // Adjust the size  of some elements if there si a header or not
     cssVarHasHeader () {
       return {
         '--header-size': (this.hasHeader) ? '10vh' : '0vh'
@@ -60,6 +61,7 @@ export default {
     },
   },
   created () {
+    // Possibility to cancel the selection with the esc key
     document.addEventListener('keyup', e => {
         if (this.isEditing && e.key === 'Escape') {
             this['feature/cancel']()

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import axios from 'axios'
 import * as convert from 'xml-js'
 import { server } from '@/app.config.json'
@@ -8,7 +7,8 @@ const baseUrl = `${server.host}?${defaultQueryParams}&SERVICE=WFS&VERSION=1.1.0`
 
 /**
  * Make a GetCapabilities AJAX request and return a stringified XML document from the response
- * @returns String
+ * 
+ * @returns { string } A stringified XML document 
  */
 const fetchLayers = async () => {
     const url = `${baseUrl}&REQUEST=GetCapabilities`
@@ -18,7 +18,10 @@ const fetchLayers = async () => {
 
 /**
  * Extract a list of layers from a Capabilities XML document
- * @param capabilitiesXML : String - Capabilities stringified XML document
+ * 
+ * @param { string } capabilitiesXML - Capabilities stringified XML document
+ * 
+ * @returns { Array } A list of layers
  */
 const extractLayers = capabilitiesXML => {
     const capabilities = convert.xml2js(capabilitiesXML, {compact: true})
@@ -26,9 +29,11 @@ const extractLayers = capabilitiesXML => {
 }
 
 /**
- *
- * @param coordinates : Array - Returns reversed coordinates
- * @returns Array
+ * Reverse the coordinates of a feature
+ * 
+ * @param { object } geometry - the geometry object of the feature which contains the coordinates
+ * 
+ * @returns { Array } The reversed coordinates
  */
 const reverseCoordinates = geometry => {
 
@@ -53,8 +58,10 @@ const reverseCoordinates = geometry => {
 
 /**
  * Make a GetFeature AJAX request and return the data from the response
- * @param layer : String - The name of the associated layer
- * @returns Object
+ * 
+ * @param { string } layer - The name of the layer
+ * 
+ * @returns { Array } A list of features
  */
 const fetchFeatures = async layer => {
     const url = `${baseUrl}&REQUEST=GetFeature&TYPENAME=${layer}&OUTPUTFORMAT=GEOJSON`
@@ -67,7 +74,8 @@ const fetchFeatures = async layer => {
 
 /**
  * Make a DescribeFeature AJAX request and return a list of descriptions
- * @returns Array
+ * 
+ * @returns { Array } A list of descriptions
  */
 const fetchAllFeatureDescriptions = async () => {
     const url = `${baseUrl}&REQUEST=DescribeFeatureType`

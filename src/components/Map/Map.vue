@@ -39,15 +39,13 @@ export default {
             }
             return 'grab'
         },
-        representations: function () {
+        representations () {
             return this.featureList.map(f => {
                 f.createRepresentation()
                 return f.representation
             })
         },
-        mapParams: function () {
-            return this.$route.query
-        },
+        mapParams () { return this.$route.query },
     },
     methods: {
         ...mapMutations(['setMap',
@@ -69,9 +67,8 @@ export default {
                         
             const point = [e.latlng.lat, e.latlng.lng];
 
-            if (this.quickMeasure.type != null) {
-                this['quickMeasure/addLatlng'](point);
-            }else if(this.feature) {
+            if (this.quickMeasure.type != null) this['quickMeasure/addLatlng'](point);
+            else if(this.feature) {
                 if (this.feature.type == 'point'){
                     
                     if (this.feature.representation && this.editable){
@@ -158,6 +155,7 @@ export default {
 
         },
         
+        // Use the default map param or use the GET params in the url if given  
         getMapParam: function (key) { return((this.mapParams[key]) ? this.mapParams[key] : mapConfig.default[key]); },
 
     },
@@ -171,6 +169,7 @@ export default {
             )
             .on('click', e => this.mapClicked(e));
 
+        // Handle the editable events
         map.on('editable:vertex:dragend', e => this.dragVertex(e));
         map.on('editable:vertex:new', e => this.newVertex(e));
         map.on('editable:vertex:deleted', e => this.deleteVertex(e));

@@ -16,6 +16,7 @@
 </template>
 
 <script>
+    // A 404 page for the app
     export default {
         name: 'PageNotFound'
     }

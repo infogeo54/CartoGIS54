@@ -69,9 +69,8 @@ export default {
                 '--list-length': this.datalist.length
             }
         },
-        order0: function(){
-            return (this.field.options.order == 0)
-        }
+        // if order==0 input in bold + bigger
+        order0(){ return (this.field.options.order == 0) }
 
     },
     methods: {

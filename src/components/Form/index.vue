@@ -1,10 +1,6 @@
 <template>
   <div class="form-container">
     <form id="form" @submit.prevent="onSaveClick">
-      <!-- <div class="form-title component-title">
-        <h2>3</h2>
-        <h3>La fiche</h3>
-      </div> -->
       <div class="groups">
           <Group v-for="property in properties"
                 :key="property"
@@ -53,7 +49,7 @@ export default {
             'feature/cancel'
         ]),
 
-
+    
         sortProperties: function (a, b){
           return a < b ? -1 : a > b ? 1 : 0;
         },

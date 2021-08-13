@@ -81,9 +81,8 @@ export default {
 
 
         async saveClick(){
-            if (this.modifying) {
-                await this.updateFile()
-            }else await this.postFile()
+            if (this.modifying) await this.updateFile()
+            else await this.postFile()
 
             await this['feature/save']()
         },
@@ -98,11 +97,9 @@ export default {
                         this.modifying = false
                         this.getFile()
                     }
-                } catch (err) {
-                    console.log(err);
-                }
+                } catch (err) { console.log(err); }
             }
-        },    
+        },
 
         async postFile () {
             try {
@@ -113,9 +110,7 @@ export default {
                     this.resetFileInput()
                     this.getFile()
                 }
-            } catch (err) {
-                console.log(err);
-            }
+            } catch (err) { console.log(err); }
         },
 
         async deleteClick(){
@@ -128,9 +123,7 @@ export default {
                             this.url = null
                         }
                         await this['feature/save']()
-                    } catch (err) {
-                        console.log(err);
-                    }
+                    } catch (err) { console.log(err); }
                 }
             }
             
@@ -141,9 +134,7 @@ export default {
                 try {
                     const fileUrl = await fileAPI.getFile(this.fileName, this.feature.layer);
                     if (fileUrl) this.url = fileUrl 
-                } catch (err) {
-                    console.log(err);
-                }
+                } catch (err) { console.log(err); }
             }
         }
     },

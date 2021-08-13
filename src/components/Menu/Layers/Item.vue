@@ -11,24 +11,16 @@ import { mapGetters } from 'vuex'
 export default {
     props: ['layer'],
     computed: {
-        name () {
-            return this.layer.properties.name
-        },
-        title () {
-            return this.layer.properties.title
-        },
+        name () { return this.layer.properties.name },
+        title () { return this.layer.properties.title },
         ...mapGetters({
           isFormVisible: "form/formVisible",
           isDrawing: "isDrawing",
       }),
-      cursor(){
-        return (this.isFormVisible || this.isDrawing)? 'cursor: not-allowed': 'cursor: pointer'
-      }
+      cursor(){ return (this.isFormVisible || this.isDrawing)? 'cursor: not-allowed': 'cursor: pointer' }
     },
     methods: {
-        clicked () {
-            this.$emit('itemClicked', this.name)
-        }
+        clicked () { this.$emit('itemClicked', this.name) }
     }
 }
 </script>

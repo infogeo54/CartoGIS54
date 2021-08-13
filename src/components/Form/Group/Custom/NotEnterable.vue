@@ -18,6 +18,7 @@ export default {
         
     },
     computed: {
+        // Convert the value if it has an unit (meter, square meter)
         computedValue: function(){
             const a = {
                 value: this.value,
@@ -52,9 +53,8 @@ export default {
             }
             return a;
         },
-        order0: function(){
-            return (this.field.options.order == 0)
-        }
+        // if order==0 input in bold + bigger
+        order0(){ return (this.field.options.order == 0) }
     },
     methods: {
         change (e) { this.$emit('change', e) },

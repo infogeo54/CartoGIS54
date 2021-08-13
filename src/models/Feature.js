@@ -52,8 +52,8 @@ export default class Feature {
             if ((this.type=='polygon') && (g.value.coordinates.length >= 3)) {
                 
                 /* 
-                    Dans le cas où le premier point a été duppliquer pour fermer le polygone, 
-                    on supprime le doublon, qui est le dernier point.
+                    In the case where the 1st point was duplicated to close the polygon,
+                    We delete the duplicate, which is the last point
                 */
                 let firstCoord = g.value.coordinates[0];
                 let lastCoord = g.value.coordinates[g.value.coordinates.length -1 ];
@@ -73,6 +73,7 @@ export default class Feature {
         return this.parent.description.layer;
     }
 
+    // For testing the feature's shape by regrouping the "simple/classic" version with the "multi" version
     get type () {
         let t = this.properties.geometry.type
         switch (this.properties.geometry.type) {
@@ -130,13 +131,23 @@ export default class Feature {
         throw  'Feature has no properties'
     }
 
-
+    /**
+     * To update the measurements attributes of a Feature by computing the value of the current shape
+     * The function is called whenever the geometry of the feature is changed
+     * Handled measures : area, perimeter, distance.
+     */
     updateMeasurements () {
         this._updateByRole('area');
         this._updateByRole('perimetre');
         this._updateByRole('distance');
     }
 
+    /**
+     * Search in the config the attributes of the Feature where the role is used.
+     * If found, call the getter linked to the role to compute the measurement 
+     * 
+     * @param { ('area'|'perimeter'|'distance') } role - The role of the attribute, to which kind of measure it is for 
+     */
     _updateByRole(role){
         const type = form.notEnterable.find((t) => { 
             return (t.role === role) ? (!t.layer || t.layer === this.parent.description.layer) : null
@@ -146,10 +157,22 @@ export default class Feature {
         }
     }
 
+    /**
+     * Compute a perimeter (for polygons only)
+     * Using accumulatedLengths the L.GeometryUtil of Makina Corpus 
+     * { @link https://makinacorpus.github.io/Leaflet.GeometryUtil/global.html#accumulatedLengths }
+     * 
+     * @returns { number } The computed perimeter
+     */
     get perimetre (){
         if (this.representation && this.type == 'polygon') {
             let coordinates = this.representation._latlngs[0];
-                
+            
+            /*
+             accumulatedLengths do the sum of the distances between the coordinates passed in parameter,
+             But it doesn't do the distance between the last and the first coordiantes,
+             We have do it manually with the function length which computes the distance between to coordinates
+             */
             let allSides =  L.GeometryUtil.accumulatedLengths(coordinates);
             let lastSide = L.GeometryUtil.length([coordinates[0], coordinates[coordinates.length-1]]);
             let perimeter = allSides[allSides.length-1] + lastSide;
@@ -160,6 +183,13 @@ export default class Feature {
     }
 
 
+    /**
+     * Compute a area (for polygons only)
+     * Using geodesicArea of the L.GeometryUtil of Leaflet Draw 
+     * { @link https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#l-geometryutil }
+     * 
+     * @returns { number } The computed area
+     */
     get area (){
         if (this.representation && this.type == 'polygon') {
             let area = L.GeometryUtil.geodesicArea(this.representation._latlngs[0]);
@@ -170,9 +200,19 @@ export default class Feature {
 
     }
 
-
+    /**
+     * Compute a distance (for lines only)
+     * Using length the L.GeometryUtil of Makina Corpus 
+     * { @link https://makinacorpus.github.io/Leaflet.GeometryUtil/global.html#accumulatedLengths }
+     * 
+     * @returns { number } The computed area
+     */
     get distance (){
         if (this.representation && this.type == 'polyline') {
+            /*
+             L.GeometryUitl.length return here the complete perimeter of the Feature
+             Because we passed as a parameter a Leaflet Polyline object
+             */
             let totalDistance = L.GeometryUtil.length(this.representation);
     
             return Math.round(totalDistance);

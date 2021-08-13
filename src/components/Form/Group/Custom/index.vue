@@ -90,7 +90,6 @@
             field () { return config[this.category].find(field => field.name === this.property.name) || null },
             options () { return this.field ? this.field.options : {} },
             hidden () { if( this.options && this.options.hidden) { return this.options.hidden } else return false },
-            // title () { return this.field.alias ? this.field.alias : this.field.name.toUpperCase()[0] + this.field.name.slice(1) },
             title () { return this.property.alias ? this.property.alias : this.field.name.toUpperCase()[0] + this.field.name.slice(1) },
             value: function () {
                 if (this.property.name !== 'geometry') { return this.property.value }

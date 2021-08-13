@@ -5,7 +5,7 @@
                 <i class="fas fa-undo-alt"></i>
                 Annuler
             </button>
-            <button id="btn-validate" v-if="isValidate" @click="validateButtonClicked">
+            <button id="btn-validate" v-if="isValid" @click="validateButtonClicked">
                 <i class="fas fa-file-invoice"></i>
                 Voir la fiche
             </button>
@@ -85,6 +85,7 @@
 <script>
 import Map from "./Map";
 import HelpButton from "./Button";
+import Feature from '@/models/Feature'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { bus } from '@/main.js'
 
@@ -115,9 +116,11 @@ export default {
             map: 'map',
             isDrawing: 'isDrawing',   
         }),
-        isValidate(){
+        isValid(){
             if (this.feature && !this.formVisible && this.feature.coordinates){
+                // a polygon is valid when it has at least 3 vertexes
                 if (this.feature.type=="polygon") return(this.feature.coordinates.length >= 3);
+                // a line is valid when it has at least 2 vertexes
                 if (this.feature.type=="polyline") return(this.feature.coordinates.length >= 2);
                 return !!this.feature.representation
             } 
@@ -136,13 +139,10 @@ export default {
             if (this.feature){
                 if(this.feature.representation && this.feature.representation._latlngs) return !!this.feature.representation
                 else if (this.feature.type != 'point') return true 
-                
             }
             return false
         },
-        isButtonsBarVisible(){
-            return !(this.smallScreen && this.buttonsBarIsVisible)
-        },
+        isButtonsBarVisible(){ return !(this.smallScreen && this.buttonsBarIsVisible) },
         smallScreen(){ return(this.windowWidth < 768); }
 
     },
@@ -159,9 +159,7 @@ export default {
             'quickMeasure/cancel',
         ]),
 
-        ...mapActions([
-            'feature/cancel'
-        ]),
+        ...mapActions([ 'feature/cancel' ]),
 
         validateButtonClicked (){
             this['feature/setEditable'](false)
@@ -175,13 +173,9 @@ export default {
             this['feature/toggleEdit'](this.map)
         },
 
-        measurementsButtonClicked(){
-            (this.isMeasuring == true) ? this.isMeasuring = false : this.isMeasuring = true;
-        },
+        measurementsButtonClicked(){ (this.isMeasuring == true) ? this.isMeasuring = false : this.isMeasuring = true; },
 
-        buttonClicked (button) {
-            this.$emit('button-clicked', button)
-        },
+        buttonClicked (button) { this.$emit('button-clicked', button) },
 
         cancel () {
             this['feature/cancel']()
@@ -213,10 +207,18 @@ export default {
             this['quickMeasure/cancel']();           
         },
 
+        /**
+         * Center the map on the feature which has just been clicked 
+         * 
+         * @param { Feature } f - a feature
+         */
         centerOnFeature (f) {
-            let c = (Array.isArray(f.coordinates[0])) 
-                    ? f.representation.getBounds().getCenter() 
-                    : c = f.coordinates;
+            let c = (Array.isArray(f.coordinates[0])) ? f.representation.getBounds().getCenter() : [...f.coordinates];
+            // try to offset/compensate the appearance of the form
+            if (!this.smallScreen && !this.formVisible) { 
+                let e = this.map.getBounds()._northEast.lng - this.map.getCenter().lng;
+                c[1]+=e*0.1
+            }
             this.map.panTo(c)
         },
 
@@ -224,8 +226,8 @@ export default {
     },
 
     watch: {
-        isValidate(){
-            if (this.isValidate && window.innerWidth >= 768) this.validateButtonClicked();
+        isValid(){
+            if (this.isValid && window.innerWidth >= 768) this.validateButtonClicked();
         },
 
         isMeasuring: function(){

@@ -5,8 +5,6 @@ const baseUrl = confAPI.baseUrl
 
 import axios from 'axios'
 
-// const baseUrl = "http://localhost:8888"
-
 const deleteAllFiles = async (f) => {
     try {
         await deleteFiles(f);
@@ -23,7 +21,7 @@ const deleteAllFiles = async (f) => {
  * @param { string } fileName - The name of the file to get
  * @param { string } layer - The name of the layer of the feature 
  * @param { boolean } [isImage=false] - Is the file for Thumbnail (image)  
- * @returns { string } The file Url 
+ * @returns { string } An url to the file 
  */
 const getFile = async (fileName, layer, isImage = false) => {
     
@@ -34,9 +32,19 @@ const getFile = async (fileName, layer, isImage = false) => {
         responseType: 'blob'
     }).then(res => {
         if (res.status == 200) {
-            fileUrl = URL.createObjectURL(res.data);
+            /*
+             With URL.createObjectURL we create an URL to the file 
+             that can be use in an input file or a src tag of an image
+            */
+             fileUrl = URL.createObjectURL(res.data);
         }
     }).catch(async err => { 
+        /*
+         If we received an error (in json), we can't read it 
+         Because the response type is blob
+         We will have to do a axios request to the url created by the URL.createOBjectURL
+         And set the response type to json so we can read the error message
+         */
         if (err.response && err.response.status === 404) {
             let errUrl = URL.createObjectURL(err.response.data);
             await axios.get(errUrl, { responseType: 'json'})

@@ -33,9 +33,7 @@ export default {
         }
     },
     methods: {
-        clicked: function () {
-            this.$emit('itemClicked', this.literal)
-        }
+        clicked: function () { this.$emit('itemClicked', this.literal) }
     },
 
 }

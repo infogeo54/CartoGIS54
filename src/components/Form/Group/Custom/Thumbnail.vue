@@ -85,9 +85,7 @@ export default {
                         this.modifying = false
                         this.getImage()
                     }
-                } catch (err) {
-                    console.log(err);
-                }
+                } catch (err) { console.log(err); }
             }
         },
 
@@ -100,9 +98,7 @@ export default {
                     this.resetFileInput()
                     this.getImage()
                 }
-            } catch (err) {
-                console.log(err);
-            }
+            } catch (err) { console.log(err); }
         },
 
         async deleteClick(){
@@ -115,9 +111,7 @@ export default {
                             this.img = null
                         }
                         await this['feature/save']()
-                    } catch (err) {
-                        console.log(err);
-                    }
+                    } catch (err) { console.log(err); }
                 }
             }
         },
@@ -127,9 +121,7 @@ export default {
                 try {
                     const imgUrl = await fileAPI.getFile(this.fileName, this.feature.layer, true);
                     if (imgUrl) this.img = imgUrl;
-                } catch (err) {
-                    console.log(err);
-                }
+                } catch (err) { console.log(err); }
             } 
          }
     },

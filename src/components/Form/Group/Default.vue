@@ -23,9 +23,7 @@ export default {
         }
     },
     methods: {
-        changed (e) {
-            this.$emit('changed', e)
-        }
+        changed (e) { this.$emit('changed', e) }
     },
 }
 </script>

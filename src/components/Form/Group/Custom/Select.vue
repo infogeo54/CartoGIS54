@@ -33,9 +33,6 @@ export default {
         options () { return this.field.options },
         map () { return this.options.map },
         hint () { return this.value === '' || this.value === undefined || this.value === null },
-        // ...mapGetters({
-        //     feature: 'feature/selected',
-        // })
     },
     methods: {
         change (e) { this.$emit('change', e) }

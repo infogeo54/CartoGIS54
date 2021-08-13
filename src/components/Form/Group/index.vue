@@ -26,9 +26,7 @@ import Custom from './Custom'
 export default {
     components: { Default, Custom },
     data() {
-        return {
-            order: 10
-        }
+        return { order: 10 }
     },
     props: {
         property: { type: Object, default: null },
@@ -50,9 +48,6 @@ export default {
                     }
                 })
             })
-
-
-
             return !!matchingField
         },
     },

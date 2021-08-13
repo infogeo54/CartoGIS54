@@ -38,18 +38,14 @@ export default {
             selectedFeature: 'feature/selected',
             map: 'map',
         }),
-        legendVisibility () {
-            return this.selectedLayer && !this.selectedFeature
-        }
+        legendVisibility () { return this.selectedLayer && !this.selectedFeature }
     },
     methods: {
         ...mapMutations([
             'layer/setSelected',
             'feature/setSelected',
         ]),
-        ...mapActions([
-            'feature/cancel'
-        ]),
+        ...mapActions([ 'feature/cancel' ]),
         layerItemClicked (layerName) {
             const layer = this.layers.find(l => l.properties.name === layerName)
             this['layer/setSelected'](layer)
@@ -61,9 +57,7 @@ export default {
             }
             this['feature/setSelected'](new Feature(options))
         },
-        legendCloseClicked () {
-            this['layer/setSelected'](null)
-        },
+        legendCloseClicked () { this['layer/setSelected'](null) },
         
     },
     mounted() {

@@ -46,6 +46,7 @@ export default {
     },
     data(){
       return {
+        // Doc : https://swiperjs.com/swiper-api
         options: {
           disableLayers: false,
           direction: 'horizontal',
@@ -84,20 +85,12 @@ export default {
       }
     },
     computed: {
-        title () {
-            return this.layer.properties.title
-        },
-        styles () {
-            return this.layer.styles
-        }
+        title () { return this.layer.properties.title },
+        styles () { return this.layer.styles }
     },
     methods: {
-        itemClicked (featureType) {
-            this.$emit('legendItemClicked', featureType)
-        },
-        close () {
-            this.$emit('legendCloseClicked')
-        }
+        itemClicked (featureType) { this.$emit('legendItemClicked', featureType) },
+        close () { this.$emit('legendCloseClicked') }
     },
 }
 </script>

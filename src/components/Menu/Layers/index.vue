@@ -36,6 +36,7 @@ export default {
     },
     data() {
       return {
+        // Doc : https://swiperjs.com/swiper-api
         options: {
           disableLayers: false,
           direction: 'horizontal',

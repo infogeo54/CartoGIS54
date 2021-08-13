@@ -83,6 +83,7 @@
         "layer": "nom_de_la_couche", // optionnel, nom de la couche dans qgis
         "options": {
           "order": "10" // optionnel, ordre dans la fiche qui est trié par défaut par ordre alphabétique, par défaut à 10
+                        // si order est à 0 et que le champ est soit de type notEnterable soit input Text, celui-ci sera mis en évidence
         },
         "default": "Valeur par défaut" // valeur par défaut dans le formulaire, par défaut à ""
       },
